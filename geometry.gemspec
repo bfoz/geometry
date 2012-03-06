@@ -7,9 +7,9 @@ Gem::Specification.new do |s|
   s.version     = Geometry::VERSION
   s.authors     = ["Brandon Fosdick"]
   s.email       = ["bfoz@bfoz.net"]
-  s.homepage    = ""
-  s.summary     = %q{TODO: Write a gem summary}
-  s.description = %q{TODO: Write a gem description}
+  s.homepage    = "http://github.com/bfoz/geometry"
+  s.summary     = %q{Geometric primitives}
+  s.description = %q{Geometric primitives for Ruby}
 
   s.rubyforge_project = "geometry"
 
