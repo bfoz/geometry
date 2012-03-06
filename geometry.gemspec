@@ -4,7 +4,7 @@ require "geometry/version"
 
 Gem::Specification.new do |s|
   s.name        = "geometry"
-  s.version     = Geometry::VERSION
+  s.version     = '0'
   s.authors     = ["Brandon Fosdick"]
   s.email       = ["bfoz@bfoz.net"]
   s.homepage    = "http://github.com/bfoz/geometry"
