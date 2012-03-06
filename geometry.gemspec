@@ -8,8 +8,8 @@ Gem::Specification.new do |s|
   s.authors     = ["Brandon Fosdick"]
   s.email       = ["bfoz@bfoz.net"]
   s.homepage    = "http://github.com/bfoz/geometry"
-  s.summary     = %q{Geometric primitives}
-  s.description = %q{Geometric primitives for Ruby}
+  s.summary     = %q{Geometric primitives and algoritms}
+  s.description = %q{Geometric primitives and algorithms for Ruby}
 
   s.rubyforge_project = "geometry"
 
