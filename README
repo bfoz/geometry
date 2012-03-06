@@ -24,6 +24,7 @@ Examples
 --------
 
 ### Point
+```ruby
     point = Geometry::Point[3,4]    # 2D Point at coordinate 3, 4
     point = Geometry.Point(1,2)	    # Functional constructor
     
@@ -35,3 +36,4 @@ Examples
     point.x
     point.y
     point[2]	# Same as point.z
+```
