@@ -1,0 +1,21 @@
+Geometry for Ruby
+=================
+
+Classes and methods for the handling of all of the basic geometry that you 
+learned in high school (and then forgot).
+
+The classes in this libary are based on the Vector class provided by the Ruby 
+standard library. Geometric primitives are generally assumed to lie in 2D space,
+but aren't necessarily restricted to it. Please let me know if you find cases 
+that don't work in higher dimensions and I'll do my best to fix them.
+
+License
+-------
+
+Copyright 2012 Brandon Fosdick <bfoz@bfoz.net> and released under the BSD 
+license.
+
+Primitives
+----------
+
+- Point
