@@ -19,3 +19,19 @@ Primitives
 ----------
 
 - Point
+
+Examples
+--------
+
+### Point
+    point = Geometry::Point[3,4]    # 2D Point at coordinate 3, 4
+    point = Geometry.Point(1,2)	    # Functional constructor
+    
+    # Copy constructors
+    point2 = Geometry::Point[point]
+    point2 = Geometry::Point[Vector[5,6]]
+    
+    # Accessors
+    point.x
+    point.y
+    point[2]	# Same as point.z
