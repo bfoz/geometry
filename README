@@ -19,6 +19,7 @@ Primitives
 ----------
 
 - Point
+- Line
 
 Examples
 --------
@@ -27,13 +28,33 @@ Examples
 ```ruby
     point = Geometry::Point[3,4]    # 2D Point at coordinate 3, 4
     point = Geometry.Point(1,2)	    # Functional constructor
-    
+
     # Copy constructors
     point2 = Geometry::Point[point]
     point2 = Geometry::Point[Vector[5,6]]
-    
+
     # Accessors
     point.x
     point.y
     point[2]	# Same as point.z
+```
+
+### Line
+```ruby
+    # Two-point constructors
+    line = Geometry::Line[[0,0], [10,10]]
+    line = Geometry::Line[Geometry::Point[0,0], Geometry::Point[10,10]]
+    line = Geometry::Line[Vector[0,0], Vector[10,10]]
+
+    # Slope-intercept constructors
+    Geometry::Line[Rational(3,4), 5]	# Slope = 3/4, Intercept = 5
+    Geometry::Line[0.75, 5]
+
+    # Point-slope constructors
+    Geometry::Line(Geometry::Point[0,0], 0.75)
+    Geometry::Line(Vector[0,0], Rational(3,4))
+
+    # Special constructors (2D only)
+    Geometry::Line.horizontal(y=0)
+    Geometry::Line.vertical(x=0)
 ```
