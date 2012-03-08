@@ -16,7 +16,8 @@ module Geometry
 
 	# Allow vector-style initialization, but override to
 	#  support copy-init from another Vector or Point
-	def Point.[](*array)
+	def self.[](*array)
+	    array = array[0] if array[0].is_a?(Array)
 	    return Point[*(array[0].to_a)] if array[0].is_a?(Vector)
 	    super *array
 	end
