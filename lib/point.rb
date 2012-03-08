@@ -26,7 +26,7 @@ module Geometry
 	    'Point' + @elements.inspect
 	end
 	def to_s
-	    'Point' + @elements.inspect
+	    'Point' + @elements.to_s
 	end
     end
     
