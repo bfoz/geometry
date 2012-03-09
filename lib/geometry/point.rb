@@ -21,7 +21,7 @@ module Geometry
 	# from Vector or another Point
 	def self.[](*array)
 	    array = array[0] if array[0].is_a?(Array)
-	    return Point[*(array[0].to_a)] if array[0].is_a?(Vector)
+	    array = array[0].to_a if array[0].is_a?(Vector)
 	    super *array
 	end
 
@@ -31,7 +31,7 @@ module Geometry
 	def to_s    # :nodoc:
 	    'Point' + @elements.to_s
 	end
-    
+
 	def x
 	    @elements[0]
 	end
@@ -42,10 +42,4 @@ module Geometry
 	    @elements[2]
 	end
     end
-end
-
-def Geometry.Point(*args)
-    args[0] = args[0].to_a if args[0].is_a?(Vector)
-    args = args[0] if args[0].is_a?(Array)
-    Geometry::Point[*args]
 end

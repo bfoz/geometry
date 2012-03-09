@@ -35,7 +35,20 @@ Supports two-point, slope-intercept, and point-slope initializer forms
 	#   Line[y-intercept, slope]    -> SlopeInterceptLine
 	#   Line[point, slope]		-> PointSlopeLine
 	def self.[](*args)
-	    Geometry.Line(*args)
+	    if( 2 == args.size )
+		args.map! {|x| x.is_a?(Array) ? Point[*x] : x}
+
+		# If both args are Points, create a TwoPointLine
+		return TwoPointLine.new(*args) if args.all? {|x| x.is_a?(Vector)}
+
+		# If only the first arg is a Point, create a PointSlopeLine
+		return PointSlopeLine.new(*args) if args.first.is_a?(Vector)
+
+		# Otherise, create a SlopeInterceptLine
+		return SlopeInterceptLine.new(*args)
+	    else
+		nil
+	    end
 	end
 
 	def self.horizontal(y_intercept=0)
@@ -61,7 +74,7 @@ Supports two-point, slope-intercept, and point-slope initializer forms
 	    @slope = slope
 	    @intercept = intercept
 	end
-	
+
 	def horizontal?
 	    0 == @slope
 	end
@@ -90,29 +103,12 @@ Supports two-point, slope-intercept, and point-slope initializer forms
 	attr_reader :first, :last
 
 	def initialize(point0, point1)
-	    @first, @last = [point0, point1].map {|p| p.is_a?(Point) ? p : Geometry.Point(p) }
+	    @first, @last = [point0, point1].map {|p| p.is_a?(Point) ? p : Point[p] }
 	end
 	def inspect
 	    'Line(' + @first.to_s + ', ' + @last.to_s + ')'
 	end
 	alias :to_s :inspect
-    end
-
-    def self.Line(*args)
-	if( 2 == args.size )
-	    args.map! {|x| x.is_a?(Array) ? Point[*x] : x}
-
-	    # If both args are Points, create a TwoPointLine
-	    return TwoPointLine.new(*args) if args.all? {|x| x.is_a?(Vector)}
-
-	    # If only the first arg is a Point, create a PointSlopeLine
-	    return PointSlopeLine.new(*args) if args.first.is_a?(Vector)
-
-	    # Otherise, create a SlopeInterceptLine
-	    return SlopeInterceptLine.new(*args)
-	else
-	    nil
-	end
     end
 end
 

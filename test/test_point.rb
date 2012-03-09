@@ -10,31 +10,25 @@ class PointTest < Test::Unit::TestCase
 	assert_equal(1, point.y)
     end
     must "create a Point object from an array" do
-	point = Geometry::Point([3,4])
-	assert_equal(2, point.size)
-	assert_equal(3, point.x)
-	assert_equal(4, point.y)
-    end
-    must "create a Point object from an array using list syntax" do
 	point = Geometry::Point[[3,4]]
 	assert_equal(2, point.size)
 	assert_equal(3, point.x)
 	assert_equal(4, point.y)
     end
     must "create a Point object from individual parameters" do
-	point = Geometry.Point(3,4)
+	point = Geometry::Point[3,4]
 	assert_equal(2, point.size)
 	assert_equal(3, point.x)
 	assert_equal(4, point.y)
     end
     must "create a Point object from a Vector" do
-	point = Geometry.Point(Vector[3,4])
+	point = Geometry::Point[Vector[3,4]]
 	assert_equal(2, point.size)
 	assert_equal(3, point.x)
 	assert_equal(4, point.y)
     end
     must "create a Point object from a Point" do
-	point = Geometry.Point(Geometry::Point[3,4])
+	point = Geometry::Point[Geometry::Point[3,4]]
 	assert_equal(2, point.size)
 	assert_equal(3, point.x)
 	assert_equal(4, point.y)
