@@ -3,7 +3,7 @@ require_relative 'point'
 module Geometry
 
 =begin rdoc
-An cluster of objects representing a Line of infinite length
+A cluster of objects representing a Line of infinite length
 
 Supports two-point, slope-intercept, and point-slope initializer forms
 
