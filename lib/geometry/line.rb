@@ -1,10 +1,43 @@
 require_relative 'point'
 
 module Geometry
+
+=begin rdoc
+An cluster of objects representing a Line of infinite length
+
+Supports two-point, slope-intercept, and point-slope initializer forms
+
+== Usage
+
+=== Two-point constructors
+    line = Geometry::Line[[0,0], [10,10]]
+    line = Geometry::Line[Geometry::Point[0,0], Geometry::Point[10,10]]
+    line = Geometry::Line[Vector[0,0], Vector[10,10]]
+
+=== Slope-intercept constructors
+    Geometry::Line[Rational(3,4), 5]	# Slope = 3/4, Intercept = 5
+    Geometry::Line[0.75, 5]
+
+=== Point-slope constructors
+    Geometry::Line(Geometry::Point[0,0], 0.75)
+    Geometry::Line(Vector[0,0], Rational(3,4))
+
+===  Special constructors (2D only)
+    Geometry::Line.horizontal(y=0)
+    Geometry::Line.vertical(x=0)
+=end
     class Line
+
+	# :call-seq:
+	#   Line[Array, Array]		-> TwoPointLine
+	#   Line[Point, Point]		-> TwoPointLine
+	#   Line[Vector, Vector]	-> TwoPointLine
+	#   Line[y-intercept, slope]    -> SlopeInterceptLine
+	#   Line[point, slope]		-> PointSlopeLine
 	def self.[](*args)
 	    Geometry.Line(*args)
 	end
+
 	def self.horizontal(y_intercept=0)
 	    SlopeInterceptLine.new(0, y_intercept)
 	end
@@ -13,7 +46,7 @@ module Geometry
 	end
     end
 
-    class PointSlopeLine < Line
+    class PointSlopeLine < Line		# :nodoc:
 	def initialize(point, slope)
 	    @point = point.is_a?(Geometry::Point) ? point : Geometry.Point(point)
 	    @slope = slope
@@ -23,7 +56,7 @@ module Geometry
 	end
     end
 
-    class SlopeInterceptLine < Line
+    class SlopeInterceptLine < Line	# :nodoc:
 	def initialize(slope, intercept)
 	    @slope = slope
 	    @intercept = intercept
@@ -53,7 +86,7 @@ module Geometry
 	end
     end
 
-    class TwoPointLine < Line
+    class TwoPointLine < Line		# :nodoc:
 	attr_reader :first, :last
 
 	def initialize(point0, point1)
