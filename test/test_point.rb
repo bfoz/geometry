@@ -1,6 +1,6 @@
 require 'test/unit'
 require_relative 'test_unit_extensions'
-require_relative '../lib/point'
+require_relative '../lib/geometry/point'
 
 class PointTest < Test::Unit::TestCase
     must "create a Point object using list syntax" do
