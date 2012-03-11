@@ -1,5 +1,4 @@
-require 'test/unit'
-require_relative 'test_unit_extensions'
+require_relative 'helper'
 require_relative '../lib/geometry/line'
 
 class PointTest < Test::Unit::TestCase
