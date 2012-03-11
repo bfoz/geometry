@@ -28,12 +28,9 @@ geometry class (x, y, z).
 	    super *array
 	end
 
-	# @private
 	def inspect
 	    'Point' + @elements.inspect
 	end
-
-	# @private
 	def to_s
 	    'Point' + @elements.to_s
 	end
