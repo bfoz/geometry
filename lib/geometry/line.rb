@@ -26,14 +26,19 @@ Supports two-point, slope-intercept, and point-slope initializer forms
     Geometry::Line.horizontal(y=0)
     Geometry::Line.vertical(x=0)
 =end
+
     class Line
 
-	# :call-seq:
-	#   Line[Array, Array]		-> TwoPointLine
-	#   Line[Point, Point]		-> TwoPointLine
-	#   Line[Vector, Vector]	-> TwoPointLine
-	#   Line[y-intercept, slope]    -> SlopeInterceptLine
-	#   Line[point, slope]		-> PointSlopeLine
+	# @overload [](Array, Array)
+	#   @return [TwoPointLine]
+	# @overload [](Point, Point)
+	#   @return [TwoPointLine]
+	# @overload [](Vector, Vector)
+	#   @return [TwoPointLine]
+	# @overload [](y-intercept, slope)
+	#   @return [SlopeInterceptLine]
+	# @overload [](point, slope)
+	#   @return [PointSlopeLine]
 	def self.[](*args)
 	    if( 2 == args.size )
 		args.map! {|x| x.is_a?(Array) ? Point[*x] : x}
@@ -59,7 +64,8 @@ Supports two-point, slope-intercept, and point-slope initializer forms
 	end
     end
 
-    class PointSlopeLine < Line		# :nodoc:
+    # @private
+    class PointSlopeLine < Line
 	def initialize(point, slope)
 	    @point = point.is_a?(Geometry::Point) ? point : Geometry.Point(point)
 	    @slope = slope
@@ -69,7 +75,8 @@ Supports two-point, slope-intercept, and point-slope initializer forms
 	end
     end
 
-    class SlopeInterceptLine < Line	# :nodoc:
+    # @private
+    class SlopeInterceptLine < Line
 	def initialize(slope, intercept)
 	    @slope = slope
 	    @intercept = intercept
@@ -99,7 +106,8 @@ Supports two-point, slope-intercept, and point-slope initializer forms
 	end
     end
 
-    class TwoPointLine < Line		# :nodoc:
+    # @private
+    class TwoPointLine < Line
 	attr_reader :first, :last
 
 	def initialize(point0, point1)
