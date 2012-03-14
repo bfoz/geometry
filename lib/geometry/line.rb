@@ -114,7 +114,7 @@ Supports two-point, slope-intercept, and point-slope initializer forms
 	    @first, @last = [point0, point1].map {|p| p.is_a?(Point) ? p : Point[p] }
 	end
 	def inspect
-	    'Line(' + @first.to_s + ', ' + @last.to_s + ')'
+	    'Line(' + @first.inspect + ', ' + @last.inspect + ')'
 	end
 	alias :to_s :inspect
     end
