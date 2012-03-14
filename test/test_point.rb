@@ -57,6 +57,13 @@ class PointTest < Test::Unit::TestCase
 	assert_equal(6, point.y)
 	assert_equal(7, point.z)
     end
+    must "compare equal" do
+	point1 = Geometry::Point[1,2]
+	point2 = Geometry::Point[1,2]
+	point3 = Geometry::Point[3,4]
+	assert_equal(point1, point2)
+	assert_not_equal(point2, point3)
+    end
     must "implement inspect" do
 	point = Geometry::Point[8,9]
 	assert_equal('Point[8, 9]', point.inspect)
