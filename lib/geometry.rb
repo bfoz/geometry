@@ -23,8 +23,8 @@ module Geometry
     #   @param [Point] point Starting point
     #   @param [Numeric] slope Slope
     #   @return [PointSlopeLine]
-    def self.Line(*args)
-	Geometry::Line[*args]
+    def self.line(*args)
+	Line[*args]
     end
 
     # @overload Point(x,y,z,...)
@@ -33,7 +33,7 @@ module Geometry
     #   @return [Point]
     # @overload Point(Vector)
     #   @return [Point]
-    def self.Point(*args)
-	Geometry::Point[*args]
+    def self.point(*args)
+	Point[*args]
     end
 end
