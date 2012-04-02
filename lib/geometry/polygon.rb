@@ -65,7 +65,7 @@ An object representing a closed set of vertices and edges.
 	    end
 
 	    # Close the polygon if needed
-	    @edges.push Edge.new(@edges.last.last, @edges.first.first) unless @edges.last.last == @edges.first.first
+	    @edges.push Edge.new(@edges.last.last, @edges.first.first) unless @edges.empty? || (@edges.last.last == @edges.first.first)
 	end
 
 	private
