@@ -35,6 +35,16 @@ An edge. It's a line segment between 2 points. Generally part of a {Polygon}.
 	    self
 	end
 
+	# Return the {Edge}'s length along the Y axis
+	def height
+	    (@first.y - @last.y).abs
+	end
+
+	# Return the {Edge}'s length along the X axis
+	def width
+	    (@first.x - @last.x).abs
+	end
+
 	def inspect
 	    'Edge(' + @first.inspect + ', ' + @last.inspect + ')'
 	end
