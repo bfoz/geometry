@@ -2,6 +2,8 @@ require_relative 'helper'
 require_relative '../lib/geometry/point'
 
 class PointTest < Test::Unit::TestCase
+    Point = Geometry::Point
+
     must "create a Point object using list syntax" do
 	point = Geometry::Point[2,1]
 	assert_equal(2, point.size)
@@ -64,6 +66,17 @@ class PointTest < Test::Unit::TestCase
 	assert_equal(point1, point2)
 	assert_not_equal(point2, point3)
     end
+
+    must "compare equal to an array with equal elements" do
+	point1 = Point[1,2]
+	assert_equal(point1, [1,2])
+    end
+
+    must "not compare equal to an array with unequal elements" do
+	point1 = Point[1,2]
+	assert_not_equal(point1, [3,2])
+    end
+
     must "implement inspect" do
 	point = Geometry::Point[8,9]
 	assert_equal('Point[8, 9]', point.inspect)

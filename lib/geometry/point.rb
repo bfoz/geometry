@@ -28,6 +28,12 @@ geometry class (x, y, z).
 	    super *array
 	end
 
+	# Allow comparison with an Array, otherwise do the normal thing
+	def ==(other)
+	    return @elements == other if other.is_a?(Array)
+	    super other
+	end
+
 	def inspect
 	    'Point' + @elements.inspect
 	end
