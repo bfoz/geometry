@@ -63,5 +63,5 @@ Examples
 ### Circle
 ```ruby
     # A circle at Point[1,2] with a radius of 3
-    circle = Geometry::Circle [1,2], 3
+    circle = Geometry::Circle.new [1,2], 3
 ```
