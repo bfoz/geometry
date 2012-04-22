@@ -20,6 +20,7 @@ Primitives
 
 - Point
 - Line
+- Circle
 
 Examples
 --------
@@ -27,7 +28,7 @@ Examples
 ### Point
 ```ruby
     point = Geometry::Point[3,4]    # 2D Point at coordinate 3, 4
-    point = Geometry.Point(1,2)	    # Functional constructor
+    point = Geometry.point(1,2)	    # Functional constructor
 
     # Copy constructors
     point2 = Geometry::Point[point]
@@ -57,4 +58,10 @@ Examples
     # Special constructors (2D only)
     Geometry::Line.horizontal(y=0)
     Geometry::Line.vertical(x=0)
+```
+
+### Circle
+```ruby
+    # A circle at Point[1,2] with a radius of 3
+    circle = Geometry::Circle [1,2], 3
 ```
