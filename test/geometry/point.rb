@@ -1,5 +1,5 @@
-require_relative 'helper'
-require_relative '../lib/geometry/point'
+require_relative '../helper'
+require_relative '../../lib/geometry/point'
 
 class PointTest < Test::Unit::TestCase
     Point = Geometry::Point
