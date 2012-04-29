@@ -21,6 +21,7 @@ Primitives
 - Point
 - Line
 - Circle
+- Rectangle
 
 Examples
 --------
