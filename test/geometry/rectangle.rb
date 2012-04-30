@@ -68,4 +68,10 @@ class RectangleTest < Test::Unit::TestCase
     must "have an origin property" do
 	assert_equal(Point[1,2], @rectangle.origin)
     end
+
+    must "have an edges property that returns 4 edges" do
+	edges = @rectangle.edges
+	assert_equal(4, edges.size)
+	edges.each {|edge| assert_kind_of(Geometry::Edge, edge)}
+    end
 end
