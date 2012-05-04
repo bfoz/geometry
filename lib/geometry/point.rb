@@ -55,5 +55,20 @@ geometry class (x, y, z).
 	def z
 	    @elements[2]
 	end
+
+# @group Arithmetic
+#  Override the arithmetic operators to force them to return {Point}s instead
+#  of {Vector}s
+
+	def +(other)
+	    Point[super]
+	end
+
+	def -(other)
+	    Point[super]
+	end
+
+# @endgroup
+
     end
 end

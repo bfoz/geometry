@@ -1,9 +1,9 @@
 require_relative '../helper'
 require_relative '../../lib/geometry/point'
 
-class PointTest < Test::Unit::TestCase
-    Point = Geometry::Point
+Point = Geometry::Point
 
+class PointTest < Test::Unit::TestCase
     must "create a Point object using list syntax" do
 	point = Geometry::Point[2,1]
 	assert_equal(2, point.size)
@@ -84,5 +84,20 @@ class PointTest < Test::Unit::TestCase
     must "implement to_s" do
 	point = Geometry::Point[10,11]
 	assert_equal('Point[10, 11]', point.to_s)
+    end
+end
+
+class PointArithmeticTest < Test::Unit::TestCase
+    def setup
+	@left = Point[1,2]
+	@right = Point[3,4]
+    end
+
+    must "return a Point when adding two Points" do
+	assert_kind_of(Point, @left+@right)
+    end
+
+    must "return a Point when subtracting two Points" do
+	assert_kind_of(Point, @left-@right)
     end
 end
