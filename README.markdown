@@ -19,9 +19,12 @@ Primitives
 ----------
 
 - Point
+- Size
 - Line
+- Edge
 - Circle
 - Rectangle
+- Polygon
 
 Examples
 --------
@@ -29,7 +32,6 @@ Examples
 ### Point
 ```ruby
     point = Geometry::Point[3,4]    # 2D Point at coordinate 3, 4
-    point = Geometry.point(1,2)	    # Functional constructor
 
     # Copy constructors
     point2 = Geometry::Point[point]
@@ -65,4 +67,10 @@ Examples
 ```ruby
     # A circle at Point[1,2] with a radius of 3
     circle = Geometry::Circle.new [1,2], 3
+```
+
+### Polygon
+```ruby
+    # A polygon that looks a lot like a square
+    polygon = Geometry::Polygon.new [0,0], [1,0], [1,1], [0,1]
 ```
