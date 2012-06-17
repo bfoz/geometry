@@ -74,4 +74,10 @@ class RectangleTest < Test::Unit::TestCase
 	assert_equal(4, edges.size)
 	edges.each {|edge| assert_kind_of(Geometry::Edge, edge)}
     end
+
+    must "have a points property that returns 4 points" do
+	points = @rectangle.points
+	assert_equal(4, points.size)
+	points.each {|point| assert_kind_of(Geometry::Point, point)}
+    end
 end

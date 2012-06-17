@@ -9,12 +9,12 @@ The {Rectangle} class cluster represents your typical arrangement of 4 corners a
 == Usage
 
 === Constructors
-    rect = Rectangle[[1,2], [2,3]]	# Using two corners
-    rect = Rectangle[[1,2], Size[1,1]]	# Using origin and size
-    rect = Rectangle[1,2,2,3]		# Using four sides
+    rect = Rectangle[[1,2], [2,3]]      # Using two corners
+    rect = Rectangle[[1,2], Size[1,1]]  # Using origin and size
+    rect = Rectangle[1,2,2,3]           # Using four sides
 
-    rect = Rectangle[10, 20]		# origin = [0,0], size = [10, 20]
-    rect = Rectangle[Size[10, 20]]	# origin = [0,0], size = [10, 20]
+    rect = Rectangle[10, 20]            # origin = [0,0], size = [10, 20]
+    rect = Rectangle[Size[10, 20]]      # origin = [0,0], size = [10, 20]
 
 =end
 
@@ -100,6 +100,8 @@ The {Rectangle} class cluster represents your typical arrangement of 4 corners a
 	end
 
 # @group Accessors
+
+	# @return [Point]   The {Rectangle}'s center
 	def center
 	    min, max = @points.minmax {|a,b| a.y <=> b.y}
 	    Point[(max.x+min.x)/2, (max.y+min.y)/2]
@@ -114,6 +116,14 @@ The {Rectangle} class cluster represents your typical arrangement of 4 corners a
 	     Edge.new(point1, point2),
 	     Edge.new(point2, point3),
 	     Edge.new(point3, point0)]
+	end
+
+	# @return [Array<Point>]    The {Rectangle}'s four points (clockwise)
+	def points
+	    point0, point2 = *@points
+	    point1 = Point[point0.x,point2.y]
+	    point3 = Point[point2.x, point0.y]
+	    [point0, point1, point2, point3]
 	end
 
 	def origin
@@ -183,6 +193,15 @@ The {Rectangle} class cluster represents your typical arrangement of 4 corners a
 	    Edge.new(point3, point0)]
 	end
 
+	# @return [Array<Point>]    The {Rectangle}'s four points (clockwise)
+	def points
+	    point0 = @center - @size/2
+	    point2 = @center + @size/2
+	    point1 = Point[point0.x,point2.y]
+	    point3 = Point[point2.x, point0.y]
+	    [point0, point1, point2, point3]
+	end
+
 	def height
 	    @size.height
 	end
@@ -247,6 +266,15 @@ The {Rectangle} class cluster represents your typical arrangement of 4 corners a
 	    Edge.new(point1, point2),
 	    Edge.new(point2, point3),
 	    Edge.new(point3, point0)]
+	end
+
+	# @return [Array<Point>]    The {Rectangle}'s four points (clockwise)
+	def points
+	    point0 = @origin
+	    point2 = @origin + @size
+	    point1 = Point[point0.x,point2.y]
+	    point3 = Point[point2.x, point0.y]
+	    [point0, point1, point2, point3]
 	end
 
 	def height
