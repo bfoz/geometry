@@ -13,6 +13,7 @@ An object representing a closed set of vertices and edges.
 
     class Polygon
 	attr_reader :edges, :vertices
+	alias :points :vertices
 
 	# Construct a new Polygon from Points and/or Edges
 	#  The constructor will try to convert all of its arguments into Points and
