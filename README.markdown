@@ -25,6 +25,7 @@ Primitives
 - Circle
 - Rectangle
 - Polygon
+- Transformation
 
 Examples
 --------

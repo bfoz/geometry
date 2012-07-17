@@ -4,6 +4,7 @@ require_relative 'geometry/line'
 require_relative 'geometry/polygon'
 require_relative 'geometry/rectangle'
 require_relative 'geometry/size'
+require_relative 'geometry/transformation'
 
 module Geometry
     # @overload Line(array0, array1)
