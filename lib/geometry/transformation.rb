@@ -4,7 +4,7 @@ module Geometry
 =begin
 {Transformation} represents a relationship between two coordinate frames
 
-To create a pure translation relationship
+To create a pure translation relationship:
 
     translate = Geometry::Transformation.new(:translate => Point[4, 2])
 =end
@@ -32,7 +32,14 @@ To create a pure translation relationship
 
 	    @translation = options[:translate] || translate
 	    @translation = Point[*@translation] if @translation.is_a?(Array)
-	    raise ArgumentError, ":translate must be a Point or a Vector" if @translation and !@translation.is_a?(Vector)
+	    if @translation
+		@translation = nil if @translation.all? {|v| v == 0}
+		raise ArgumentError, ":translate must be a Point or a Vector" unless @translation.is_a?(Vector)
+	    end
+	end
+
+	def identity?
+	    !(@rotation || @scale || @translation)
 	end
     end
 end

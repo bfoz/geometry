@@ -9,8 +9,8 @@ describe Geometry::Transformation do
     let(:transformation) { Geometry::Transformation.new }
 
     describe "when constructed" do
-	it "must accept nothing" do
-	    Transformation.new
+	it "must accept nothing and become and identity transformation" do
+	    Transformation.new.identity?.must_equal true
 	end
 
 	it "must accept a translate Array" do
