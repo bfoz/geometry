@@ -23,6 +23,11 @@ describe Geometry::Transformation do
 	    translate.translation.must_equal Point[4,2]
 	end
 
+	it "must accept a translate Point equal to zero" do
+	    translate = Transformation.new(:translate => [0,0])
+	    translate.translation.must_equal nil
+	end
+
 	it "must accept a translate Vector" do
 	    translate = Transformation.new(:translate => Vector[4,2])
 	    translate.translation.must_equal Point[4,2]

@@ -34,7 +34,7 @@ To create a pure translation relationship:
 	    @translation = Point[*@translation] if @translation.is_a?(Array)
 	    if @translation
 		@translation = nil if @translation.all? {|v| v == 0}
-		raise ArgumentError, ":translate must be a Point or a Vector" unless @translation.is_a?(Vector)
+		raise ArgumentError, ":translate must be a Point or a Vector" if @translation and not @translation.is_a?(Vector)
 	    end
 	end
 
