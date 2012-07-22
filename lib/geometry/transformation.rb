@@ -8,12 +8,12 @@ To create a pure translation relationship:
 
     translate = Geometry::Transformation.new(:translate => Point[4, 2])
 
-To create a transformation with an origin and an X-axis aligned with the parent 
+To create a transformation with an origin and an X-axis aligned with the parent
 coordinate system's Y-axis (the Y and Z axes will be chosen arbitrarily):
 
     translate = Geometry::Transformation.new(:origin => [4, 2], :x => [0,1,0])
 
-To create a transformation with an origin, an X-axis aligned with the parent 
+To create a transformation with an origin, an X-axis aligned with the parent
 coordinate system's Y-axis, and a Y-axis aligned with the parent coordinate
 system's X-axis:
 
@@ -75,6 +75,35 @@ system's X-axis:
 	# Returns true if the {Transformation} is the identity transformation
 	def identity?
 	    !(@rotation || @scale || @translation)
+	end
+
+	# Compose the current {Transformation} with another one
+	def +(other)
+	    if other.is_a?(Array) or other.is_a?(Vector)
+		options = {}
+		options[:x] = @x_axis if @x_axis
+		options[:y] = @y_axis if @y_axis
+		options[:z] = @z_axis if @z_axis
+		if @translation
+		    Transformation.new(@translation+other, @rotation, @scale, options)
+		else
+		    Transformation.new(other, @rotation, @scale, options)
+		end
+	    end
+	end
+
+	def -(other)
+	    if other.is_a?(Array) or other.is_a?(Vector)
+		options = {}
+		options[:x] = @x_axis if @x_axis
+		options[:y] = @y_axis if @y_axis
+		options[:z] = @z_axis if @z_axis
+		if @translation
+		    Transformation.new(@translation-other, @rotation, @scale, options)
+		else
+		    Transformation.new(other.map {|e| -e}, @rotation, @scale, options)
+		end
+	    end
 	end
     end
 end
