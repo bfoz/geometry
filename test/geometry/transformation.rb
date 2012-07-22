@@ -42,5 +42,20 @@ describe Geometry::Transformation do
 	    lambda { Transformation.new :translate => [1,2], :origin => [3,4] }.must_raise ArgumentError
 	end
 
+	describe "rotation" do
+	    it "must raise an exception when given too many rotation options" do
+		lambda { Transformation.new :rotate => [1,2], :x => [1,0] }.must_raise ArgumentError
+	    end
+	    
+	    it "must accept an x axis option" do
+		t = Transformation.new :x => [0,1]
+		t.x_axis.must_equal [0,1]
+	    end
+
+	    it "must accept a y axis option" do
+		t = Transformation.new :y => [1,0]
+		t.y_axis.must_equal [1,0]
+	    end
+	end
     end
 end
