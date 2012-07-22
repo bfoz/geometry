@@ -41,6 +41,12 @@ geometry class (x, y, z).
 	    'Point' + @elements.to_s
 	end
 
+	# @param [Integer]  i	Index into the {Point}'s elements
+	# @return [Numeric] Element i (starting at 0)
+	def [](i)
+	    @elements[i]
+	end
+
 	# @return [Numeric] X-component
 	def x
 	    @elements[0]
