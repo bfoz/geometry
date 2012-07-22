@@ -30,7 +30,15 @@ To create a pure translation relationship:
 	    @rotation = options[:rotate] || rotate
 	    @scale = options[:scale] || scale
 
-	    @translation = options[:translate] || translate
+	    case options.count {|k,v| [:move, :origin, :translate].include? k }
+		when 0
+		    @translation = translate
+		when 1
+		    @translation = (options[:translate] ||= options.delete(:move) || options.delete(:origin))
+		else
+		    raise ArgumentError, "Too many translation parameters in #{options}"
+	    end
+
 	    @translation = Point[*@translation] if @translation.is_a?(Array)
 	    if @translation
 		@translation = nil if @translation.all? {|v| v == 0}

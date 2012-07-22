@@ -32,5 +32,15 @@ describe Geometry::Transformation do
 	    translate = Transformation.new(:translate => Vector[4,2])
 	    translate.translation.must_equal Point[4,2]
 	end
+
+	it "must accept an origin option" do
+	    translate = Transformation.new(:origin => [4,2])
+	    translate.translation.must_equal Point[4,2]
+	end
+
+	it "must raise an exception when given too many translation options" do
+	    lambda { Transformation.new :translate => [1,2], :origin => [3,4] }.must_raise ArgumentError
+	end
+
     end
 end
