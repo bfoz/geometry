@@ -95,12 +95,40 @@ describe Geometry::Point do
 	let(:left) { Point[1,2] }
 	let(:right) { Point[3,4] }
 
-	it "return a Point when adding two Points" do
-	    assert_kind_of(Point, left+right)
+	describe "when adding" do
+	    it "return a Point when adding two Points" do
+		assert_kind_of(Point, left+right)
+	    end
+
+	    it "must return a Point when adding an array to a Point" do
+		(left + [5,6]).must_equal Point[6,8]
+	    end
+
+	    it "must raise TypeError when adding a scalar to a Vector" do
+		lambda { left + 1 }.must_raise TypeError
+	    end
+
+	    it "must raise an exception when adding mismatched sizes" do
+		lambda { left + [1,2,3,4] }.must_raise ExceptionForMatrix::ErrDimensionMismatch
+	    end
 	end
 
-	it "return a Point when subtracting two Points" do
-	    assert_kind_of(Point, left-right)
+	describe "when subtracting" do
+	    it "return a Point when subtracting two Points" do
+		assert_kind_of(Point, left-right)
+	    end
+
+	    it "must return a Point when subtracting an array from a Point" do
+		(left - [5,6]).must_equal Point[-4, -4]
+	    end
+
+	    it "must raise TypeError when subtracting a scalar from a Vector" do
+		lambda { left - 1 }.must_raise TypeError
+	    end
+
+	    it "must raise an exception when subtracting mismatched sizes" do
+		lambda { left - [1,2,3,4] }.must_raise ExceptionForMatrix::ErrDimensionMismatch
+	    end
 	end
     end
 end

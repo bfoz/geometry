@@ -47,34 +47,39 @@ geometry class (x, y, z).
 	    @elements[i]
 	end
 
+	# !@attribute [r] x
 	# @return [Numeric] X-component
 	def x
 	    @elements[0]
 	end
 
+	# !@attribute [r] y
 	# @return [Numeric] Y-component
 	def y
 	    @elements[1]
 	end
 
+	# !@attribute [r] z
 	# @return [Numeric] Z-component
 	def z
 	    @elements[2]
 	end
 
-# @group Arithmetic
-#  Override the arithmetic operators to force them to return {Point}s instead
-#  of {Vector}s
+# !@group Arithmetic
 
 	def +(other)
-	    Point[super]
+	    raise TypeError, "Integer is not like Vector" if other.is_a?(Integer) and (size != 1)
+	    Vector.Raise ErrDimensionMismatch if size != other.size
+	    Point[Array.new(size) {|i| @elements[i] + other[i] }]
 	end
 
 	def -(other)
-	    Point[super]
+	    raise TypeError, "Integer is not like Vector" if other.is_a?(Integer) and (size != 1)
+	    Vector.Raise ErrDimensionMismatch if size != other.size
+	    Point[Array.new(size) {|i| @elements[i] - other[i] }]
 	end
 
-# @endgroup
+# !@endgroup
 
     end
 end
