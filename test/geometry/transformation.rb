@@ -44,6 +44,26 @@ describe Geometry::Transformation do
 	    lambda { Transformation.new :translate => [1,2], :origin => [3,4] }.must_raise ArgumentError
 	end
 
+	describe "when given a dimensions option" do
+	    it "must raise an exception if the other arguments are too big" do
+		lambda { Transformation.new :dimensions => 2, :origin => [1,2,3] }
+	    end
+
+	    it "must promote the other arguments if they are too small" do
+		t = Transformation.new :dimensions => 3, :origin => [1,2]
+		t.translation.must_equal Point[1,2,0]
+	    end
+
+	    it "must not alter the other arguments if they are the correct size" do
+		t = Transformation.new :dimensions => 3, :origin => [1,2,3]
+		t.translation.must_equal Point[1,2,3]
+	    end
+
+	    it "must not complain when given only a dimensions option" do
+		Transformation.new(:dimensions => 3).dimensions.must_equal 3
+	    end
+	end
+
 	describe "rotation" do
 	    it "must raise an exception when given too many rotation options" do
 		lambda { Transformation.new :rotate => [1,2], :x => [1,0] }.must_raise ArgumentError

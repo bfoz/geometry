@@ -20,6 +20,7 @@ system's X-axis:
     translate = Geometry::Transformation.new(:origin => [4, 2], :x => [0,1,0], :y => [1,0,0])
 =end
     class Transformation
+	attr_reader :dimensions
     	attr_reader :rotation
     	attr_reader :scale
     	attr_reader :translation
@@ -32,6 +33,7 @@ system's X-axis:
     	# @param [Vector]   scale	Scaling
     	# @overload new(options)
     	# @param [Hash] options
+	# @option options [Integer]	:dimensions Dimensionality of the transformation
     	# @option options [Point]	:origin	    Same as :translate
     	# @option options [Point]	:move	    Same as :translate
     	# @option options [Point]	:translate  Linear displacement
@@ -44,6 +46,8 @@ system's X-axis:
 	    options, args = args.partition {|a| a.is_a? Hash}
 	    translate, rotate, scale = args
 	    options = options.reduce({}, :merge)
+
+	    @dimensions = options[:dimensions] || 0
 
 	    if options.key?(:rotate) and (options.key?(:x) or options.key?(:y) or options.key?(:z))
 		raise ArgumentError, "Can't specify rotation and axes at the same time"
@@ -69,6 +73,21 @@ system's X-axis:
 	    if @translation
 		@translation = nil if @translation.all? {|v| v == 0}
 		raise ArgumentError, ":translate must be a Point or a Vector" if @translation and not @translation.is_a?(Vector)
+	    end
+
+	    if @dimensions and (@dimensions != 0)
+		biggest = [@x_axis, @y_axis, @z_axis, @translation, @rotation, @scale].select {|a| a}.map {|a| a.size}.max
+		if biggest and (biggest != 0)
+		    raise ArgumentError, "Dimensionality mismatch" if biggest > @dimensions
+		    if biggest < @dimensions
+			@x_axis = Array.new(@dimensions) {|i| @x_axis[i] || 0 } if @x_axis && @x_axis.size < @dimensions
+			@y_axis = Array.new(@dimensions) {|i| @y_axis[i] || 0 } if @y_axis && @y_axis.size < @dimensions
+			@z_axis = Array.new(@dimensions) {|i| @z_axis[i] || 0 } if @z_axis && @z_axis.size < @dimensions
+			@rotation = Array.new(@dimensions) {|i| @rotation[i] || 0 } if @rotation && @rotation.size < @dimensions
+			@scale = Array.new(@dimensions) {|i| @scale || 1 } if @scale && @scale.size < @dimensions
+			@translation = Array.new(@dimensions) {|i| @translation[i] || 0 } if @translation && @translation.size < @dimensions
+		    end
+		end
 	    end
 	end
 
