@@ -93,7 +93,7 @@ system's X-axis:
 
 	# Returns true if the {Transformation} is the identity transformation
 	def identity?
-	    !(@rotation || @scale || @translation)
+	    !(@rotation || @scale || @translation || @x_axis || @y_axis || @z_axis)
 	end
 
 	# Compose the current {Transformation} with another one

@@ -72,11 +72,13 @@ describe Geometry::Transformation do
 	    it "must accept an x axis option" do
 		t = Transformation.new :x => [0,1]
 		t.x_axis.must_equal [0,1]
+		t.identity?.wont_equal true
 	    end
 
 	    it "must accept a y axis option" do
 		t = Transformation.new :y => [1,0]
 		t.y_axis.must_equal [1,0]
+		t.identity?.wont_equal true
 	    end
 	end
     end
