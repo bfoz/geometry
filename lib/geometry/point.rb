@@ -1,5 +1,17 @@
 require 'matrix'
 
+class Vector
+    # !@group Unary operators
+    def +@
+	self
+    end
+
+    def -@
+	Vector[*(@elements.map {|e| -e })]
+    end
+    # !@endgroup
+end
+
 module Geometry
 =begin rdoc
 An object repesenting a Point in N-dimensional space
@@ -67,6 +79,12 @@ geometry class (x, y, z).
 
 # !@group Arithmetic
 
+# !@group Unary operators
+	def -@
+	    Point[@elements.map {|e| -e }]
+	end
+# !@endgroup
+
 	def +(other)
 	    raise TypeError, "Integer is not like Vector" if other.is_a?(Integer) and (size != 1)
 	    Vector.Raise ErrDimensionMismatch if size != other.size
@@ -83,3 +101,4 @@ geometry class (x, y, z).
 
     end
 end
+

@@ -1,8 +1,6 @@
 require 'minitest/autorun'
 require 'geometry/point'
 
-#Point = Geometry::Point
-
 describe Geometry::Point do
     it "create a Point object using list syntax" do
 	point = Geometry::Point[2,1]
@@ -95,6 +93,16 @@ describe Geometry::Point do
 	let(:left) { Point[1,2] }
 	let(:right) { Point[3,4] }
 
+	it "must have +@" do
+	    (+left).must_equal Point[1,2]
+	    (+left).must_be_instance_of(Point)
+	end
+
+	it "must have unary negation" do
+	    (-left).must_equal Point[-1,-2]
+	    (-left).must_be_instance_of(Point)
+	end
+
 	describe "when adding" do
 	    it "return a Point when adding two Points" do
 		assert_kind_of(Point, left+right)
@@ -131,4 +139,18 @@ describe Geometry::Point do
 	    end
 	end
     end
+
+    describe "when monkeypatching Vector" do
+	let(:left) { Vector[1,2] }
+	let(:right) { Vector[3,4] }
+
+	it "must have +@" do
+	    (+left).must_equal Vector[1,2]
+	end
+
+	it "must have unary negation" do
+	    (-left).must_equal Vector[-1,-2]
+	end
+    end
+
 end
