@@ -3,7 +3,6 @@ require 'geometry/point'
 require 'geometry/transformation'
 
 describe Geometry::Transformation do
-    Point = Geometry::Point
     Transformation = Geometry::Transformation
 
     describe "when constructed" do
