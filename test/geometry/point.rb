@@ -2,6 +2,17 @@ require 'minitest/autorun'
 require 'geometry/point'
 
 describe Geometry::Point do
+    describe "constructor" do
+	it "must return the Point when constructed from a Point" do
+	    original_point = Point[3,4]
+	    point = Geometry::Point[original_point]
+	    point.must_be_same_as original_point
+	    point.size.must_equal 2
+	    point.x.must_equal 3
+	    point.y.must_equal 4
+	end
+    end
+
     it "create a Point object using list syntax" do
 	point = Geometry::Point[2,1]
 	assert_equal(2, point.size)
@@ -26,12 +37,7 @@ describe Geometry::Point do
 	assert_equal(3, point.x)
 	assert_equal(4, point.y)
     end
-    it "create a Point object from a Point" do
-	point = Geometry::Point[Geometry::Point[3,4]]
-	assert_equal(2, point.size)
-	assert_equal(3, point.x)
-	assert_equal(4, point.y)
-    end
+
     it "create a Point object from a Vector using list syntax" do
 	point = Geometry::Point[Vector[3,4]]
 	assert_equal(2, point.size)
