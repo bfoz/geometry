@@ -5,6 +5,7 @@ require_relative 'geometry/point_zero'
 require_relative 'geometry/polygon'
 require_relative 'geometry/rectangle'
 require_relative 'geometry/size'
+require_relative 'geometry/size_zero'
 require_relative 'geometry/square'
 require_relative 'geometry/transformation'
 
