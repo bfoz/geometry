@@ -16,7 +16,7 @@ An edge. It's a line segment between 2 points. Generally part of a {Polygon}.
 	# Construct a new {Edge} object from any two things that can be converted
 	# to a {Point}.
 	def initialize(point0, point1)
-	    @first, @last = [point0, point1].map {|p| p.is_a?(Point) ? p : Point[p] }
+	    @first, @last = [Point[point0], Point[point1]]
 	end
 
 	# Two Edges are equal if both have equal {Point}s in the same order

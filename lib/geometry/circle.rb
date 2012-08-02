@@ -21,7 +21,7 @@ Circles come in all shapes and sizes, but they're usually round.
 	# @param    [Number]	radius  The radius of the Circle
 	# @return   [Circle]	A new Circle object
 	def initialize(center, radius)
-	    @center = center.is_a?(Point) ? center : Point[center]
+	    @center = Point[center]
 	    @radius = radius
 	end
     end

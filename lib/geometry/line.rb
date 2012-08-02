@@ -67,7 +67,7 @@ Supports two-point, slope-intercept, and point-slope initializer forms
     # @private
     class PointSlopeLine < Line
 	def initialize(point, slope)
-	    @point = point.is_a?(Geometry::Point) ? point : Geometry.Point(point)
+	    @point = Point[point]
 	    @slope = slope
 	end
 	def to_s
@@ -111,7 +111,7 @@ Supports two-point, slope-intercept, and point-slope initializer forms
 	attr_reader :first, :last
 
 	def initialize(point0, point1)
-	    @first, @last = [point0, point1].map {|p| p.is_a?(Point) ? p : Point[p] }
+	    @first, @last = [Point[point0], Point[point1]]
 	end
 	def inspect
 	    'Line(' + @first.inspect + ', ' + @last.inspect + ')'

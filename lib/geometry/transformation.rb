@@ -69,7 +69,7 @@ system's X-axis:
 		    raise ArgumentError, "Too many translation parameters in #{options}"
 	    end
 
-	    @translation = Point[*@translation] if @translation.is_a?(Array)
+	    @translation = Point[*@translation]
 	    if @translation
 		@translation = nil if @translation.all? {|v| v == 0}
 		raise ArgumentError, ":translate must be a Point or a Vector" if @translation and not @translation.is_a?(Vector)

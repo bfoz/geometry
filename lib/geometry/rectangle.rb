@@ -81,8 +81,8 @@ The {Rectangle} class cluster represents your typical arrangement of 4 corners a
 	#   @param [Point]	point0	A corner (ie. bottom-left)
 	#   @param [Point]	point1	The other corner (ie. top-right)
 	def initialize(point0, point1)
-	    point0 = point0.is_a?(Point) ? point0 : Point[point0]
-	    point1 = point1.is_a?(Point) ? point1 : Point[point1]
+	    point0 = Point[point0]
+	    point1 = Point[point1]
 	    raise(ArgumentError, "Point sizes must match") unless point0.size == point1.size
 
 	    # Reorder the points to get lower-left and upper-right
