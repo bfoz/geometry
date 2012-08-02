@@ -102,13 +102,23 @@ describe Geometry::Point do
 		(left + [5,6]).must_equal Point[6,8]
 	    end
 
-	    it "must raise TypeError when adding a scalar to a Vector" do
-		lambda { left + 1 }.must_raise TypeError
+	    it "must raise TypeError when adding a scalar to a Point of dimension greater than 1" do
+		lambda { left + 1 }.must_raise Geometry::DimensionMismatch
+	    end
+
+	    it "must support adding a Numeric to a Point with a size of 1" do
+		(Point[1] + 2).must_equal Point[3]
 	    end
 
 	    it "must raise an exception when adding mismatched sizes" do
-		lambda { left + [1,2,3,4] }.must_raise ExceptionForMatrix::ErrDimensionMismatch
+		lambda { left + [1,2,3,4] }.must_raise Geometry::DimensionMismatch
 	    end
+	    
+	    it "must return a Point when adding a Vector" do
+		(left + Vector[5,6]).must_equal Point[6,8]
+		(Vector[5,6] + right).must_equal Vector[8,10]
+	    end
+
 	end
 
 	describe "when subtracting" do
@@ -120,12 +130,16 @@ describe Geometry::Point do
 		(left - [5,6]).must_equal Point[-4, -4]
 	    end
 
-	    it "must raise TypeError when subtracting a scalar from a Vector" do
-		lambda { left - 1 }.must_raise TypeError
+	    it "must raise an exception when subtracting a scalar from a Vector" do
+		lambda { left - 1 }.must_raise Geometry::DimensionMismatch
+	    end
+
+	    it "must subtract a Numeric from a Point of size 1" do
+		(Point[3] - 2).must_equal Point[1]
 	    end
 
 	    it "must raise an exception when subtracting mismatched sizes" do
-		lambda { left - [1,2,3,4] }.must_raise ExceptionForMatrix::ErrDimensionMismatch
+		lambda { left - [1,2,3,4] }.must_raise Geometry::DimensionMismatch
 	    end
 	end
     end
@@ -165,7 +179,7 @@ describe Geometry::Point do
 	    Point[3,2].wont_equal point
 	end
 
-	it "must compare equal to an eqal Vector" do
+	it "must compare equal to an equal Vector" do
 	    point.must_equal Vector[1,2]
 	    Vector[1,2].must_equal point
 	end
@@ -188,5 +202,4 @@ describe Geometry::Point do
 	    (-left).must_equal Vector[-1,-2]
 	end
     end
-
 end

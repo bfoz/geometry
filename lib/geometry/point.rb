@@ -13,6 +13,9 @@ class Vector
 end
 
 module Geometry
+    DimensionMismatch = Class.new(StandardError)
+    OperationNotDefined = Class.new(StandardError)
+
 =begin rdoc
 An object repesenting a Point in N-dimensional space
 
@@ -41,6 +44,12 @@ geometry class (x, y, z).
 	    super *array
 	end
 
+	# Creates and returns a new {PointZero} instance
+	# @return [PointZero] A new {PointZero} instance
+	def self.zero
+	    PointZero.new
+	end
+
 	# Allow comparison with an Array, otherwise do the normal thing
 	def eql?(other)
 	    return @elements == other if other.is_a?(Array)
@@ -53,7 +62,7 @@ geometry class (x, y, z).
 		when Array then [Point[*other], self]
 		when Vector then [Point[*other], self]
 		else
-		    nil
+		    raise TypeError, "#{self.class} can't be coerced into #{other.class}"
 	    end
 	end
 
@@ -99,15 +108,31 @@ geometry class (x, y, z).
 # !@endgroup
 
 	def +(other)
-	    raise TypeError, "Integer is not like Vector" if other.is_a?(Integer) and (size != 1)
-	    Vector.Raise ErrDimensionMismatch if size != other.size
-	    Point[Array.new(size) {|i| @elements[i] + other[i] }]
+	    case other
+		when Numeric
+		    raise DimensionMismatch, "A scalar can't be added to a Point of dimension greater than 1" if size != 1
+		    Point[@elements.first + other]
+		when PointZero
+		    self
+		else
+		    raise OperationNotDefined, "#{other.class} must respond to :size and :[]" unless other.respond_to?(:size) && other.respond_to?(:[])
+		    raise DimensionMismatch,  "Can't add #{other} to #{self}" if size != other.size
+		    Point[Array.new(size) {|i| @elements[i] + other[i] }]
+	    end
 	end
 
 	def -(other)
-	    raise TypeError, "Integer is not like Vector" if other.is_a?(Integer) and (size != 1)
-	    Vector.Raise ErrDimensionMismatch if size != other.size
-	    Point[Array.new(size) {|i| @elements[i] - other[i] }]
+	    case other
+		when Numeric
+		    raise DimensionMismatch, "A scalar can't be subtracted from a Point of dimension greater than 1" if size != 1
+		    Point[@elements.first - other]
+		when PointZero
+		    self
+		else
+		    raise OperationNotDefined, "#{other.class} must respond to :size and :[]" unless other.respond_to?(:size) && other.respond_to?(:[])
+		    raise DimensionMismatch, "Can't subtract #{other} from #{self}" if size != other.size
+		    Point[Array.new(size) {|i| @elements[i] - other[i] }]
+	    end
 	end
 
 # !@endgroup
