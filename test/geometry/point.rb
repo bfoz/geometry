@@ -63,22 +63,6 @@ describe Geometry::Point do
 	assert_equal(6, point.y)
 	assert_equal(7, point.z)
     end
-    it "compare equal" do
-	point1 = Geometry::Point[1,2]
-	point2 = Geometry::Point[1,2]
-	point3 = Geometry::Point[3,4]
-	assert_equal(point1, point2)
-	point2.wont_equal point3
-    end
-
-    it "compare equal to an array with equal elements" do
-	point1 = Point[1,2]
-	assert_equal(point1, [1,2])
-    end
-
-    it "not compare equal to an array with unequal elements" do
-	Point[1,2].wont_equal [3,2]
-    end
 
     it "implement inspect" do
 	point = Geometry::Point[8,9]
@@ -143,6 +127,52 @@ describe Geometry::Point do
 	    it "must raise an exception when subtracting mismatched sizes" do
 		lambda { left - [1,2,3,4] }.must_raise ExceptionForMatrix::ErrDimensionMismatch
 	    end
+	end
+    end
+
+    describe "coercion" do
+	it "must coerce Arrays into Points" do
+	    Point[1,2].coerce([3,4]).must_equal [Point[3,4], Point[1,2]]
+	end
+
+	it "must coerce Vectors into Points" do
+	    Point[1,2].coerce(Vector[3,4]).must_equal [Point[3,4], Point[1,2]]
+	end
+    end
+
+    describe "comparison" do
+	let(:point) { Point[1,2] }
+
+	it "must compare equal to an equal Array" do
+	    point.must_be :==, [1,2]
+	    point.must_be :eql?, [1,2]
+	    [1,2].must_equal point
+	end
+
+	it "must not compare equal to an unequal Array" do
+	    point.wont_equal [3,2]
+	    [3,2].wont_equal point
+	end
+
+	it "must compare equal to an equal Point" do
+	    point.must_be :==, Point[1,2]
+	    point.must_be :eql?, Point[1,2]
+	    Point[1,2].must_equal point
+	end
+	
+	it "must not compare equal to an unequal Point" do
+	    point.wont_equal Point[3,2]
+	    Point[3,2].wont_equal point
+	end
+
+	it "must compare equal to an eqal Vector" do
+	    point.must_equal Vector[1,2]
+	    Vector[1,2].must_equal point
+	end
+
+	it "must not compare equal to an unequal Vector" do
+	    point.wont_equal Vector[3,2]
+	    Vector[3,2].wont_equal point
 	end
     end
 

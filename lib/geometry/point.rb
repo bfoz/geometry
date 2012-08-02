@@ -42,9 +42,19 @@ geometry class (x, y, z).
 	end
 
 	# Allow comparison with an Array, otherwise do the normal thing
-	def ==(other)
+	def eql?(other)
 	    return @elements == other if other.is_a?(Array)
 	    super other
+	end
+	alias == eql?
+
+	def coerce(other)
+	    case other
+		when Array then [Point[*other], self]
+		when Vector then [Point[*other], self]
+		else
+		    nil
+	    end
 	end
 
 	def inspect
@@ -54,6 +64,7 @@ geometry class (x, y, z).
 	    'Point' + @elements.to_s
 	end
 
+# !@group Accessors
 	# @param [Integer]  i	Index into the {Point}'s elements
 	# @return [Numeric] Element i (starting at 0)
 	def [](i)
@@ -77,6 +88,7 @@ geometry class (x, y, z).
 	def z
 	    @elements[2]
 	end
+# !@endgroup
 
 # !@group Arithmetic
 
