@@ -1,4 +1,5 @@
 require 'geometry/point'
+require 'geometry/rotation'
 
 module Geometry
 =begin
@@ -47,17 +48,9 @@ system's X-axis:
 	    translate, rotate, scale = args
 	    options = options.reduce({}, :merge)
 
-	    @dimensions = options[:dimensions] || 0
+	    @dimensions = options[:dimensions] || nil
 
-	    if options.key?(:rotate) and (options.key?(:x) or options.key?(:y) or options.key?(:z))
-		raise ArgumentError, "Can't specify rotation and axes at the same time"
-	    end
-
-	    @x_axis = options[:x]
-	    @y_axis = options[:y]
-	    @z_axis = options[:z]
-
-	    @rotation = options[:rotate] || rotate
+	    @rotation = options[:rotate] || rotate || Geometry::Rotation.new(options)
 	    @scale = options[:scale] || scale
 
 	    case options.count {|k,v| [:move, :origin, :translate].include? k }
@@ -75,52 +68,37 @@ system's X-axis:
 		raise ArgumentError, ":translate must be a Point or a Vector" if @translation and not @translation.is_a?(Vector)
 	    end
 
-	    if @dimensions and (@dimensions != 0)
-		biggest = [@x_axis, @y_axis, @z_axis, @translation, @rotation, @scale].select {|a| a}.map {|a| a.size}.max
-		if biggest and (biggest != 0)
-		    raise ArgumentError, "Dimensionality mismatch" if biggest > @dimensions
-		    if biggest < @dimensions
-			@x_axis = Array.new(@dimensions) {|i| @x_axis[i] || 0 } if @x_axis && @x_axis.size < @dimensions
-			@y_axis = Array.new(@dimensions) {|i| @y_axis[i] || 0 } if @y_axis && @y_axis.size < @dimensions
-			@z_axis = Array.new(@dimensions) {|i| @z_axis[i] || 0 } if @z_axis && @z_axis.size < @dimensions
-			@rotation = Array.new(@dimensions) {|i| @rotation[i] || 0 } if @rotation && @rotation.size < @dimensions
-			@scale = Array.new(@dimensions) {|i| @scale || 1 } if @scale && @scale.size < @dimensions
-			@translation = Array.new(@dimensions) {|i| @translation[i] || 0 } if @translation && @translation.size < @dimensions
-		    end
+	    if @dimensions
+		biggest = [@translation, @scale].select {|a| a}.map {|a| a.size}.max
+
+		if biggest and (biggest != 0) and (((biggest != @dimensions)) or (@rotation and (@rotation.dimensions != biggest)))
+		    raise ArgumentError, "Dimensionality mismatch"
 		end
 	    end
 	end
 
 	# Returns true if the {Transformation} is the identity transformation
 	def identity?
-	    !(@rotation || @scale || @translation || @x_axis || @y_axis || @z_axis)
+	    @rotation.identity? && !(@scale || @translation)
 	end
 
 	# Compose the current {Transformation} with another one
 	def +(other)
 	    if other.is_a?(Array) or other.is_a?(Vector)
-		options = {}
-		options[:x] = @x_axis if @x_axis
-		options[:y] = @y_axis if @y_axis
-		options[:z] = @z_axis if @z_axis
 		if @translation
-		    Transformation.new(@translation+other, @rotation, @scale, options)
+		    Transformation.new(@translation+other, @rotation, @scale)
 		else
-		    Transformation.new(other, @rotation, @scale, options)
+		    Transformation.new(other, @rotation, @scale)
 		end
 	    end
 	end
 
 	def -(other)
 	    if other.is_a?(Array) or other.is_a?(Vector)
-		options = {}
-		options[:x] = @x_axis if @x_axis
-		options[:y] = @y_axis if @y_axis
-		options[:z] = @z_axis if @z_axis
 		if @translation
-		    Transformation.new(@translation-other, @rotation, @scale, options)
+		    Transformation.new(@translation-other, @rotation, @scale)
 		else
-		    Transformation.new(other.map {|e| -e}, @rotation, @scale, options)
+		    Transformation.new(other.map {|e| -e}, @rotation, @scale)
 		end
 	    end
 	end
