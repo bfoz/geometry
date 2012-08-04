@@ -1,17 +1,5 @@
 require 'matrix'
 
-class Vector
-    # !@group Unary operators
-    def +@
-	self
-    end
-
-    def -@
-	Vector[*(@elements.map {|e| -e })]
-    end
-    # !@endgroup
-end
-
 module Geometry
     DimensionMismatch = Class.new(StandardError)
     OperationNotDefined = Class.new(StandardError)
@@ -102,6 +90,10 @@ geometry class (x, y, z).
 # !@group Arithmetic
 
 # !@group Unary operators
+	def +@
+	    self
+	end
+
 	def -@
 	    Point[@elements.map {|e| -e }]
 	end
