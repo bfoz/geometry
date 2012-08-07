@@ -3,7 +3,7 @@ module Geometry
 A generalized representation of a rotation transformation.
 =end
     class Rotation
-	# !@attribute [r] dimensions
+	# @attribute [r] dimensions
 	# @return [Integer]
 	attr_reader :dimensions
 	attr_reader :x, :y, :z

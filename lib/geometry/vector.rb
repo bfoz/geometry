@@ -2,7 +2,7 @@ require 'matrix'
 
 # Monkeypatch Vector to overcome some deficiencies
 class Vector
-# !@group Unary operators
+# @group Unary operators
     def +@
 	self
     end
@@ -10,5 +10,5 @@ class Vector
     def -@
 	Vector[*(@elements.map {|e| -e })]
     end
-# !@endgroup
+# @endgroup
 end

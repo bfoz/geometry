@@ -29,9 +29,9 @@ everything else, regardless of dimensionality.
 	    end
 	end
 
-# !@group Arithmetic
+# @group Arithmetic
 
-# !@group Unary operators
+# @group Unary operators
 	def +@
 	    self
 	end
@@ -39,7 +39,7 @@ everything else, regardless of dimensionality.
 	def -@
 	    self
 	end
-# !@endgroup
+# @endgroup
 
 	def +(other)
 	    other
@@ -62,7 +62,7 @@ everything else, regardless of dimensionality.
 	    raise ZeroDivisionError if 0 == other
 	    self
 	end
-# !@endgroup
+# @endgroup
 
     end
 end

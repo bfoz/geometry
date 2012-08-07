@@ -61,35 +61,35 @@ geometry class (x, y, z).
 	    'Point' + @elements.to_s
 	end
 
-# !@group Accessors
+# @group Accessors
 	# @param [Integer]  i	Index into the {Point}'s elements
 	# @return [Numeric] Element i (starting at 0)
 	def [](i)
 	    @elements[i]
 	end
 
-	# !@attribute [r] x
+	# @attribute [r] x
 	# @return [Numeric] X-component
 	def x
 	    @elements[0]
 	end
 
-	# !@attribute [r] y
+	# @attribute [r] y
 	# @return [Numeric] Y-component
 	def y
 	    @elements[1]
 	end
 
-	# !@attribute [r] z
+	# @attribute [r] z
 	# @return [Numeric] Z-component
 	def z
 	    @elements[2]
 	end
-# !@endgroup
+# @endgroup
 
-# !@group Arithmetic
+# @group Arithmetic
 
-# !@group Unary operators
+# @group Unary operators
 	def +@
 	    self
 	end
@@ -97,7 +97,7 @@ geometry class (x, y, z).
 	def -@
 	    Point[@elements.map {|e| -e }]
 	end
-# !@endgroup
+# @endgroup
 
 	def +(other)
 	    case other
@@ -127,7 +127,7 @@ geometry class (x, y, z).
 	    end
 	end
 
-# !@endgroup
+# @endgroup
 
     end
 end

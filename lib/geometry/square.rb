@@ -31,7 +31,7 @@ The {Square} class cluster is like the {Rectangle} class cluster, but not longer
 	end
 
 # !@group Accessors
-	# !@attribute [r] origin
+	# @attribute [r] origin
 	# @return [Point] The lower left corner
 	def origin
 	    @points.first
@@ -46,12 +46,12 @@ The {Square} class cluster is like the {Rectangle} class cluster, but not longer
 	    min, max = @points.minmax {|a,b| a.x <=> b.x}
 	    max.x - min.x
 	end
-# !@endgroup
+# @endgroup
     end
 
     # A {Square} created with a center point and a size
     class CenteredSquare < Square
-	# !@attribute [r] center
+	# @attribute [r] center
 	# @return [Point]   The center of the {Square}
 	attr_reader :center
 
@@ -62,14 +62,14 @@ The {Square} class cluster is like the {Rectangle} class cluster, but not longer
 	    @size = size
 	end
 
-# !@group Accessors
-	# !@attribute [r] origin
+# @group Accessors
+	# @attribute [r] origin
 	# @return [Point] The lower left corner
 	def origin
 	    Point[@center.x - size/2, @center.y - size/2]
 	end
 
-	# !@attribute [r] points
+	# @attribute [r] points
 	# @return [Array<Point>]    The {Square}'s four points (clockwise)
 	def points
 	    half_size = @size/2
@@ -88,7 +88,7 @@ The {Square} class cluster is like the {Rectangle} class cluster, but not longer
 	def width
 	    @size
 	end
-# !@endgroup
+# @endgroup
     end
 
     # A {Square} created with an origin point and a size

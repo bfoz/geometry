@@ -21,13 +21,13 @@ An object representing a closed set of vertices and edges.
 	#   Edges that share a common vertex will be added to the new Polygon. If
 	#   there's a gap between Edges it will be automatically filled with a new
 	#   Edge. The resulting Polygon will then be closed if it isn't already.
-	# @overload new(Array, Array, ...)
+	# @overload initialize(Array, Array, ...)
 	#   @return [Polygon]
-	# @overload new(Edge, Edge, ...)
+	# @overload initialize(Edge, Edge, ...)
 	#   @return [Polygon]
-	# @overload new(Point, Point, ...)
+	# @overload initialize(Point, Point, ...)
 	#   @return [Polygon]
-	# @overload new(Vector, Vector, ...)
+	# @overload initialize(Vector, Vector, ...)
 	#   @return [Polygon]
 	def initialize(*args)
 	    args.map! {|a| (a.is_a?(Array) || a.is_a?(Vector)) ? Point[a] : a}
