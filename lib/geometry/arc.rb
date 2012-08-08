@@ -27,5 +27,17 @@ An {Arc} with its center at [1,1] and a radius of 2 that starts at the X-axis an
 	    @start_angle = start_angle
 	    @end_angle = end_angle
 	end
+
+	# The starting point of the {Arc}
+	# @return [Point]
+	def first
+	    @center + @radius * Vector[Math.cos(@start_angle), Math.sin(@start_angle)]
+	end
+
+	# The end point of the {Arc}
+	# @return [Point]
+	def last
+	    @center + @radius * Vector[Math.cos(@end_angle), Math.sin(@end_angle)]
+	end
     end
 end

@@ -1,6 +1,7 @@
 require_relative 'geometry/arc'
 require_relative 'geometry/circle'
 require_relative 'geometry/line'
+require_relative 'geometry/path'
 require_relative 'geometry/point'
 require_relative 'geometry/point_zero'
 require_relative 'geometry/polygon'
