@@ -32,4 +32,9 @@ describe Geometry::Rotation do
     it "must be the identity rotation when identity axes are given" do
 	Geometry::Rotation.new(:x => [1,0,0], :y => [0,1,0])
     end
+
+    it "must have a matrix accessor" do
+	r = Geometry::Rotation.new(:x => [1,0,0], :y => [0,1,0])
+	r.matrix.must_equal Matrix[[1,0,0],[0,1,0],[0,0,1]]
+    end
 end

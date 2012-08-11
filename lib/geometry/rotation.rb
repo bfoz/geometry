@@ -1,3 +1,5 @@
+require 'matrix'
+
 module Geometry
 =begin
 A generalized representation of a rotation transformation.
@@ -34,13 +36,38 @@ A generalized representation of a rotation transformation.
 
 		raise ArgumentError, "Dimensionality mismatch" unless all_axes_options.first.size <= @dimensions
 		if all_axes_options.first.size < @dimensions
-		    @x, @y, @z = [@x, @y, @z].map {|a| (a && (a.size < @dimensions)) ? Array.new(@dimensions) {|i| a[i] || 0 } : a }
+		    @x, @y, @z = [@x, @y, @z].map {|a| (a && (a.size != 0) && (a.size < @dimensions)) ? Array.new(@dimensions) {|i| a[i] || 0 } : a }
 		end
+
+		raise ArgumentError, "Too many axes specified (expected #{@dimensions - 1} but got #{all_axes_options.size}" unless all_axes_options.size == (@dimensions - 1)
 	    end
 	end
 
 	def identity?
 	    (!@x && !@y && !@z) || ([@x, @y, @z].select {|a| a}.all? {|a| a.respond_to?(:magnitude) ? (1 == a.magnitude) : (1 == a.size)})
+	end
+
+	# @attribute [r] matrix
+	# @return [Matrix]
+	def matrix
+	    # Force all axes to be Vectors
+	    x,y,z = [@x, @y, @z].map {|a| a.is_a?(Array) ? Vector[*a] : a}
+
+	    # Force all axes to exist
+	    if x and y
+		z = x ** y
+	    elsif x and z
+		y = x ** z
+	    elsif y and z
+		x = y ** z
+	    end
+
+	    rows = []
+	    [x, y, z].each_with_index {|a, i| rows.push(a.to_a) if i < @dimensions }
+
+	    raise ArgumentError, "Number of axes must match the dimensions of each axis" unless @dimensions == rows.size
+
+	    Matrix[*rows]
 	end
     end
 end
