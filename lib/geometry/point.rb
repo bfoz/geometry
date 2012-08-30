@@ -40,10 +40,15 @@ geometry class (x, y, z).
 
 	# Allow comparison with an Array, otherwise do the normal thing
 	def eql?(other)
+	    return @elements.eql? other if other.is_a?(Array)
+	    super other
+	end
+
+	# Allow comparison with an Array, otherwise do the normal thing
+	def ==(other)
 	    return @elements == other if other.is_a?(Array)
 	    super other
 	end
-	alias == eql?
 
 	def coerce(other)
 	    case other

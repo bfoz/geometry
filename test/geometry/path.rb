@@ -46,12 +46,11 @@ describe Geometry::Path do
 
 	it "with disjoint Edges and Arcs" do
 	    path = Geometry::Path.new Edge.new([0,0], [1,0]), Geometry::Arc.new([2,1], 1, -90*Math::PI/180, 0), Edge.new([3,1], [1,2])
-	    path.elements.size.must_equal 5
+	    path.elements.size.must_equal 4
 	    path.elements[0].must_be_kind_of Geometry::Edge
 	    path.elements[1].must_be_kind_of Geometry::Edge
 	    path.elements[2].must_be_kind_of Geometry::Arc
 	    path.elements[3].must_be_kind_of Geometry::Edge
-	    path.elements[4].must_be_kind_of Geometry::Edge
 	end
 
 	it "with disjoint Arcs" do

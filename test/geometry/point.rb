@@ -113,7 +113,7 @@ describe Geometry::Point do
 	    it "must raise an exception when adding mismatched sizes" do
 		lambda { left + [1,2,3,4] }.must_raise Geometry::DimensionMismatch
 	    end
-	    
+
 	    it "must return a Point when adding a Vector" do
 		(left + Vector[5,6]).must_equal Point[6,8]
 		(Vector[5,6] + right).must_equal Vector[8,10]
@@ -173,7 +173,7 @@ describe Geometry::Point do
 	    point.must_be :eql?, Point[1,2]
 	    Point[1,2].must_equal point
 	end
-	
+
 	it "must not compare equal to an unequal Point" do
 	    point.wont_equal Point[3,2]
 	    Point[3,2].wont_equal point
@@ -187,6 +187,16 @@ describe Geometry::Point do
 	it "must not compare equal to an unequal Vector" do
 	    point.wont_equal Vector[3,2]
 	    Vector[3,2].wont_equal point
+	end
+
+	it "must think that floats == ints" do
+	    Point[1,2].must_be :==, Point[1.0,2.0]
+	    Point[1.0,2.0].must_be :==, Point[1,2]
+	end
+
+	it "must not think that floats eql? ints" do
+	    Point[1,2].wont_be :eql?, Point[1.0,2.0]
+	    Point[1.0,2.0].wont_be :eql?, Point[1,2]
 	end
     end
 end
