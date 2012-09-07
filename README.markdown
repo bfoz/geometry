@@ -26,6 +26,7 @@ Primitives
 - Rectangle
 - Polygon
 - Transformation
+- Triangle
 
 Examples
 --------

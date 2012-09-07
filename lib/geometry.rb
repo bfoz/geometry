@@ -11,6 +11,7 @@ require_relative 'geometry/size'
 require_relative 'geometry/size_zero'
 require_relative 'geometry/square'
 require_relative 'geometry/transformation'
+require_relative 'geometry/triangle'
 require_relative 'geometry/vector'
 
 module Geometry
