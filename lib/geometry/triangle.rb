@@ -17,6 +17,12 @@ An isoscoles right {Triangle} created with an origin and leg length
 
 	class << self
 	    alias :original_new :new
+
+	    def inherited(subclass)
+		class << subclass
+		    alias :new :original_new
+		end
+	    end
 	end
 
 	# @overload new(point0, point1, point2)
@@ -55,10 +61,6 @@ An isoscoles right {Triangle} created with an origin and leg length
     class RightTriangle < Triangle
 	attr_reader :origin, :base, :height
 
-	def self.new(*args)
-	    original_new(*args)
-	end
-
 	# Construct a Right Triangle given a {Point} and the leg lengths
 	def initialize(origin, base, height)
 	    @origin = Point[origin]
@@ -74,10 +76,6 @@ An isoscoles right {Triangle} created with an origin and leg length
 
     class ScaleneTriangle < Triangle
 	attr_reader :points
-
-	def self.new(*args)
-	    original_new(*args)
-	end
 
 	# Construct a scalene {Triangle}
 	def initialize(point0, point1, point2)

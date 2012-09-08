@@ -32,6 +32,12 @@ The {Rectangle} class cluster represents your typical arrangement of 4 corners a
 
 	class << self
 	    alias :original_new :new
+
+	    def inherited(subclass)
+		class << subclass
+		    alias :new :original_new
+		end
+	    end
 	end
 
 	# @overload new(width, height)
@@ -151,10 +157,6 @@ The {Rectangle} class cluster represents your typical arrangement of 4 corners a
 	# @return [Size]	The {Size} of the {Rectangle}
 	attr_accessor :size
 
-	def self.new(*args)
-	    original_new(*args)
-	end
-
 	# @overload new(width, height)
 	#   Creates a {Rectangle} of the given width and height, centered on the origin
 	#   @param [Number]   height  Height
@@ -219,10 +221,6 @@ The {Rectangle} class cluster represents your typical arrangement of 4 corners a
 	attr_accessor :origin
 	# @return [Size]	The {Size} of the {Rectangle}
 	attr_accessor :size
-
-	def self.new(*args)
-	    original_new(*args)
-	end
 
 	# @overload new(width, height)
 	#   Creates a {Rectangle} of the given width and height with its origin at [0,0]

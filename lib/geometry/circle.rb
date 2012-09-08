@@ -19,6 +19,16 @@ Circles come in all shapes and sizes, but they're usually round.
 	# @return [Number]  The {Circle}'s radius
 	attr_reader :radius
 
+	class << self
+	    alias :original_new :new
+
+	    def inherited(subclass)
+		class << subclass
+		    alias :new :original_new
+		end
+	    end
+	end
+
 	# @overload new(circle, radius)
 	#   Construct a {Circle} using a centerpoint and radius
 	#   @param [Point]	center  The center point of the {Circle}
@@ -58,7 +68,7 @@ Circles come in all shapes and sizes, but they're usually round.
 	    @center = Point[center]
 	    @radius = radius
 	end
-	
+
 # @!group Accessors
 	# @!attribute [r] diameter
 	#   @return [Numeric] The diameter of the {Circle}
@@ -67,7 +77,7 @@ Circles come in all shapes and sizes, but they're usually round.
 	end
 # @!endgroup
     end
-    
+
     class CenterDiameterCircle < Circle
 	# @return [Number]  The {Circle}'s diameter
 	attr_reader :diameter
