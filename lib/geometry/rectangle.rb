@@ -1,3 +1,4 @@
+require_relative 'cluster_factory'
 require_relative 'edge'
 require_relative 'point'
 require_relative 'size'
@@ -19,6 +20,8 @@ The {Rectangle} class cluster represents your typical arrangement of 4 corners a
 =end
 
     class Rectangle
+	include ClusterFactory
+
 	# @return [Point]   The {Rectangle}'s center
 	attr_reader :center
 	# @return [Number]  Height of the {Rectangle}
@@ -29,16 +32,6 @@ The {Rectangle} class cluster represents your typical arrangement of 4 corners a
 	attr_reader :size
 	# @return [Number]  Width of the {Rectangle}
 	attr_reader :width
-
-	class << self
-	    alias :original_new :new
-
-	    def inherited(subclass)
-		class << subclass
-		    alias :new :original_new
-		end
-	    end
-	end
 
 	# @overload new(width, height)
 	#   Creates a {Rectangle} of the given width and height, centered on the origin

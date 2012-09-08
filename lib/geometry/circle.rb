@@ -1,3 +1,4 @@
+require_relative 'cluster_factory'
 require_relative 'point'
 
 module Geometry
@@ -13,21 +14,13 @@ Circles come in all shapes and sizes, but they're usually round.
 =end
 
     class Circle
+	include ClusterFactory
+
 	# @return [Point]   The {Circle}'s center point
 	attr_reader :center
 
 	# @return [Number]  The {Circle}'s radius
 	attr_reader :radius
-
-	class << self
-	    alias :original_new :new
-
-	    def inherited(subclass)
-		class << subclass
-		    alias :new :original_new
-		end
-	    end
-	end
 
 	# @overload new(circle, radius)
 	#   Construct a {Circle} using a centerpoint and radius

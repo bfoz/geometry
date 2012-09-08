@@ -1,3 +1,4 @@
+require_relative 'cluster_factory'
 require_relative 'point'
 
 module Geometry
@@ -15,15 +16,7 @@ An isoscoles right {Triangle} created with an origin and leg length
     # @abstract Factory class that instantiates the appropriate subclasses
     class Triangle
 
-	class << self
-	    alias :original_new :new
-
-	    def inherited(subclass)
-		class << subclass
-		    alias :new :original_new
-		end
-	    end
-	end
+	include ClusterFactory
 
 	# @overload new(point0, point1, point2)
 	#   Contruct a {ScaleneTriangle} using three {Point}s
