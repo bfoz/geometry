@@ -198,5 +198,20 @@ describe Geometry::Point do
 	    Point[1,2].wont_be :eql?, Point[1.0,2.0]
 	    Point[1.0,2.0].wont_be :eql?, Point[1,2]
 	end
+
+	describe "spaceship" do
+	    it "must spaceship with another Point of the same length" do
+		(Point[1,2] <=> Point[0,3]).must_equal Point[1,-1]
+	    end
+
+	    it "must spaceship with another Point of different length" do
+		(Point[1,2] <=> Point[0,3,4]).must_equal Point[1,-1]
+		(Point[1,2,4] <=> Point[0,3]).must_equal Point[1,-1]
+	    end
+
+	    it "must spaceship with an Array" do
+		(Point[1,2] <=> [0,3]).must_equal Point[1,-1]
+	    end
+	end
     end
 end

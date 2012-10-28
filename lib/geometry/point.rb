@@ -50,6 +50,12 @@ geometry class (x, y, z).
 	    super other
 	end
 
+	# Combined comparison operator
+	# @return [Point]   The <=> operator is applied to the elements of the arguments pairwise and the results are returned in a Point
+	def <=>(other)
+	    Point[self.to_a.zip(other.to_a).map {|a,b| a <=> b}.compact]
+	end
+
 	def coerce(other)
 	    case other
 		when Array then [Point[*other], self]
