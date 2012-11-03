@@ -13,7 +13,7 @@ An object representing a set of connected elements, each of which could be an
 	#  Successive {Point}s will be converted to {Edge}s.
 	def initialize(*args)
 	    args.map! {|a| (a.is_a?(Array) or a.is_a?(Vector)) ? Point[a] : a}
-	    raise(ArgumentError,'Unknown argument type') unless args.all? {|a| a.is_a?(Point) or a.is_a?(Edge) or a.is_a?(Arc) }
+	    args.each {|a| raise ArgumentError, "Unknown argument type #{a.class}" unless a.is_a?(Point) or a.is_a?(Edge) or a.is_a?(Arc) }
 
 	    @elements = []
 
