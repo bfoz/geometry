@@ -46,9 +46,33 @@ An object representing a closed set of vertices and edges.
 
 	    args.reduce(@vertices.last) do |previous,n|
 		if n.is_a?(Point)
-		    push_edge Edge.new(previous, n)
-		    push_vertex n
-		    n
+		    if n == previous	# Ignore repeated Points
+			previous
+		    else
+			if @edges.last
+			    new_edge = Edge.new(previous, n)
+			    if @edges.last.parallel?(new_edge)
+				@edges.pop				# Remove the previous Edge
+				@vertices.pop(@edges.size ? 1 : 2)	# Remove the now unused vertex, or vertices
+				if n == @edges.last.last
+				    @edges.last.last
+				else
+				    push_edge Edge.new(@edges.last.last, n)
+				    push_vertex @edges.last.first
+				    push_vertex n
+				    n
+				end
+			    else
+				push_edge Edge.new(previous, n)
+				push_vertex n
+				n
+			    end
+			else
+			    push_edge Edge.new(previous, n)
+			    push_vertex n
+			    n
+			end
+		    end
 		elsif n.is_a?(Edge)
 		    if previous == n.first
 			push_edge n
@@ -68,6 +92,14 @@ An object representing a closed set of vertices and edges.
 	    # Close the polygon if needed
 	    @edges.push Edge.new(@edges.last.last, @edges.first.first) unless @edges.empty? || (@edges.last.last == @edges.first.first)
 	end
+
+	# Check the equality of two {Polygon}s. Note that if two {Polygon}s have
+	#  opposite winding, but are otherwise identical, they will be considered unequal.
+	# @return [Bool] true if both {Polygon}s have equal edges
+	def eql?(other)
+	    @vertices.zip(other.vertices).all? {|a,b| a == b}
+	end
+	alias :== :eql?
 
 	# Returns the convex hull of the {Polygon}
 	# @return [Polygon] A convex {Polygon}, or the original {Polygon} if it's already convex

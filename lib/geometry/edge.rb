@@ -50,6 +50,31 @@ An edge. It's a line segment between 2 points. Generally part of a {Polygon}.
 	end
 	alias :to_s :inspect
 
+	# @return [Bool] Returns true if the passed {Edge} is parallel to the receiver
+	def parallel?(edge)
+	    v1, v2 = self.direction, edge.direction
+	    winding = v1[0]*v2[1] - v1[1]*v2[0]
+	    if 0 == winding	# collinear?
+		if v1 == v2
+		    1		# same direction
+		else
+		    -1		# opposite direction
+		end
+	    else
+		false
+	    end
+	end
+
+	# @return [Vector]  A unit {Vector} pointing from first to last
+	def direction
+	    self.vector.normalize
+	end
+
+	# @return [Vector]  A {Vector} pointing from first to last
+	def vector
+	    Vector[*((last-first).to_a)]
+	end
+
 	def to_a
 	    [@first, @last]
 	end

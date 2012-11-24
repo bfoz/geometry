@@ -4,6 +4,8 @@ require 'geometry/polygon'
 describe Geometry::Polygon do
     Polygon = Geometry::Polygon
 
+    let(:unit_square) { Polygon.new [0,0], [1,0], [1,1], [0,1] }
+
     it "must create a Polygon object with no arguments" do
 	polygon = Geometry::Polygon.new
 	assert_kind_of(Geometry::Polygon, polygon)
@@ -16,6 +18,30 @@ describe Geometry::Polygon do
 	assert_kind_of(Geometry::Polygon, polygon)
 	assert_equal(4, polygon.edges.size)
 	assert_equal(4, polygon.vertices.size)
+    end
+
+    describe "when creating a Polygon from an array of Points" do
+	it "must ignore repeated Points" do
+	    polygon = Geometry::Polygon.new([0,0], [1,0], [1,1], [1,1], [0,1])
+	    polygon.must_be_kind_of Geometry::Polygon
+	    polygon.edges.size.must_equal 4
+	    polygon.vertices.size.must_equal 4
+	    polygon.must_equal Geometry::Polygon.new([0,0], [1,0], [1,1], [0,1])
+	end
+
+	it "must collapse collinear Edges" do
+	    polygon = Geometry::Polygon.new([0,0], [1,0], [1,1], [0.5,1], [0,1])
+	    polygon.must_equal Geometry::Polygon.new([0,0], [1,0], [1,1], [0,1])
+	end
+
+	it "must collapse backtracking Edges" do
+	    polygon = Geometry::Polygon.new [0,0], [2,0], [2,2], [1,2], [1,1], [1,2], [0,2]
+	    polygon.must_equal Geometry::Polygon.new([0,0], [2,0], [2,2], [0,2])
+	end
+    end
+
+    it "must compare identical polygons as equal" do
+	(unit_square.eql? unit_square).must_equal true
     end
 
     it "must create closed polygons" do

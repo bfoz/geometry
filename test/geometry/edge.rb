@@ -38,4 +38,23 @@ describe Geometry::Edge do
 	edge = Edge([0,0], [1,1])
 	assert_equal(1, edge.width)
     end
+
+    it "must convert an Edge to a Vector" do
+	Edge.new([0,0], [1,0]).vector.must_equal Vector[1,0]
+    end
+
+    it "must return the normalized direction of a vector" do
+	Edge.new([0,0], [1,0]).direction.must_equal Vector[1,0]
+    end
+
+    it "must return true for parallel edges" do
+	Edge.new([0,0], [1,0]).parallel?(Edge.new([0,0], [1,0])).must_equal 1
+	Edge.new([0,0], [1,0]).parallel?(Edge.new([1,0], [2,0])).must_equal 1
+	Edge.new([0,0], [1,0]).parallel?(Edge.new([3,0], [4,0])).must_equal 1
+	Edge.new([0,0], [1,0]).parallel?(Edge.new([3,1], [4,1])).must_equal 1
+    end
+
+    it "must return false for non-parallel edges" do
+	Edge.new([0,0], [2,0]).parallel?(Edge.new([1,-1], [1,1])).must_equal false
+    end
 end
