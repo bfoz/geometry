@@ -101,6 +101,9 @@ An object representing a closed set of vertices and edges.
 	end
 	alias :== :eql?
 
+	# @group Convex Hull
+
+
 	# Returns the convex hull of the {Polygon}
 	# @return [Polygon] A convex {Polygon}, or the original {Polygon} if it's already convex
 	def convex
@@ -133,7 +136,105 @@ An object representing a closed set of vertices and edges.
 	    Polygon.new *hull_points
 	end
 
+	# @endgroup
+
+	# Outset the receiver by the specified distance
+	# @param [Number] distance	The distance to offset by
+	# @return [Polygon] A new {Polygon} outset by the given distance
+	def outset(distance)
+	    bisectors = offset_bisectors(distance)
+	    offsets = (bisectors.each_cons(2).to_a << [bisectors.last, bisectors.first])
+
+	    # Create the offset edges and then wrap them in Hashes so the edges
+	    #  can be altered while walking the array
+	    active_edges = edges.zip(offsets).map do |e,offset|
+		offset = Edge.new(e.first+offset.first.vector, e.last+offset.last.vector)
+
+		# Skip zero-length edges
+		{:edge => (offset.first == offset.last) ? nil : offset}
+	    end
+
+	    # Walk the array and handle any intersections
+	    for i in 0..(active_edges.count-1) do
+		e1 = active_edges[i][:edge]
+		next unless e1	# Ignore deleted edges
+
+		intersection, j = find_last_intersection(active_edges, i, e1)
+		if intersection
+		    e2 = active_edges[j][:edge]
+		    if intersection.is_a? Point
+			active_edges[i][:edge] = Edge.new(e1.first, intersection)
+			active_edges[j][:edge] = Edge.new(intersection, e2.last)
+		    else
+			# Handle the collinear case
+			active_edges[i][:edge] = Edge.new(e1.first, e2.last)
+			active_edges[j].delete(:edge)
+		    end
+
+		    # Delete everything between e1 and e2
+		    for k in i..j do
+			next if (k==i) or (k==j)    # Exclude e1 and e2
+			active_edges[k].delete(:edge)
+		    end
+
+		    redo    # Recheck the modified edges
+		end
+	    end
+	    Polygon.new *(active_edges.map {|e| e[:edge]}.compact.map {|e| [e.first, e.last]}.flatten)
+	end
+
+	# Vertex bisectors suitable for offsetting
+	# @param [Number] length    The distance to offset by
+	# @return [Array<Edge>]	{Edge}s representing the bisectors
+	def offset_bisectors(length)
+	    vectors = edges.map {|e| e.direction }
+	    winding = 0
+	    sums = vectors.unshift(vectors.last).each_cons(2).map do |v1,v2|
+		k = v1[0]*v2[1] - v1[1]*v2[0]	# z-component of v1 x v2
+		winding += k
+		if v1 == v2			# collinear, same direction?
+		    Vector[-v1[1], v1[0]]
+		elsif 0 == k			# collinear, reverse direction
+		    nil
+		else
+		    by = (v2[1] - v1[1])/k
+		    v = (0 == v1[1]) ? v2 : v1
+		    Vector[(v[0]*by - 1)/v[1], by]
+		end
+	    end
+
+	    # Check the polygon's orientation. If clockwise, negate length as a hack for injecting a -1 into the final result
+	    length = -length if winding >= 0
+	    vertices.zip(sums).map {|v,b| b ? Edge.new(v, v+(b * length)) : nil}
+	end
+
 	private
+
+	# @group Helpers for outset()
+
+	# Find the next edge that intersects with e, starting at index i
+	def find_next_intersection(edges, i, e)
+	    for j in i..(edges.count-1)
+		e2 = edges[j][:edge]
+		next if !e2 || e.connected?(e2)
+		intersection = e.intersection(e2)
+		return [intersection, j] if intersection
+	    end
+	    nil
+	end
+
+	# Find the last edge that intersects with e, starting at index i
+	def find_last_intersection(edges, i, e)
+	    intersection, intersection_at = nil, nil
+	    for j in i..(edges.count-1)
+		e2 = edges[j][:edge]
+		next if !e2 || e.connected?(e2)
+		_intersection = e.intersection(e2)
+		intersection, intersection_at = _intersection, j if _intersection
+	    end
+	    [intersection, intersection_at]
+	end
+	# @endgroup
 
 	# Return a number that increases with the slope of the {Edge}
 	# @return [Number]  A number in the range [0,4)

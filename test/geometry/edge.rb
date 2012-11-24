@@ -57,4 +57,38 @@ describe Geometry::Edge do
     it "must return false for non-parallel edges" do
 	Edge.new([0,0], [2,0]).parallel?(Edge.new([1,-1], [1,1])).must_equal false
     end
+
+    describe "when finding an intersection" do
+	it "must find the intersection of two end-intersecting Edges" do
+	    intersection = Edge.new([0,0],[1,1]).intersection(Edge.new([0,1],[1,1]))
+	    intersection.must_be_kind_of Geometry::Point
+	    intersection.must_equal Geometry::Point[1,1]
+	end
+
+	it "must find the itersection of two crossed Edges" do
+	    edge1 = Edge.new [0.0, 0], [2.0, 2.0]
+	    edge2 = Edge.new [2.0, 0], [0.0, 2.0]
+	    intersection = edge1.intersection edge2
+	    intersection.must_be_kind_of Geometry::Point
+	    intersection.must_equal Geometry::Point[1,1]
+	end
+
+	it "must return nil for two edges that do not intersect" do
+	    Edge.new([0,0],[1,0]).intersection(Edge.new([0,1],[1,1])).must_equal nil
+	end
+
+	it "must return true for two collinear and overlapping edges" do
+	    Edge.new([0,0],[2,0]).intersection(Edge.new([1,0],[3,0])).must_equal true
+	end
+
+	it "must return false for collinear but non-overlapping edges" do
+	    Edge.new([0,0],[2,0]).intersection(Edge.new([3,0],[4,0])).must_equal false
+	    Edge.new([0,0],[0,2]).intersection(Edge.new([0,3],[0,4])).must_equal false
+	end
+
+	it "must return nil for two parallel but not collinear edges" do
+	    Edge.new([0,0],[2,0]).intersection(Edge.new([1,1],[3,1])).must_equal nil
+	end
+
+    end
 end

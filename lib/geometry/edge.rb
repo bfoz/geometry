@@ -65,9 +65,45 @@ An edge. It's a line segment between 2 points. Generally part of a {Polygon}.
 	    end
 	end
 
+	# @param [Edge] other	The other {Edge} to check
+	# @return [Bool] Returns true if the receiver and the passed {Edge} share an endpoint
+	def connected?(other)
+	    (@first == other.last) || (@last == other.first) || (@first == other.first) || (@last == other.last)
+	end
+
 	# @return [Vector]  A unit {Vector} pointing from first to last
 	def direction
 	    self.vector.normalize
+	end
+
+	# Find the intersection of two {Edge}s (http://bloggingmath.wordpress.com/2009/05/29/line-segment-intersection/)
+	# @return [Point] The intersection of the two {Edge}s, nil if they don't intersect, true if they're collinear and overlapping, and false if they're collinear and non-overlapping
+	def intersection(other)
+	    p0, p1 = self.first, self.last
+	    p2, p3 = other.first, other.last
+	    v1, v2 = self.vector, other.vector
+
+	    denominator = v1[0] * v2[1] - v2[0] * v1[1]		# v1 x v2
+	    p = p0 - p2
+	    if denominator == 0	    # collinear, so check for overlap
+		if 0 == (-v1[1] * p.x + v1[0] * p.y)	# collinear?
+		    # The edges are collinear, but do they overlap?
+		    # Project them onto the x and y axes to find out
+		    left1, right1 = [self.first[0], self.last[0]].sort
+		    bottom1, top1 = [self.first[1], self.last[1]].sort
+		    left2, right2 = [other.first[0], other.last[0]].sort
+		    bottom2, top2 = [other.first[1], other.last[1]].sort
+
+		    !((left2 > right1) || (right2 < left1) || (top2 < bottom1) || (bottom2 > top1))
+		else
+		    nil
+		end
+	    else
+		s = (-v1[1] * p.x + v1[0] * p.y) / denominator	# v1 x (p0 - p2) / denominator
+		t = ( v2[0] * p.y - v2[1] * p.x) / denominator	# v2 x (p0 - p2) / denominator
+
+		p0 + v1 * t if ((0..1) === s) && ((0..1) === t)
+	    end
 	end
 
 	# @return [Vector]  A {Vector} pointing from first to last

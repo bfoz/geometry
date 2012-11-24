@@ -2,8 +2,10 @@ require 'minitest/autorun'
 require 'geometry/polygon'
 
 describe Geometry::Polygon do
+    Point = Geometry::Point
     Polygon = Geometry::Polygon
 
+    let(:cw_unit_square) { Polygon.new [0,0], [0,1], [1,1], [1,0] }
     let(:unit_square) { Polygon.new [0,0], [1,0], [1,1], [0,1] }
 
     it "must create a Polygon object with no arguments" do
@@ -89,4 +91,35 @@ describe Geometry::Polygon do
 	convex_hull.vertices.must_equal [[0,0], [0,1], [2,1], [2,0], [1,-1]].map {|a| Point[*a]}
     end
 
+    describe "when outsetting" do
+	it "must outset a unit square" do
+	    outset_polygon = unit_square.outset(1)
+	    expected_polygon = Polygon.new [-1.0,-1.0], [2.0,-1.0], [2.0,2.0], [-1.0,2.0]
+	    outset_polygon.must_equal expected_polygon
+	end
+
+	it "must outset a simple concave polygon" do
+	    concave_polygon = Polygon.new [0,0], [4,0], [4,2], [3,2], [3,1], [1,1], [1,2], [0,2]
+	    outset_polygon = concave_polygon.outset(1)
+	    outset_polygon.must_equal Polygon.new [-1,-1], [5,-1], [5,3], [-1,3]
+	end
+
+	it "must outset a concave polygon" do
+	    concave_polygon = Polygon.new [0,0], [4,0], [4,2], [3,2], [3,1], [1,1], [1,2], [0,2]
+	    outset_polygon = concave_polygon.outset(2)
+	    outset_polygon.must_equal Polygon.new [-2,-2], [6,-2], [6,4], [-2,4]
+	end
+
+	it "must outset an asymetric concave polygon" do
+	    concave_polygon = Polygon.new [0,0], [4,0], [4,3], [3,3], [3,1], [1,1], [1,2], [0,2]
+	    outset_polygon = concave_polygon.outset(2)
+	    outset_polygon.must_equal Polygon.new [-2,-2], [6,-2], [6,5], [1,5], [1,4], [-2,4]
+	end
+
+	it "must outset a concave polygon with multiply-intersecting edges" do
+	    concave_polygon = Polygon.new [0,0], [5,0], [5,2], [4,2], [4,1], [3,1], [3,2], [2,2], [2,1], [1,1], [1,2], [0,2]
+	    outset_polygon = concave_polygon.outset(2)
+	    outset_polygon.must_equal Polygon.new [-2,-2], [7,-2], [7,4], [-2,4]
+	end
+    end
 end
