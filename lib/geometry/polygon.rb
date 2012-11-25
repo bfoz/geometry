@@ -155,16 +155,23 @@ An object representing a closed set of vertices and edges.
 	    end
 
 	    # Walk the array and handle any intersections
-	    for i in 0..(active_edges.count-1) do
-		e1 = active_edges[i][:edge]
+	    active_edges.each_with_index do |e, i|
+		e1 = e[:edge]
 		next unless e1	# Ignore deleted edges
 
 		intersection, j = find_last_intersection(active_edges, i, e1)
 		if intersection
 		    e2 = active_edges[j][:edge]
+		    wrap_around_is_shortest = ((i + active_edges.count - j) < (j-i))
+
 		    if intersection.is_a? Point
-			active_edges[i][:edge] = Edge.new(e1.first, intersection)
-			active_edges[j][:edge] = Edge.new(intersection, e2.last)
+			if wrap_around_is_shortest
+			    active_edges[i][:edge] = Edge.new(intersection, e1.last)
+			    active_edges[j][:edge] = Edge.new(e2.first, intersection)
+			else
+			    active_edges[i][:edge] = Edge.new(e1.first, intersection)
+			    active_edges[j][:edge] = Edge.new(intersection, e2.last)
+			end
 		    else
 			# Handle the collinear case
 			active_edges[i][:edge] = Edge.new(e1.first, e2.last)
@@ -172,9 +179,19 @@ An object representing a closed set of vertices and edges.
 		    end
 
 		    # Delete everything between e1 and e2
-		    for k in i..j do
-			next if (k==i) or (k==j)    # Exclude e1 and e2
-			active_edges[k].delete(:edge)
+		    if wrap_around_is_shortest	# Choose the shortest path
+			for k in 0...i do
+			    active_edges[k].delete(:edge)
+			end
+			for k in j...active_edges.count do
+			    next if k==j    # Exclude e2
+			    active_edges[k].delete(:edge)
+			end
+		    else
+			for k in i...j do
+			    next if k==i    # Exclude e1 and e2
+			    active_edges[k].delete(:edge)
+			end
 		    end
 
 		    redo    # Recheck the modified edges
@@ -226,7 +243,7 @@ An object representing a closed set of vertices and edges.
 	# Find the last edge that intersects with e, starting at index i
 	def find_last_intersection(edges, i, e)
 	    intersection, intersection_at = nil, nil
-	    for j in i..(edges.count-1)
+	    for j in i...edges.count
 		e2 = edges[j][:edge]
 		next if !e2 || e.connected?(e2)
 		_intersection = e.intersection(e2)

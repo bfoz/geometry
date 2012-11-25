@@ -121,5 +121,11 @@ describe Geometry::Polygon do
 	    outset_polygon = concave_polygon.outset(2)
 	    outset_polygon.must_equal Polygon.new [-2,-2], [7,-2], [7,4], [-2,4]
 	end
+
+	it "must outset a concave polygon where the first outset edge intersects with the last outset edge" do
+	    polygon = Polygon.new [0,0], [0,1], [2,1], [2,2], [-1,2], [-1,-1], [2,-1], [2,0]
+	    polygon.edges.count.must_equal 8
+	    polygon.outset(1).must_equal Polygon.new [3, 0], [3, 3], [-2, 3], [-2, -2], [3, -2]
+	end
     end
 end
