@@ -1,9 +1,10 @@
 require_relative 'edge'
+require_relative 'polyline'
 
 module Geometry
 
 =begin rdoc
-An object representing a closed set of vertices and edges.
+A {Polygon} is a closed path comprised entirely of lines so straight they don't even curve.
 
 {http://en.wikipedia.org/wiki/Polygon}
 
@@ -11,9 +12,7 @@ An object representing a closed set of vertices and edges.
 
 =end
 
-    class Polygon
-	attr_reader :edges, :vertices
-	alias :points :vertices
+    class Polygon < Polyline
 
 	# Construct a new Polygon from Points and/or Edges
 	#  The constructor will try to convert all of its arguments into Points and
@@ -21,88 +20,18 @@ An object representing a closed set of vertices and edges.
 	#   Edges that share a common vertex will be added to the new Polygon. If
 	#   there's a gap between Edges it will be automatically filled with a new
 	#   Edge. The resulting Polygon will then be closed if it isn't already.
-	# @overload initialize(Array, Array, ...)
-	#   @return [Polygon]
 	# @overload initialize(Edge, Edge, ...)
 	#   @return [Polygon]
 	# @overload initialize(Point, Point, ...)
 	#   @return [Polygon]
-	# @overload initialize(Vector, Vector, ...)
-	#   @return [Polygon]
 	def initialize(*args)
-	    args.map! {|a| (a.is_a?(Array) || a.is_a?(Vector)) ? Point[a] : a}
-	    args.each {|a| raise ArgumentError, "Unknown argument type #{a.class}" unless a.is_a?(Point) or a.is_a?(Edge) }
-
-	    @edges = [];
-	    @vertices = [];
-
-	    first = args.shift
-	    if first.is_a?(Point)
-		@vertices.push first
-	    elsif first.is_a?(Edge)
-		@edges.push first
-		@vertices.push *(first.to_a)
-	    end
-
-	    args.reduce(@vertices.last) do |previous,n|
-		if n.is_a?(Point)
-		    if n == previous	# Ignore repeated Points
-			previous
-		    else
-			if @edges.last
-			    new_edge = Edge.new(previous, n)
-			    if @edges.last.parallel?(new_edge)
-				@edges.pop				# Remove the previous Edge
-				@vertices.pop(@edges.size ? 1 : 2)	# Remove the now unused vertex, or vertices
-				if n == @edges.last.last
-				    @edges.last.last
-				else
-				    push_edge Edge.new(@edges.last.last, n)
-				    push_vertex @edges.last.first
-				    push_vertex n
-				    n
-				end
-			    else
-				push_edge Edge.new(previous, n)
-				push_vertex n
-				n
-			    end
-			else
-			    push_edge Edge.new(previous, n)
-			    push_vertex n
-			    n
-			end
-		    end
-		elsif n.is_a?(Edge)
-		    if previous == n.first
-			push_edge n
-			push_vertex n.last
-		    elsif previous == n.last
-			push_edge n.reverse!
-			push_vertex n.last
-		    else
-			e = Edge.new(previous, n.first)
-			push_edge e, n
-			push_vertex *(e.to_a), *(n.to_a)
-		    end
-		    n.last
-		end
-	    end
+	    super
 
 	    # Close the polygon if needed
 	    @edges.push Edge.new(@edges.last.last, @edges.first.first) unless @edges.empty? || (@edges.last.last == @edges.first.first)
 	end
 
-	# Check the equality of two {Polygon}s. Note that if two {Polygon}s have
-	#  opposite winding, but are otherwise identical, they will be considered unequal.
-	# @return [Bool] true if both {Polygon}s have equal edges
-	def eql?(other)
-	    @vertices.zip(other.vertices).all? {|a,b| a == b}
-	end
-	alias :== :eql?
-
 	# @group Convex Hull
-
 
 	# Returns the convex hull of the {Polygon}
 	# @return [Polygon] A convex {Polygon}, or the original {Polygon} if it's already convex
@@ -227,32 +156,6 @@ An object representing a closed set of vertices and edges.
 
 	private
 
-	# @group Helpers for outset()
-
-	# Find the next edge that intersects with e, starting at index i
-	def find_next_intersection(edges, i, e)
-	    for j in i..(edges.count-1)
-		e2 = edges[j][:edge]
-		next if !e2 || e.connected?(e2)
-		intersection = e.intersection(e2)
-		return [intersection, j] if intersection
-	    end
-	    nil
-	end
-
-	# Find the last edge that intersects with e, starting at index i
-	def find_last_intersection(edges, i, e)
-	    intersection, intersection_at = nil, nil
-	    for j in i...edges.count
-		e2 = edges[j][:edge]
-		next if !e2 || e.connected?(e2)
-		_intersection = e.intersection(e2)
-		intersection, intersection_at = _intersection, j if _intersection
-	    end
-	    [intersection, intersection_at]
-	end
-	# @endgroup
-
 	# Return a number that increases with the slope of the {Edge}
 	# @return [Number]  A number in the range [0,4)
 	def pseudo_angle_for_edge(point0, point1)
@@ -274,15 +177,6 @@ An object representing a closed set of vertices and edges.
 
 	def quadrant_one_psuedo_angle(dx, dy)
 	    dx / (dx + dy)
-	end
-
-	def push_edge(*e)
-	    @edges.push *e
-	    @edges.uniq!
-	end
-	def push_vertex(*v)
-	    @vertices.push *v
-	    @vertices.uniq!
 	end
     end
 end
