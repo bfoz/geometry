@@ -44,8 +44,8 @@ The {Rectangle} class cluster represents your typical arrangement of 4 corners a
 	#   @return [CenteredRectangle]
 	# @overload new(point0, point1)
 	#   Creates a {Rectangle} using the given {Point}s
-	#   @param [Point,Array]    point0	A corner
-	#   @param [Point,Array]    point1	The other corner
+	#   @param [Point]    point0	A corner
+	#   @param [Point]    point1	The other corner
 	# @overload new(origin, size)
 	#   Creates a {Rectangle} from the given origin and size
 	#   @param [Point]	origin	Lower-left corner
@@ -106,22 +106,22 @@ The {Rectangle} class cluster represents your typical arrangement of 4 corners a
 	    Point[(max.x+min.x)/2.0, (max.y+min.y)/2.0]
 	end
 
-	# @return [Array<Edge>]   The {Rectangle}'s four edges
+	# @return [Array<Edge>]   The {Rectangle}'s four edges (counterclockwise)
 	def edges
 	    point0, point2 = *@points
-	    point1 = Point[point0.x,point2.y]
-	    point3 = Point[point2.x, point0.y]
+	    point1 = Point[point2.x, point0.y]
+	    point3 = Point[point0.x, point2.y]
 	    [Edge.new(point0, point1),
 	     Edge.new(point1, point2),
 	     Edge.new(point2, point3),
 	     Edge.new(point3, point0)]
 	end
 
-	# @return [Array<Point>]    The {Rectangle}'s four points (clockwise)
+	# @return [Array<Point>]    The {Rectangle}'s four points (counterclockwise)
 	def points
 	    point0, point2 = *@points
-	    point1 = Point[point0.x,point2.y]
-	    point3 = Point[point2.x, point0.y]
+	    point1 = Point[point2.x, point0.y]
+	    point3 = Point[point0.x, point2.y]
 	    [point0, point1, point2, point3]
 	end
 
