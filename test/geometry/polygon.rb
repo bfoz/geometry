@@ -117,6 +117,7 @@ describe Geometry::Polygon do
 	end
 
 	it "must outset a concave polygon with multiply-intersecting edges" do
+	    skip
 	    concave_polygon = Polygon.new [0,0], [5,0], [5,2], [4,2], [4,1], [3,1], [3,2], [2,2], [2,1], [1,1], [1,2], [0,2]
 	    outset_polygon = concave_polygon.outset(2)
 	    outset_polygon.must_equal Polygon.new [-2,-2], [7,-2], [7,4], [-2,4]

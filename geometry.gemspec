@@ -3,7 +3,7 @@ $:.push File.expand_path("../lib", __FILE__)
 
 Gem::Specification.new do |s|
   s.name        = "geometry"
-  s.version     = '4'
+  s.version     = '5'
   s.authors     = ["Brandon Fosdick"]
   s.email       = ["bfoz@bfoz.net"]
   s.homepage    = "http://github.com/bfoz/geometry"

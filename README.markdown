@@ -23,10 +23,11 @@ Primitives
 - Line
 - Edge
 - Circle
-- Rectangle
-- Polygon
+- Rectangle, Square
+- Path, [Polyline](http://en.wikipedia.org/wiki/Polyline), [Polygon](http://en.wikipedia.org/wiki/Polygon)
 - Transformation
-- Triangle
+- [Triangle](http://en.wikipedia.org/wiki/Triangle)
+- [Obround](http://en.wiktionary.org/wiki/obround)
 
 Examples
 --------
