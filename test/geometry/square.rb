@@ -42,7 +42,7 @@ describe Geometry::CenteredSquare do
 	end
 
 	it "must have a points property" do
-	    square.points.must_equal [Point[0,1], Point[0,5], Point[4,5], Point[4,1]]
+	    square.points.must_equal [Point[0,1], Point[4,1], Point[4,5], Point[0,5]]
 	end
 
 	it "must have a height property" do

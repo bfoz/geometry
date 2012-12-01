@@ -70,7 +70,7 @@ The {Square} class cluster is like the {Rectangle} class cluster, but not longer
 	end
 
 	# @attribute [r] points
-	# @return [Array<Point>]    The {Square}'s four points (clockwise)
+	# @return [Array<Point>]    The {Square}'s four points (counterclockwise)
 	def points
 	    half_size = @size/2
 	    minx = @center.x - half_size
@@ -78,7 +78,7 @@ The {Square} class cluster is like the {Rectangle} class cluster, but not longer
 	    miny = @center.y - half_size
 	    maxy = @center.y + half_size
 
-	    [Point[minx,miny], Point[minx,maxy], Point[maxx, maxy], Point[maxx, miny]]
+	    [Point[minx,miny], Point[maxx, miny], Point[maxx, maxy], Point[minx,maxy]]
 	end
 
 	def height
