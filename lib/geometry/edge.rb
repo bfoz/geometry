@@ -1,3 +1,5 @@
+require 'mathn'
+
 require_relative 'point'
 
 module Geometry

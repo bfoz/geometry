@@ -103,7 +103,7 @@ The {Rectangle} class cluster represents your typical arrangement of 4 corners a
 	# @return [Point]   The {Rectangle}'s center
 	def center
 	    min, max = @points.minmax {|a,b| a.y <=> b.y}
-	    Point[(max.x+min.x)/2.0, (max.y+min.y)/2.0]
+	    Point[(max.x+min.x)/2, (max.y+min.y)/2]
 	end
 
 	# @return [Array<Edge>]   The {Rectangle}'s four edges (counterclockwise)

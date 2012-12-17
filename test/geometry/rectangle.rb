@@ -52,7 +52,7 @@ describe Geometry::Rectangle do
 	let(:rectangle) { Rectangle [1,2], [3,4] }
 
 	it "have a center point property" do
-	    assert_equal(rectangle.center, [2,3])
+	    rectangle.center.must_equal Point[2,3]
 	end
 
 	it "have a width property" do
