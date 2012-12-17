@@ -8,6 +8,9 @@ A {Polygon} is a closed path comprised entirely of lines so straight they don't 
 
 {http://en.wikipedia.org/wiki/Polygon}
 
+The {Polygon} class is generally intended to represent {http://en.wikipedia.org/wiki/Simple_polygon Simple polygons},
+but there's currently nothing that enforces simplicity.
+
 == Usage
 
 =end
@@ -30,6 +33,114 @@ A {Polygon} is a closed path comprised entirely of lines so straight they don't 
 	    # Close the polygon if needed
 	    @edges.push Edge.new(@edges.last.last, @edges.first.first) unless @edges.empty? || (@edges.last.last == @edges.first.first)
 	end
+
+	# Check the orientation of the {Polygon}
+	# @return [Boolean] True if the {Polygon} is clockwise, otherwise false
+	def clockwise?
+	    edges.map {|e| (e.last.x - e.first.x) * (e.last.y + e.first.y)}.reduce(:+) >= 0
+	end
+
+	# @return [Polygon] A new {Polygon} with orientation that's the opposite of the receiver
+	def reverse
+	    self.class.new *(self.vertices.reverse)
+	end
+
+	# @group Boolean operators
+
+	# Test a {Point} for inclusion in the receiver using a simplified winding number algorithm
+	# @param [Point] point	The {Point} to test
+	# @return [Number]	1 if the {Point} is inside the {Polygon}, -1 if it's outside, and 0 if it's on an {Edge}
+	def <=>(point)
+	    sum = edges.reduce(0) do |sum, e|
+		direction = e.last.y <=> e.first.y
+		next sum if 0 == direction	# Ignore horizontal lines
+
+		# Ignore edges that don't cross the point's x coordinate
+		next sum unless ((point.y <=> e.last.y) + (point.y <=> e.first.y)).abs <= 1
+
+		is_left = e <=> point
+		return 0 if 0 == is_left
+		next sum unless is_left
+		sum += 0 <=> (direction + is_left)
+	    end
+	    (0 == sum) ? -1 : 1
+	end
+
+	# Create a new {Polygon} that's the union of the receiver and a passed {Polygon}
+	#  This is a simplified implementation of the alogrithm outlined in the
+	#  paper {http://gvu.gatech.edu/people/official/jarek/graphics/papers/04PolygonBooleansMargalit.pdf An algorithm for computing the union, intersection or difference of two polygons}.
+	#  In particular, this method assumes the receiver and passed {Polygon}s are "island" type and that the desired output is "regular", as those terms are described in the paper.
+	# @param [Polygon] other    The {Polygon} to union with the receiver
+	# @return [Polygon] The union of the receiver and the passed {Polygon}
+	def union(other)
+	    # Table 1: Both polygons are islands and the operation is union, so both must have the same orientation
+	    # Reverse the other polygon if the orientations are different
+	    other = other.reverse if self.clockwise? != other.clockwise?
+
+	    # Receiver's vertex ring
+	    ringA = VertexRing.new
+	    self.vertices.each {|v| ringA.push v, (other <=> v)}
+
+	    # The other vertex ring
+	    ringB = VertexRing.new
+	    other.vertices.each {|v| ringB.push v, (self <=> v)}
+
+	    # Find intersections
+	    offset = 0
+	    self.edges.each_with_index do |a, indexA|
+		other.edges.each_with_index do |b, indexB|
+		    intersection = a.intersection(b)
+		    if intersection === true
+			p "Collinear and overlapping #{a} #{b}" unless (a.first == b.last) or (a.last == b.first)
+		    elsif intersection.is_a?(Point)
+			ringA.insert_boundary(indexA + 1 + offset, intersection)
+			ringB.insert_boundary(indexB + 1 + offset, intersection)
+			offset += 1
+		    end
+		end
+	    end
+
+	    # Table 2: Both polygons are islands and the operation is union, so select outside from both polygons
+	    edgeFragments = []
+	    [[ringA, other], [ringB, self]].each do |ring, other_polygon|
+		ring.edges do |v1,v2|
+		    if (v1[:type] == -1) or (v2[:type] == -1)
+			edgeFragments.push :first => v1[:vertex], :last => v2[:vertex]
+		    elsif (v1[:type] == 0) and (v2[:type] == 0)
+			if (other_polygon <=> Point[(v1[:vertex] + v2[:vertex])/2]) <= 0
+			    edgeFragments.push :first => v1[:vertex], :last => v2[:vertex]
+			end
+		    end
+		end
+	    end
+
+	    # Delete any equal-and-opposite edges
+	    edgeFragments = edgeFragments.reject {|f| edgeFragments.find {|f2| (f[:first] == f2[:last]) and (f[:last] == f2[:first])} }
+
+	    # Construct the output polygons
+	    output = edgeFragments.reduce([Array.new]) do |output, fragment|
+		next output if fragment.empty?
+		polygon = output.last
+		polygon.push fragment[:first], fragment[:last] if polygon.empty?
+		while 1 do
+		    adjacent_fragment = edgeFragments.find {|f| fragment[:last] == f[:first]}
+		    break unless adjacent_fragment
+
+		    polygon.push adjacent_fragment[:first], adjacent_fragment[:last]
+		    fragment = adjacent_fragment.dup
+		    adjacent_fragment.clear
+
+		    break if polygon.first == polygon.last	# closed?
+		end
+		output << Array.new
+	    end
+
+	    output.reject! {|a| a.empty? }.map! {|a| Polygon.new *a }
+	    (1 == output.size) ? output.shift : output
+	end
+	alias :+ :union
+
+	# @endgroup
 
 	# @group Convex Hull
 
@@ -177,6 +288,41 @@ A {Polygon} is a closed path comprised entirely of lines so straight they don't 
 
 	def quadrant_one_psuedo_angle(dx, dy)
 	    dx / (dx + dy)
+	end
+    end
+
+    private
+
+    class VertexRing
+	attr_reader :vertices
+
+	def initialize
+	    @vertices = []
+	end
+
+	# @param [Integer] index	The index to insert the new {Point} before
+	# @param [Point] point		The {Point} to insert
+	# @param [Integer] type		The vertex type: 1 is inside, 0 is boundary, -1 is outside
+	def insert(index, point, type)
+	    @vertices.insert(index, {:vertex => point, :type => type}) unless @vertices.any? {|v| v[:vertex] == point }
+	end
+
+	# Insert a boundary vertex
+	# @param [Integer] index	The index to insert the new {Point} before
+	# @param [Point] point		The {Point} to insert
+	def insert_boundary(index, point)
+	    self.insert(index, point, 0)
+	end
+
+	# @param [Point] point		The {Point} to push
+	# @param [Integer] type		The vertex type: 1 is inside, 0 is boundary, -1 is outside
+	def push(point, type)
+	    @vertices << {:vertex => point, :type => type}
+	end
+
+	# Enumerate the pairs of vertices corresponding to each edge
+	def edges
+	    (@vertices + [@vertices.first]).each_cons(2) {|v1,v2| yield v1, v2}
 	end
     end
 end

@@ -59,6 +59,18 @@ describe Geometry::Polygon do
 	assert_equal(polygon.edges.first.first, polygon.edges.last.last)
     end
 
+    describe "orientation" do
+	it "must return true for clockwise" do
+	    Polygon.new([0,0], [0,1], [1,1], [1,0]).clockwise?.must_equal true
+	    Polygon.new([1,1], [1,3], [3,3], [3,1]).clockwise?.must_equal true
+	end
+
+	it "must return fale for counterclockwise" do
+	    Polygon.new([0,0], [1,0], [1,1], [0,1]).clockwise?.must_equal false
+	    Polygon.new([1,1], [3,1], [3,3], [1,3]).clockwise?.must_equal false
+	end
+    end
+
     it "must gift wrap a square polygon" do
 	polygon = Polygon.new [0,0], [1,0], [1,1], [0,1]
 	convex_hull = polygon.wrap
@@ -89,6 +101,14 @@ describe Geometry::Polygon do
 	convex_hull.must_be_kind_of Geometry::Polygon
 	convex_hull.edges.size.must_equal 5
 	convex_hull.vertices.must_equal [[0,0], [0,1], [2,1], [2,0], [1,-1]].map {|a| Point[*a]}
+    end
+
+    describe "spaceship" do
+	it "with a Point" do
+	    (unit_square <=> Point[2,0]).must_equal -1
+	    (unit_square <=> Point[1,0]).must_equal 0
+	    (unit_square <=> Point[0.5,0.5]).must_equal 1
+	end
     end
 
     describe "when outsetting" do
@@ -127,6 +147,26 @@ describe Geometry::Polygon do
 	    polygon = Polygon.new [0,0], [0,1], [2,1], [2,2], [-1,2], [-1,-1], [2,-1], [2,0]
 	    polygon.edges.count.must_equal 8
 	    polygon.outset(1).must_equal Polygon.new [3, 0], [3, 3], [-2, 3], [-2, -2], [3, -2]
+	end
+    end
+
+    describe "set operations" do
+	describe "union" do
+	    it "must union two adjacent squares" do
+		polygonA = Polygon.new [0,0], [1,0], [1,1], [0,1]
+		polygonB = Polygon.new [1,0], [2,0], [2,1], [1,1]
+		(polygonA.union polygonB).must_equal Polygon.new [0,0], [2,0], [2,1], [0,1]
+		(polygonA + polygonB).must_equal Polygon.new [0,0], [2,0], [2,1], [0,1]
+	    end
+
+	    it "must union two overlapping squares" do
+		polygonA = Polygon.new [0,0], [2,0], [2,2], [0,2]
+		polygonB = Polygon.new [1,1], [3,1], [3,3], [1,3]
+		expected_polygon = Polygon.new [0,0], [2,0], [2,1], [3,1], [3,3], [1,3], [1,2], [0,2]
+		union = polygonA.union polygonB
+		union.must_be_kind_of Polygon
+		union.must_equal expected_polygon
+	    end
 	end
     end
 end

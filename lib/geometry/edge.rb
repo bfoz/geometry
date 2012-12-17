@@ -24,6 +24,22 @@ An edge. It's a line segment between 2 points. Generally part of a {Polygon}.
 	    (@first == other.first) && (@last == other.last)
 	end
 
+	# @param [Point] point	A {Point} to spaceship with
+	# @return [Boolean]	Returns 1 if the {Point} is strictly to the left of the receiver, -1 to the right, and 0 if the point is on the receiver
+	def <=>(point)
+	    case point
+		when Point
+		    k = (@last.x - @first.x) * (point.y - @first.y) - (point.x - @first.x) * (@last.y - @first.y)
+		    if 0 == k
+			(((@first.x <=> point.x) + (@last.x <=> point.x)).abs <= 1) && (((@first.y <=> point.y) + (@last.y <=> point.y)).abs <= 1) ? 0 : nil
+		    else
+			k <=> 0
+		    end
+		else
+		    raise ArgumentError, "Can't spaceship with #{point.class}"
+	    end
+	end
+
 	# Return a new {Edge} with swapped endpoints
 	def reverse
 	    Edge.new(@last, @first)

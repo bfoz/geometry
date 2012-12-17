@@ -48,13 +48,13 @@ also like a {Path} in that it isn't necessarily closed.
 			if @edges.last
 			    new_edge = Edge.new(previous, n)
 			    if @edges.last.parallel?(new_edge)
-				@edges.pop				# Remove the previous Edge
+				popped_edge = @edges.pop		# Remove the previous Edge
 				@vertices.pop(@edges.size ? 1 : 2)	# Remove the now unused vertex, or vertices
-				if n == @edges.last.last
-				    @edges.last.last
+				if n == popped_edge.first
+				    popped_edge.first
 				else
-				    push_edge Edge.new(@edges.last.last, n)
-				    push_vertex @edges.last.first
+				    push_edge Edge.new(popped_edge.first, n)
+				    push_vertex popped_edge.first
 				    push_vertex n
 				    n
 				end

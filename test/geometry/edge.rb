@@ -58,6 +58,24 @@ describe Geometry::Edge do
 	Edge.new([0,0], [2,0]).parallel?(Edge.new([1,-1], [1,1])).must_equal false
     end
 
+    describe "spaceship" do
+	it "ascending with a Point" do
+	    edge = Edge.new [0,0], [1,1]
+	    (edge <=> Point[0,0]).must_equal 0
+	    (edge <=> Point[1,0]).must_equal -1
+	    (edge <=> Point[0,1]).must_equal 1
+	    (edge <=> Point[2,2]).must_equal nil
+	end
+
+	it "descending with a Point" do
+	    edge = Edge.new [1,1], [0,0]
+	    (edge <=> Point[0,0]).must_equal 0
+	    (edge <=> Point[1,0]).must_equal 1
+	    (edge <=> Point[0,1]).must_equal -1
+	    (edge <=> Point[2,2]).must_equal nil
+	end
+    end
+
     describe "when finding an intersection" do
 	it "must find the intersection of two end-intersecting Edges" do
 	    intersection = Edge.new([0,0],[1,1]).intersection(Edge.new([0,1],[1,1]))
@@ -90,5 +108,8 @@ describe Geometry::Edge do
 	    Edge.new([0,0],[2,0]).intersection(Edge.new([1,1],[3,1])).must_equal nil
 	end
 
+	it "must return nil for two perpendicular but not interseting edges" do
+	    Edge.new([0, 0], [2, 0]).intersection(Edge.new([3, 3], [3, 1])).must_equal nil
+	end
     end
 end
