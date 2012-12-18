@@ -86,16 +86,19 @@ but there's currently nothing that enforces simplicity.
 	    other.vertices.each {|v| ringB.push v, (self <=> v)}
 
 	    # Find intersections
-	    offset = 0
+	    offsetA = 0
+	    edgesB = other.edges.dup
 	    self.edges.each_with_index do |a, indexA|
-		other.edges.each_with_index do |b, indexB|
+		offsetB = 0
+		ringB.edges_with_index do |b, indexB|
 		    intersection = a.intersection(b)
 		    if intersection === true
 			p "Collinear and overlapping #{a} #{b}" unless (a.first == b.last) or (a.last == b.first)
 		    elsif intersection.is_a?(Point)
-			ringA.insert_boundary(indexA + 1 + offset, intersection)
-			ringB.insert_boundary(indexB + 1 + offset, intersection)
-			offset += 1
+			ringA.insert_boundary(indexA + 1 + offsetA, intersection)
+			ringB.insert_boundary(indexB + 1 + offsetB, intersection)
+			offsetA += 1
+			offsetB += 1
 		    end
 		end
 	    end
@@ -323,6 +326,11 @@ but there's currently nothing that enforces simplicity.
 	# Enumerate the pairs of vertices corresponding to each edge
 	def edges
 	    (@vertices + [@vertices.first]).each_cons(2) {|v1,v2| yield v1, v2}
+	end
+
+	def edges_with_index
+	    index = 0
+	    (@vertices + [@vertices.first]).each_cons(2) {|v1,v2| yield(Edge.new(v1[:vertex], v2[:vertex]), index); index += 1}
 	end
     end
 end

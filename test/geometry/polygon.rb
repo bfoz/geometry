@@ -167,6 +167,15 @@ describe Geometry::Polygon do
 		union.must_be_kind_of Polygon
 		union.must_equal expected_polygon
 	    end
+
+	    it "must union two overlapping clockwise squares" do
+		polygonA = Polygon.new [0,0], [0,2], [2,2], [2,0]
+		polygonB = Polygon.new [1,1], [1,3], [3,3], [3,1]
+		expected_polygon = Polygon.new [0, 0], [0, 2], [1, 2], [1, 3], [3, 3], [3, 1], [2, 1], [2, 0]
+		union = polygonA.union polygonB
+		union.must_be_kind_of Polygon
+		union.must_equal expected_polygon
+	    end
 	end
     end
 end
