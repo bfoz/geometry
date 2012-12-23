@@ -96,12 +96,20 @@ but there's currently nothing that enforces simplicity.
 		ringB.edges_with_index do |b, indexB|
 		    intersection = a.intersection(b)
 		    if intersection === true
-			p "Collinear and overlapping #{a} #{b}" unless (a.first == b.last) or (a.last == b.first)
+			if (a.first == b.first) and (a.last == b.last)	    # Equal edges
+			elsif (a.first == b.last) and (a.last == b.first)   # Ignore equal but opposite edges
+			else
+			    if a.vector.normalize == b.vector.normalize # Same direction?
+				offsetA += 1 if ringA.insert_boundary(indexA + 1 + offsetA, b.first)
+				offsetB += 1 if ringB.insert_boundary(indexB + 1 + offsetB, a.last)
+			    else    # Opposite direction
+				offsetA += 1 if ringA.insert_boundary(indexA + 1 + offsetA, b.last)
+				offsetB += 1 if ringB.insert_boundary(indexB + 1 + offsetB, a.first)
+			    end
+			end
 		    elsif intersection.is_a?(Point)
-			ringA.insert_boundary(indexA + 1 + offsetA, intersection)
-			ringB.insert_boundary(indexB + 1 + offsetB, intersection)
-			offsetA += 1
-			offsetB += 1
+			offsetA += 1 if ringA.insert_boundary(indexA + 1 + offsetA, intersection)
+			offsetB += 1 if ringB.insert_boundary(indexB + 1 + offsetB, intersection)
 		    end
 		end
 	    end
@@ -120,8 +128,8 @@ but there's currently nothing that enforces simplicity.
 		end
 	    end
 
-	    # Delete any equal-and-opposite edges
-	    edgeFragments = edgeFragments.reject {|f| edgeFragments.find {|f2| (f[:first] == f2[:last]) and (f[:last] == f2[:first])} }
+	    # Delete any duplicated, or equal-and-opposite, edges
+	    edgeFragments = edgeFragments.uniq.reject {|f| edgeFragments.find {|f2| (f[:first] == f2[:last]) and (f[:last] == f2[:first])} }
 
 	    # Construct the output polygons
 	    output = edgeFragments.reduce([Array.new]) do |output, fragment|
@@ -310,7 +318,13 @@ but there's currently nothing that enforces simplicity.
 	# @param [Point] point		The {Point} to insert
 	# @param [Integer] type		The vertex type: 1 is inside, 0 is boundary, -1 is outside
 	def insert(index, point, type)
-	    @vertices.insert(index, {:vertex => point, :type => type}) unless @vertices.any? {|v| v[:vertex] == point }
+	    if v = @vertices.find {|v| v[:vertex] == point }
+		v[:type] = type
+		false
+	    else
+		@vertices.insert(index, {:vertex => point, :type => type})
+		true
+	    end
 	end
 
 	# Insert a boundary vertex

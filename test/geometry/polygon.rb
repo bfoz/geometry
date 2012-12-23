@@ -180,6 +180,14 @@ describe Geometry::Polygon do
 		union.must_be_kind_of Polygon
 		union.must_equal expected_polygon
 	    end
+
+	    it "must union two overlapping squares with collinear edges" do
+		polygonA = Polygon.new [0,0], [2,0], [2,2], [0,2]
+		polygonB = Polygon.new [1,0], [3,0], [3,2], [1,2]
+		union = polygonA + polygonB
+		union.must_be_kind_of Polygon
+		union.must_equal Polygon.new [0,0], [3,0], [3,2], [0,2]
+	    end
 	end
     end
 end
