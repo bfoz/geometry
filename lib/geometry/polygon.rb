@@ -53,15 +53,18 @@ but there's currently nothing that enforces simplicity.
 	def <=>(point)
 	    sum = edges.reduce(0) do |sum, e|
 		direction = e.last.y <=> e.first.y
-		next sum if 0 == direction	# Ignore horizontal lines
-
 		# Ignore edges that don't cross the point's x coordinate
 		next sum unless ((point.y <=> e.last.y) + (point.y <=> e.first.y)).abs <= 1
 
-		is_left = e <=> point
-		return 0 if 0 == is_left
-		next sum unless is_left
-		sum += 0 <=> (direction + is_left)
+		if 0 == direction   # Special case horizontal edges
+		    return 0 if ((point.x <=> e.last.x) + (point.x <=> e.first.x)).abs <= 1
+		    next sum	    # Doesn't intersect
+		else
+		    is_left = e <=> point
+		    return 0 if 0 == is_left
+		    next sum unless is_left
+		    sum += 0 <=> (direction + is_left)
+		end
 	    end
 	    (0 == sum) ? -1 : 1
 	end

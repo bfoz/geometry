@@ -109,6 +109,10 @@ describe Geometry::Polygon do
 	    (unit_square <=> Point[1,0]).must_equal 0
 	    (unit_square <=> Point[0.5,0.5]).must_equal 1
 	end
+
+	it "with a Point that lies on a horizontal edge" do
+	    (unit_square <=> Point[0.5,0]).must_equal 0
+	end
     end
 
     describe "when outsetting" do
