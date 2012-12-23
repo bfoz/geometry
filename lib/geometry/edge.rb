@@ -95,8 +95,12 @@ An edge. It's a line segment between 2 points. Generally part of a {Polygon}.
 	end
 
 	# Find the intersection of two {Edge}s (http://bloggingmath.wordpress.com/2009/05/29/line-segment-intersection/)
+	# @param [Edge] other	The other {Edge}
 	# @return [Point] The intersection of the two {Edge}s, nil if they don't intersect, true if they're collinear and overlapping, and false if they're collinear and non-overlapping
 	def intersection(other)
+	    return self.first if (self.first == other.first) or (self.first == other.last)
+	    return self.last if (self.last == other.first) or (self.last == other.last)
+
 	    p0, p1 = self.first, self.last
 	    p2, p3 = other.first, other.last
 	    v1, v2 = self.vector, other.vector

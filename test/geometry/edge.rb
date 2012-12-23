@@ -83,6 +83,16 @@ describe Geometry::Edge do
 	    intersection.must_equal Geometry::Point[1,1]
 	end
 
+	it "must find the intersection of two collinear end-intersecting Edges" do
+	    intersection = Edge.new([2,2], [0,2]).intersection(Edge.new([3,2], [2,2]))
+	    intersection.must_be_kind_of Geometry::Point
+	    intersection.must_equal Geometry::Point[2,2]
+
+	    intersection = Edge.new([0,2], [2,2]).intersection(Edge.new([2,2], [3,2]))
+	    intersection.must_be_kind_of Geometry::Point
+	    intersection.must_equal Geometry::Point[2,2]
+	end
+
 	it "must find the itersection of two crossed Edges" do
 	    edge1 = Edge.new [0.0, 0], [2.0, 2.0]
 	    edge2 = Edge.new [2.0, 0], [0.0, 2.0]
