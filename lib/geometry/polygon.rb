@@ -152,8 +152,14 @@ but there's currently nothing that enforces simplicity.
 		output << Array.new
 	    end
 
-	    output.reject! {|a| a.empty? }.map! {|a| Polygon.new *a }
-	    (1 == output.size) ? output.shift : output
+	    # If everything worked properly there should be only one output Polygon
+	    output.reject! {|a| a.empty?}
+	    output = Polygon.new *(output[0])
+
+	    # Table 4: Both input polygons are "island" type and the operation
+	    #  is union, so the output polygon's orientation should be the same
+	    #  as the input polygon's orientation
+	    (self.clockwise? != output.clockwise?) ? output.reverse : output
 	end
 	alias :+ :union
 
