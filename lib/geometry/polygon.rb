@@ -128,8 +128,11 @@ but there's currently nothing that enforces simplicity.
 		end
 	    end
 
-	    # Delete any duplicated, or equal-and-opposite, edges
-	    edgeFragments = edgeFragments.uniq.reject {|f| edgeFragments.find {|f2| (f[:first] == f2[:last]) and (f[:last] == f2[:first])} }
+	    # Delete any duplicated edges. Array#uniq doesn't do the right thing, so using inject instead.
+	    edgeFragments = edgeFragments.inject([]) {|result,h| result << h unless result.include?(h); result}
+
+	    # Delete any equal-and-opposite edges
+	    edgeFragments = edgeFragments.reject {|f| edgeFragments.find {|f2| (f[:first] == f2[:last]) and (f[:last] == f2[:first])} }
 
 	    # Construct the output polygons
 	    output = edgeFragments.reduce([Array.new]) do |output, fragment|
