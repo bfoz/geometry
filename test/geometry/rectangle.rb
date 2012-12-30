@@ -39,6 +39,14 @@ describe Geometry::Rectangle do
 	    assert_equal(Point[1,2], rectangle.origin)
 	end
 
+	it "must create a Rectangle from an origin Array and a Size" do
+	    rectangle = Rectangle [1,2], Size[3,4]
+	    rectangle.must_be_kind_of Geometry::Rectangle
+	    rectangle.width.must_equal 3
+	    rectangle.height.must_equal 4
+	    rectangle.origin.must_equal Point[1,2]
+	end
+
 	it "create a Rectangle from sides" do
 	    rectangle = Rectangle 1,2,3,4
 	    assert_kind_of(Geometry::Rectangle, rectangle)

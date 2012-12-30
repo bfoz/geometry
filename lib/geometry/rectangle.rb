@@ -66,8 +66,10 @@ The {Rectangle} class cluster represents your typical arrangement of 4 corners a
 			CenteredRectangle.new(Size[*args])
 		    elsif args.all? {|a| a.is_a?(Array) || a.is_a?(Point) }
 			original_new(*args)
-		    elsif args[0].is_a?(Point) and args[1].is_a?(Size)
+		    elsif (args[0].is_a?(Point) or args[0].is_a?(Array))and args[1].is_a?(Size)
 			SizedRectangle.new(*args)
+		    else
+			raise ArgumentError, "Invalid arguments #{args}"
 		    end
 		when 4
 		    raise ArgumentError unless args.all? {|a| a.is_a?(Numeric)}
@@ -231,8 +233,8 @@ The {Rectangle} class cluster represents your typical arrangement of 4 corners a
 	    if args[0].is_a?(Size)
 		@origin = Point[0,0]
 		@size = args[0]
-	    elsif args[0].is_a?(Geometry::Point) and args[1].is_a?(Geometry::Size)
-		@origin, @size = args[0], args[1]
+	    elsif (args[0].is_a?(Point) or args[0].is_a?(Array)) and args[1].is_a?(Geometry::Size)
+		@origin, @size = Point[args[0]], args[1]
 	    elsif (2 == args.size) and args.all? {|a| a.is_a?(Numeric)}
 		@origin = Point[0,0]
 		@size = Geometry::Size[*args]
