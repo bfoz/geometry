@@ -88,12 +88,10 @@ The {Rectangle} class cluster represents your typical arrangement of 4 corners a
 	    if (point0.x > point1.x) && (point0.y > point1.y)
 		point0, point1 = point1, point0
 	    else
-		if point0.x > point1.x
-		    point0.x, point1.x = point1.x, point0.x
-		end
-		if point0.y > point1.y
-		    point0.y, point1.y = point1.y, point0.y
-		end
+		p0x, p1x = [point0.x, point1.x].minmax
+		p0y, p1y = [point0.y, point1.y].minmax
+		point0 = Point[p0x, p0y]
+		point1 = Point[p1x, p1y]
 	    end
 	    @points = [point0, point1]
 	end
