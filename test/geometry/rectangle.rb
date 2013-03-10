@@ -56,6 +56,13 @@ describe Geometry::Rectangle do
 	end
     end
 
+    describe "comparison" do
+	it "must compare equal" do
+	    rectangle = Rectangle [1,2], [3,4]
+	    rectangle.must_equal Rectangle([1,2], [3, 4])
+	end
+    end
+
     describe "properties" do
 	let(:rectangle) { Rectangle [1,2], [3,4] }
 

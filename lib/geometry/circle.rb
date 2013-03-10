@@ -62,6 +62,11 @@ Circles come in all shapes and sizes, but they're usually round.
 	    @radius = radius
 	end
 
+	def eql?(other)
+	    (self.center == other.center) && (self.radius == other.radius)
+	end
+	alias :== :eql?
+
 # @!group Accessors
 	# @!attribute [r] diameter
 	#   @return [Numeric] The diameter of the {Circle}
@@ -83,6 +88,11 @@ Circles come in all shapes and sizes, but they're usually round.
 	    @center = Point[center]
 	    @diameter = diameter
 	end
+
+	def eql?(other)
+	    (self.center == other.center) && (self.diameter == other.diameter)
+	end
+	alias :== :eql?
 
 # @!group Accessors
 	# @return The {Circle}'s radius

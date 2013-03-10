@@ -98,6 +98,11 @@ The {Rectangle} class cluster represents your typical arrangement of 4 corners a
 	    @points = [point0, point1]
 	end
 
+	def eql?(other)
+	    self.points == other.points
+	end
+	alias :== :eql?
+
 # @group Accessors
 
 	# @return [Point]   The {Rectangle}'s center
@@ -175,6 +180,11 @@ The {Rectangle} class cluster represents your typical arrangement of 4 corners a
 	    end
 	end
 
+	def eql?(other)
+	    (self.center == other.center) && (self.size == other.size)
+	end
+	alias :== :eql?
+
 # @group Accessors
 	# @return [Array<Edge>]   The {Rectangle}'s four edges
 	def edges
@@ -241,6 +251,10 @@ The {Rectangle} class cluster represents your typical arrangement of 4 corners a
 	    end
 	end
 
+	def eql?(other)
+	    (self.origin == other.origin) && (self.size == other.size)
+	end
+	alias :== :eql?
 
 # @group Accessors
 	def center

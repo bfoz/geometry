@@ -18,6 +18,10 @@ describe Geometry::Circle do
 	it "must have a radius accessor" do
 	    circle.radius.must_equal 3
 	end
+
+	it "must compare equal" do
+	    circle.must_equal Circle.new([1,2], 3)
+	end
     end
 
     describe "when constructed with named center and radius arguments" do
@@ -33,6 +37,10 @@ describe Geometry::Circle do
 	
 	it "must have a radius accessor" do
 	    circle.radius.must_equal 3
+	end
+
+	it "must compare equal" do
+	    (circle == Circle.new(:center => [1,2], :radius => 3)).must_equal true
 	end
     end
 
@@ -54,6 +62,10 @@ describe Geometry::Circle do
 
 	it "must calculate the correct radius" do
 	    circle.radius.must_equal 2
+	end
+
+	it "must compare equal" do
+	    circle.must_equal Circle.new([1,2], :diameter => 4)
 	end
     end
 end
