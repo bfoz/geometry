@@ -24,7 +24,7 @@ Primitives
 - Edge
 - Circle
 - Rectangle, Square
-- Path, [Polyline](http://en.wikipedia.org/wiki/Polyline), [Polygon](http://en.wikipedia.org/wiki/Polygon)
+- Path, [Polyline](http://en.wikipedia.org/wiki/Polyline), [Polygon](http://en.wikipedia.org/wiki/Polygon), [RegularPolygon](http://en.wikipedia.org/wiki/Regular_polygon)
 - Transformation
 - [Triangle](http://en.wikipedia.org/wiki/Triangle)
 - [Obround](http://en.wiktionary.org/wiki/obround)
@@ -76,4 +76,9 @@ Examples
 ```ruby
     # A polygon that looks a lot like a square
     polygon = Geometry::Polygon.new [0,0], [1,0], [1,1], [0,1]
+```
+### Regular Polygon
+```ruby
+    # Everyone loves a good hexagon
+    hexagon = Geometry::RegularPolygon.new 6, :diameter => 3
 ```
