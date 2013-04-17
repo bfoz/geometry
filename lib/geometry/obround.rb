@@ -40,7 +40,7 @@ The {Obround} class cluster represents a rectangle with semicircular end caps
 	def self.new(*args)
 	    case args.size
 		when 1
-		    CenteredRectangle.new(args[0])
+		    CenteredObround.new(args[0])
 		when 2
 		    if args.all? {|a| a.is_a?(Numeric) }
 			CenteredObround.new(Size[*args])
