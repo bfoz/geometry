@@ -2,6 +2,10 @@ require 'matrix'
 
 # Monkeypatch Vector to overcome some deficiencies
 class Vector
+    X = Vector[1,0,0]
+    Y = Vector[0,1,0]
+    Z = Vector[0,0,1]
+
 # @group Unary operators
     def +@
 	self
