@@ -5,55 +5,79 @@ def Rectangle(*args)
     Geometry::Rectangle.new(*args)
 end
 
-Point = Geometry::Point
-Size = Geometry::Size
-
 describe Geometry::Rectangle do
-    describe "when constructed" do
-	it "create a Rectangle object from two Points" do
-	    rectangle = Rectangle [1,2], [3,4]
-	    assert_kind_of(Geometry::Rectangle, rectangle)
-	end
+    Point = Geometry::Point
+    Rectangle = Geometry::Rectangle
 
-	it "create a Rectangle from a width and height" do
-	    rectangle = Rectangle 2, 3
-	    assert_kind_of(Geometry::Rectangle, rectangle)
-	    assert_equal(2, rectangle.width)
-	    assert_equal(3, rectangle.height)
-	    assert_equal(Point[0,0], rectangle.center)
-	end
-
-	it "create a Rectangle from a Size" do
-	    rectangle = Rectangle Size[2, 3]
-	    assert_kind_of(Geometry::Rectangle, rectangle)
-	    assert_equal(2, rectangle.width)
-	    assert_equal(3, rectangle.height)
-	    assert_equal(Point[0,0], rectangle.center)
-	end
-
-	it "create a Rectangle from an origin Point and Size" do
-	    rectangle = Rectangle Point[1,2], Size[2, 3]
-	    assert_kind_of(Geometry::Rectangle, rectangle)
-	    assert_equal(2, rectangle.width)
-	    assert_equal(3, rectangle.height)
-	    assert_equal(Point[1,2], rectangle.origin)
-	end
-
-	it "must create a Rectangle from an origin Array and a Size" do
-	    rectangle = Rectangle [1,2], Size[3,4]
+    describe "when initializing" do
+	it "must accept two corners as Arrays" do
+	    rectangle = Rectangle.new [1,2], [2,3]
 	    rectangle.must_be_kind_of Geometry::Rectangle
-	    rectangle.width.must_equal 3
-	    rectangle.height.must_equal 4
+	    rectangle.height.must_equal 1
+	    rectangle.width.must_equal 1
 	    rectangle.origin.must_equal Point[1,2]
 	end
 
-	it "create a Rectangle from sides" do
-	    rectangle = Rectangle 1,2,3,4
-	    assert_kind_of(Geometry::Rectangle, rectangle)
-	    assert_equal(2, rectangle.width)
-	    assert_equal(2, rectangle.height)
-	    assert_equal(Point[1,2], rectangle.origin)
+	it "must accept two named corners as Arrays" do
+	    rectangle = Rectangle.new from:[1,2], to:[2,3]
+	    rectangle.must_be_kind_of Geometry::Rectangle
+	    rectangle.height.must_equal 1
+	    rectangle.width.must_equal 1
+	    rectangle.origin.must_equal Point[1,2]
 	end
+
+	it "must accept named center point and size arguments" do
+	    rectangle = Rectangle.new center:[1,2], size:[3,4]
+	    rectangle.must_be_kind_of Geometry::Rectangle
+	    rectangle.height.must_equal 4
+	    rectangle.width.must_equal 3
+	    rectangle.center.must_equal Point[1,2]
+	end
+
+	it "must reject a named center argument with no size argument" do
+	    -> { Rectangle.new center:[1,2] }.must_raise ArgumentError
+	end
+
+	it "must accept named origin point and size arguments" do
+	    rectangle = Rectangle.new origin:[1,2], size:[3,4]
+	    rectangle.must_be_kind_of Geometry::Rectangle
+	    rectangle.height.must_equal 4
+	    rectangle.width.must_equal 3
+	    rectangle.origin.must_equal Point[1,2]
+	end
+
+	it "must reject a named origin argument with no size argument" do
+	    -> { Rectangle.new origin:[1,2] }.must_raise ArgumentError
+	end
+
+	it "must accept a sole named size argument that is an Array" do
+	    rectangle = Rectangle.new size:[1,2]
+	    rectangle.must_be_kind_of Geometry::Rectangle
+	    rectangle.origin.must_equal Point[0,0]
+	    rectangle.height.must_equal 2
+	    rectangle.width.must_equal 1
+	end
+
+	it "must accept a sole named size argument that is a Size" do
+	    rectangle = Rectangle.new size:Size[1,2]
+	    rectangle.must_be_kind_of Geometry::Rectangle
+	    rectangle.origin.must_equal Point[0,0]
+	    rectangle.height.must_equal 2
+	    rectangle.width.must_equal 1
+	end
+
+	it "must accept named width and height arguments" do
+	    rectangle = Rectangle.new width:1, height:3
+	    rectangle.must_be_kind_of Geometry::Rectangle
+	    rectangle.height.must_equal 3
+	    rectangle.width.must_equal 1
+	end
+
+	it "must reject width or height by themselves" do
+	    -> { Rectangle.new height:1 }.must_raise ArgumentError
+	    -> { Rectangle.new width:1 }.must_raise ArgumentError
+	end
+
     end
 
     describe "comparison" do

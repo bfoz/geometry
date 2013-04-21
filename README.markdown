@@ -65,6 +65,21 @@ Examples
     Geometry::Line.vertical(x=0)
 ```
 
+### Rectangle
+```ruby
+    # A Rectangle made from two corner points
+    Geometry::Rectangle.new [1,2], [2,3]
+    Geometry::Rectangle.new from:[1,2], to:[2,3]
+
+    Geometry::Rectangle.new center:[1,2], size:[1,1]	# Using a center point and a size
+    Geometry::Rectangle.new origin:[1,2], size:[1,1]	# Using an origin point and a size
+
+    # A Rectangle with its origin at [0, 0] and a size of [10, 20]
+    Geometry::Rectangle.new size: [10, 20]
+    Geometry::Rectangle.new size: Size[10, 20]
+    Geometry::Rectangle.new width: 10, height: 20
+```
+
 ### Circle
 ```ruby
     # A circle at Point[1,2] with a radius of 3

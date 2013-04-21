@@ -10,13 +10,15 @@ The {Rectangle} class cluster represents your typical arrangement of 4 corners a
 == Usage
 
 === Constructors
-    rect = Rectangle[[1,2], [2,3]]      # Using two corners
-    rect = Rectangle[[1,2], Size[1,1]]  # Using origin and size
-    rect = Rectangle[1,2,2,3]           # Using four sides
+    rect = Rectangle.new [1,2], [2,3]		    # Using two corners
+    rect = Rectangle.new from:[1,2], to:[2,3]	    # Using two corners
 
-    rect = Rectangle[10, 20]            # origin = [0,0], size = [10, 20]
-    rect = Rectangle[Size[10, 20]]      # origin = [0,0], size = [10, 20]
+    rect = Rectangle.new center:[1,2], size:[1,1]   # Using a center point and a size
+    rect = Rectangle.new origin:[1,2], size:[1,1]   # Using an origin point and a size
 
+    rect = Rectangle.new size: [10, 20]         # origin = [0,0], size = [10, 20]
+    rect = Rectangle.new size: Size[10, 20]	# origin = [0,0], size = [10, 20]
+    rect = Rectangle.new width: 10, height: 20	# origin = [0,0], size = [10, 20]
 =end
 
     class Rectangle
@@ -58,23 +60,25 @@ The {Rectangle} class cluster represents your typical arrangement of 4 corners a
 	#   @param [Number]	right	X-coordinate of the right side
 	#   @param [Number]	top	Y-coordinate of the top edge
 	def self.new(*args)
-	    case args.size
-		when 1
-		    CenteredRectangle.new(args[0])
-		when 2
-		    if args.all? {|a| a.is_a?(Numeric) }
-			CenteredRectangle.new(Size[*args])
-		    elsif args.all? {|a| a.is_a?(Array) || a.is_a?(Point) }
-			original_new(*args)
-		    elsif (args[0].is_a?(Point) or args[0].is_a?(Array))and args[1].is_a?(Size)
-			SizedRectangle.new(*args)
-		    else
-			raise ArgumentError, "Invalid arguments #{args}"
-		    end
-		when 4
-		    raise ArgumentError unless args.all? {|a| a.is_a?(Numeric)}
-		    left, bottom, right, top = *args
-		    original_new(Point[left, bottom], Point[right, top])
+	    options, args = args.partition {|a| a.is_a? Hash}
+	    options = options.reduce({}, :merge)
+
+	    if options.has_key?(:size)
+		if options.has_key?(:center)
+		    CenteredRectangle.new(center: options[:center], size: options[:size])
+		elsif options.has_key?(:origin)
+		    SizedRectangle.new(origin: options[:origin], size: options[:size])
+		else
+		    SizedRectangle.new(size: options[:size])
+		end
+	    elsif options.has_key?(:from) and options.has_key?(:to)
+		original_new(options[:from], options[:to])
+	    elsif options.has_key?(:height) and options.has_key?(:width)
+		SizedRectangle.new(height: options[:height], width: options[:width])
+	    elsif (2==args.count) and (args.all? {|a| a.is_a?(Array) || a.is_a?(Point) })
+		original_new(*args)
+	    else
+		raise ArgumentError, "Bad Rectangle arguments"
 	    end
 	end
 
@@ -151,7 +155,6 @@ The {Rectangle} class cluster represents your typical arrangement of 4 corners a
     class CenteredRectangle < Rectangle
 	# @return [Point]	The {Rectangle}'s center
 	attr_accessor :center
-	attr_reader :origin
 	# @return [Size]	The {Size} of the {Rectangle}
 	attr_accessor :size
 
@@ -169,14 +172,17 @@ The {Rectangle} class cluster represents your typical arrangement of 4 corners a
 	#   @param [Point]	center
 	#   @param [Size]	size
 	def initialize(*args)
-	    if args[0].is_a?(Size)
-		@center = Point[0,0]
-		@size = args[0]
-	    elsif args[0].is_a?(Geometry::Point) and args[1].is_a?(Geometry::Size)
-		@center, @size = args[0,1]
-	    elsif (2 == args.size) and args.all? {|a| a.is_a?(Numeric)}
-		@center = Point[0,0]
-		@size = Geometry::Size[*args]
+	    options, args = args.partition {|a| a.is_a? Hash}
+	    options = options.reduce({}, :merge)
+
+	    if options.has_key?(:size)
+		@center = options[:center] || Point[0,0]
+		@size = Geometry::Size[options[:size]]
+	    elsif options.has_key?(:height) and options.has_key?(:width)
+		@center = options[:center] || Point[0,0]
+		@size = Geometry::Size[options[:width], options[:height]]
+	    else
+		raise ArgumentError, "Bad arguments to CenteredRectangle#new"
 	    end
 	end
 
@@ -218,8 +224,6 @@ The {Rectangle} class cluster represents your typical arrangement of 4 corners a
     end
 
     class SizedRectangle < Rectangle
-	# @return [Point]   The {Rectangle}'s center
-	attr_reader :center
 	# @return [Point]	The {Rectangle}'s origin
 	attr_accessor :origin
 	# @return [Size]	The {Size} of the {Rectangle}
@@ -240,14 +244,17 @@ The {Rectangle} class cluster represents your typical arrangement of 4 corners a
 	#   @param [Size]	size
 	#   @return SizedRectangle
 	def initialize(*args)
-	    if args[0].is_a?(Size)
-		@origin = Point[0,0]
-		@size = args[0]
-	    elsif (args[0].is_a?(Point) or args[0].is_a?(Array)) and args[1].is_a?(Geometry::Size)
-		@origin, @size = Point[args[0]], args[1]
-	    elsif (2 == args.size) and args.all? {|a| a.is_a?(Numeric)}
-		@origin = Point[0,0]
-		@size = Geometry::Size[*args]
+	    options, args = args.partition {|a| a.is_a? Hash}
+	    options = options.reduce({}, :merge)
+
+	    if options.has_key?(:size)
+		@origin = options[:origin] || Point[0,0]
+		@size = Geometry::Size[options[:size]]
+	    elsif options.has_key?(:height) and options.has_key?(:width)
+		@origin = options[:origin] || Point[0,0]
+		@size = Geometry::Size[options[:width], options[:height]]
+	    else
+		raise ArgumentError, "Bad arguments to SizeRectangle#new"
 	    end
 	end
 
@@ -257,6 +264,7 @@ The {Rectangle} class cluster represents your typical arrangement of 4 corners a
 	alias :== :eql?
 
 # @group Accessors
+	# @return [Point]   The {Rectangle}'s center
 	def center
 	    @origin + @size/2
 	end
