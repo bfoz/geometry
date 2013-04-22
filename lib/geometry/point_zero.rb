@@ -34,6 +34,32 @@ everything else, regardless of size.
 	    []
 	end
 
+# @group Accessors
+	# @param [Integer]  i	Index into the {Point}'s elements
+	# @return [Numeric] Element i (starting at 0)
+	def [](i)
+	    0
+	end
+
+	# @attribute [r] x
+	# @return [Numeric] X-component
+	def x
+	    0
+	end
+
+	# @attribute [r] y
+	# @return [Numeric] Y-component
+	def y
+	    0
+	end
+
+	# @attribute [r] z
+	# @return [Numeric] Z-component
+	def z
+	    0
+	end
+# @endgroup
+
 # @group Arithmetic
 
 # @group Unary operators

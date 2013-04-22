@@ -19,7 +19,19 @@ describe Geometry::PointZero do
 	    (-zero).must_be :eql?, 0
 	    (-zero).must_be_instance_of(Geometry::PointZero)
 	end
-	
+
+	describe "Accessors" do
+	    it "must return 0 for array access" do
+		zero[3].must_equal 0
+	    end
+
+	    it "must return 0 for named element access" do
+		zero.x.must_equal 0
+		zero.y.must_equal 0
+		zero.z.must_equal 0
+	    end
+	end
+
 	describe "when adding" do
 	    it "must return a number" do
 		(zero + 3).must_equal 3
