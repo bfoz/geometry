@@ -29,6 +29,11 @@ everything else, regardless of size.
 	    end
 	end
 
+	# This is a hack to get Array#== to work properly. It works on ruby 2.0 and 1.9.3.
+	def to_ary
+	    []
+	end
+
 # @group Arithmetic
 
 # @group Unary operators

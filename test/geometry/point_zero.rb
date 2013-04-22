@@ -2,6 +2,8 @@ require 'minitest/autorun'
 require 'geometry/point_zero'
 
 describe Geometry::PointZero do
+    Point = Geometry::Point
+
     let(:zero) { Geometry::PointZero.new }
 
     describe "arithmetic" do
@@ -104,7 +106,7 @@ describe Geometry::PointZero do
     end
 
     describe "comparison" do
-	let(:zero) { Geometry::PointZero.new }
+	subject { Geometry::PointZero.new }
 	
 	it "must be equal to 0 and 0.0" do
 	    zero.must_be :eql?, 0
@@ -119,7 +121,9 @@ describe Geometry::PointZero do
 	it "must be equal to an Array of zeros" do
 	    zero.must_be :==, [0,0]
 	    zero.must_be :eql?, [0,0]
+	    zero.must_be :===, [0,0]
 	    [0,0].must_equal zero
+	    subject.must_equal [0,0]
 	end
 	
 	it "must not be equal to a non-zero Array" do
@@ -130,7 +134,9 @@ describe Geometry::PointZero do
 	it "must be equal to a Point at the origin" do
 	    zero.must_be :==, Point[0,0]
 	    zero.must_be :eql?, Point[0,0]
+	    zero.must_be :===, Point[0,0]
 	    Point[0,0].must_equal zero
+	    subject.must_equal Point[0,0]
 	end
 	
 	it "must not be equal to a Point not at the origin" do

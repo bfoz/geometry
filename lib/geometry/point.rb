@@ -40,14 +40,24 @@ geometry class (x, y, z).
 
 	# Allow comparison with an Array, otherwise do the normal thing
 	def eql?(other)
-	    return @elements.eql? other if other.is_a?(Array)
-	    super other
+	    if other.is_a?(Array)
+		@elements.eql? other
+	    elsif other.is_a?(PointZero)
+		@elements.all? {|e| e.eql? 0 }
+	    else
+		super other
+	    end
 	end
 
 	# Allow comparison with an Array, otherwise do the normal thing
 	def ==(other)
-	    return @elements == other if other.is_a?(Array)
-	    super other
+	    if other.is_a?(Array)
+		@elements.eql? other
+	    elsif other.is_a?(PointZero)
+		@elements.all? {|e| e.eql? 0 }
+	    else
+		super other
+	    end
 	end
 
 	# Combined comparison operator

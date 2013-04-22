@@ -2,6 +2,8 @@ require 'minitest/autorun'
 require 'geometry/size_zero'
 
 describe Geometry::SizeZero do
+    Size = Geometry::Size
+
     let(:zero) { Geometry::SizeZero.new }
 
     describe "arithmetic" do
