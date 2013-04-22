@@ -1,6 +1,7 @@
 require_relative 'cluster_factory'
 require_relative 'edge'
 require_relative 'point'
+require_relative 'point_zero'
 require_relative 'size'
 
 module Geometry
@@ -175,11 +176,11 @@ The {Rectangle} class cluster represents your typical arrangement of 4 corners a
 	    options, args = args.partition {|a| a.is_a? Hash}
 	    options = options.reduce({}, :merge)
 
+	    @center = options[:center] ? Point[options[:center]] : PointZero.new
+
 	    if options.has_key?(:size)
-		@center = options[:center] || Point[0,0]
 		@size = Geometry::Size[options[:size]]
 	    elsif options.has_key?(:height) and options.has_key?(:width)
-		@center = options[:center] || Point[0,0]
 		@size = Geometry::Size[options[:width], options[:height]]
 	    else
 		raise ArgumentError, "Bad arguments to CenteredRectangle#new"
@@ -247,11 +248,11 @@ The {Rectangle} class cluster represents your typical arrangement of 4 corners a
 	    options, args = args.partition {|a| a.is_a? Hash}
 	    options = options.reduce({}, :merge)
 
+	    @origin = options[:origin] ? Point[options[:origin]] : PointZero.new
+
 	    if options.has_key?(:size)
-		@origin = options[:origin] || Point[0,0]
 		@size = Geometry::Size[options[:size]]
 	    elsif options.has_key?(:height) and options.has_key?(:width)
-		@origin = options[:origin] || Point[0,0]
 		@size = Geometry::Size[options[:width], options[:height]]
 	    else
 		raise ArgumentError, "Bad arguments to SizeRectangle#new"
