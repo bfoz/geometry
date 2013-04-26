@@ -2,6 +2,8 @@ require 'minitest/autorun'
 require 'geometry/rotation'
 
 describe Geometry::Rotation do
+    Rotation = Geometry::Rotation
+
     it "must accept x and y axes" do
 	rotation = Geometry::Rotation.new :x => [1,2,3], :y => [4,5,6]
 	rotation.x.must_equal [1,2,3]
@@ -36,5 +38,11 @@ describe Geometry::Rotation do
     it "must have a matrix accessor" do
 	r = Geometry::Rotation.new(:x => [1,0,0], :y => [0,1,0])
 	r.matrix.must_equal Matrix[[1,0,0],[0,1,0],[0,0,1]]
+    end
+
+    describe "when comparing" do
+	it "must equate equal objects" do
+	    Rotation.new(x:[1,2,3], y:[4,5,6]).must_equal Rotation.new(x:[1,2,3], y:[4,5,6])
+	end
     end
 end

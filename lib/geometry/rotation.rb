@@ -43,6 +43,11 @@ A generalized representation of a rotation transformation.
 	    end
 	end
 
+	def eql?(other)
+	    (self.x.eql? other.x) && (self.y.eql? other.y) && (self.z.eql? other.z)
+	end
+	alias :== :eql?
+
 	def identity?
 	    (!@x && !@y && !@z) || ([@x, @y, @z].select {|a| a}.all? {|a| a.respond_to?(:magnitude) ? (1 == a.magnitude) : (1 == a.size)})
 	end

@@ -72,6 +72,12 @@ describe Geometry::Transformation do
 	end
     end
 
+    describe "comparison" do
+	it "must equate equal transformations" do
+	    Transformation.new(origin:[1,2]).must_equal Transformation.new(origin:[1,2])
+	end
+    end
+
     describe "composition" do
 	let(:transformation) { Geometry::Transformation.new }
 

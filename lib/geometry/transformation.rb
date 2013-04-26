@@ -82,6 +82,11 @@ system's X-axis:
 	    @rotation.identity? && !(@scale || @translation)
 	end
 
+	def eql?(other)
+	    (self.rotation.eql? other.rotation) && (self.scale.eql? other.scale) && (self.translation.eql? other.translation)
+	end
+	alias :== :eql?
+
 	# Compose the current {Transformation} with another one
 	def +(other)
 	    if other.is_a?(Array) or other.is_a?(Vector)
