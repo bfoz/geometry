@@ -102,12 +102,9 @@ describe Geometry::Point do
 		(left + [5,6]).must_equal Point[6,8]
 	    end
 
-	    it "must raise TypeError when adding a scalar to a Point of dimension greater than 1" do
-		lambda { left + 1 }.must_raise Geometry::DimensionMismatch
-	    end
-
-	    it "must support adding a Numeric to a Point with a size of 1" do
-		(Point[1] + 2).must_equal Point[3]
+	    it "must add a Numeric to all elements" do
+		(left + 2).must_equal Point[3,4]
+		(2 + left).must_equal Point[3,4]
 	    end
 
 	    it "must raise an exception when adding mismatched sizes" do
@@ -130,12 +127,9 @@ describe Geometry::Point do
 		(left - [5,6]).must_equal Point[-4, -4]
 	    end
 
-	    it "must raise an exception when subtracting a scalar from a Vector" do
-		lambda { left - 1 }.must_raise Geometry::DimensionMismatch
-	    end
-
-	    it "must subtract a Numeric from a Point of size 1" do
-		(Point[3] - 2).must_equal Point[1]
+	    it "must subtract a Numeric from all elements" do
+		(left - 2).must_equal Point[-1, 0]
+		(2 - left).must_equal Point[1,0]
 	    end
 
 	    it "must raise an exception when subtracting mismatched sizes" do

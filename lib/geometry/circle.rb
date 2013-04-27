@@ -68,10 +68,30 @@ Circles come in all shapes and sizes, but they're usually round.
 	alias :== :eql?
 
 # @!group Accessors
+	# @return [Rectangle]	The smallest axis-aligned {Rectangle} that bounds the receiver
+	def bounds
+	    return Rectangle.new(self.min, self.max)
+	end
+
 	# @!attribute [r] diameter
 	#   @return [Numeric] The diameter of the {Circle}
 	def diameter
 	    @radius*2
+	end
+
+	# @return [Point]   The upper right corner of the bounding {Rectangle}
+	def max
+	    @center+radius
+	end
+
+	# @return [Point]   The lower left corner of the bounding {Rectangle}
+	def min
+	    @center-radius
+	end
+
+	# @return [Array<Point>]    The lower left and upper right corners of the bounding {Rectangle}
+	def minmax
+	    [self.min, self.max]
 	end
 # @!endgroup
     end

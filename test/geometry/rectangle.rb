@@ -88,6 +88,7 @@ describe Geometry::Rectangle do
     end
 
     describe "properties" do
+	subject { Rectangle.new [1,2], [3,4] }
 	let(:rectangle) { Rectangle [1,2], [3,4] }
 
 	it "have a center point property" do
@@ -116,6 +117,22 @@ describe Geometry::Rectangle do
 	    points = rectangle.points
 	    assert_equal(4, points.size)
 	    points.each {|point| assert_kind_of(Geometry::Point, point)}
+	end
+
+	it "must have a bounds property that returns a Rectangle" do
+	    subject.bounds.must_equal Rectangle.new([1,2], [3,4])
+	end
+
+	it "must have a minmax property that returns the corners of the bounding rectangle" do
+	    subject.minmax.must_equal [Point[1,2], Point[3,4]]
+	end
+
+	it "must have a max property that returns the upper right corner of the bounding rectangle" do
+	    subject.max.must_equal Point[3,4]
+	end
+
+	it "must have a min property that returns the lower left corner of the bounding rectangle" do
+	    subject.min.must_equal Point[1,2]
 	end
     end
 end

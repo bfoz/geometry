@@ -79,7 +79,7 @@ The {Rectangle} class cluster represents your typical arrangement of 4 corners a
 	    elsif (2==args.count) and (args.all? {|a| a.is_a?(Array) || a.is_a?(Point) })
 		original_new(*args)
 	    else
-		raise ArgumentError, "Bad Rectangle arguments"
+		raise ArgumentError, "Bad Rectangle arguments: #{args}, #{options}"
 	    end
 	end
 
@@ -110,6 +110,11 @@ The {Rectangle} class cluster represents your typical arrangement of 4 corners a
 
 # @group Accessors
 
+	# @return [Rectangle]	The smallest axis-aligned {Rectangle} that bounds the receiver
+	def bounds
+	    return Rectangle.new(self.min, self.max)
+	end
+
 	# @return [Point]   The {Rectangle}'s center
 	def center
 	    min, max = @points.minmax {|a,b| a.y <=> b.y}
@@ -125,6 +130,21 @@ The {Rectangle} class cluster represents your typical arrangement of 4 corners a
 	     Edge.new(point1, point2),
 	     Edge.new(point2, point3),
 	     Edge.new(point3, point0)]
+	end
+
+	# @return [Point]   The upper right corner of the bounding {Rectangle}
+	def max
+	    @points.last
+	end
+
+	# @return [Point]   The lower left corner of the bounding {Rectangle}
+	def min
+	    @points.first
+	end
+
+	# @return [Array<Point>]    The lower left and upper right corners of the bounding {Rectangle}
+	def minmax
+	    [self.min, self.max]
 	end
 
 	# @return [Array<Point>]    The {Rectangle}'s four points (counterclockwise)
@@ -205,6 +225,16 @@ The {Rectangle} class cluster represents your typical arrangement of 4 corners a
 	    Edge.new(point3, point0)]
 	end
 
+	# @return [Point]   The upper right corner of the bounding {Rectangle}
+	def max
+	    @center + @size/2.0
+	end
+
+	# @return [Point]   The lower left corner of the bounding {Rectangle}
+	def min
+	    @center - @size/2.0
+	end
+
 	# @return [Array<Point>]    The {Rectangle}'s four points (clockwise)
 	def points
 	    point0 = @center - @size/2.0
@@ -280,6 +310,16 @@ The {Rectangle} class cluster represents your typical arrangement of 4 corners a
 	    Edge.new(point1, point2),
 	    Edge.new(point2, point3),
 	    Edge.new(point3, point0)]
+	end
+
+	# @return [Point]   The upper right corner of the bounding {Rectangle}
+	def max
+	    @origin + @size
+	end
+
+	# @return [Point]   The lower left corner of the bounding {Rectangle}
+	def min
+	    @origin
 	end
 
 	# @return [Array<Point>]    The {Rectangle}'s four points (clockwise)

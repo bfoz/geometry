@@ -23,6 +23,7 @@ geometry class (x, y, z).
 	# from Vector or another Point
 	#
 	# @overload [](x,y,z,...)
+	# @overload [](Array)
 	# @overload [](Point)
 	# @overload [](Vector)
 	def self.[](*array)
@@ -69,6 +70,7 @@ geometry class (x, y, z).
 	def coerce(other)
 	    case other
 		when Array then [Point[*other], self]
+		when Numeric then [Point[Array.new(self.size, other)], self]
 		when Vector then [Point[*other], self]
 		else
 		    raise TypeError, "#{self.class} can't be coerced into #{other.class}"
@@ -123,8 +125,7 @@ geometry class (x, y, z).
 	def +(other)
 	    case other
 		when Numeric
-		    raise DimensionMismatch, "A scalar can't be added to a Point of dimension greater than 1" if size != 1
-		    Point[@elements.first + other]
+		    Point[@elements.map {|e| e + other}]
 		when PointZero
 		    self
 		else
@@ -137,8 +138,7 @@ geometry class (x, y, z).
 	def -(other)
 	    case other
 		when Numeric
-		    raise DimensionMismatch, "A scalar can't be subtracted from a Point of dimension greater than 1" if size != 1
-		    Point[@elements.first - other]
+		    Point[@elements.map {|e| e - other}]
 		when PointZero
 		    self
 		else

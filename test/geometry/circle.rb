@@ -68,4 +68,24 @@ describe Geometry::Circle do
 	    circle.must_equal Circle.new([1,2], :diameter => 4)
 	end
     end
+
+    describe "properties" do
+	subject { Circle.new center:[1,2], :diameter => 4 }
+
+	it "must have a bounds property that returns a Rectangle" do
+	    subject.bounds.must_equal Rectangle.new([-1,0], [3,4])
+	end
+
+	it "must have a minmax property that returns the corners of the bounding rectangle" do
+	    subject.minmax.must_equal [Point[-1,0], Point[3,4]]
+	end
+
+	it "must have a max property that returns the upper right corner of the bounding rectangle" do
+	    subject.max.must_equal Point[3,4]
+	end
+
+	it "must have a min property that returns the lower left corner of the bounding rectangle" do
+	    subject.min.must_equal Point[-1,0]
+	end
+    end
 end
