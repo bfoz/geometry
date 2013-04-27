@@ -1,6 +1,5 @@
 require "bundler/gem_tasks"
 require 'rake/testtask'
-require 'yard'
 
 task :default => :test
 
@@ -9,8 +8,6 @@ Rake::TestTask.new do |t|
     t.test_files = FileList['test/**/*.rb']
     t.verbose = true
 end
-
-YARD::Rake::YardocTask.new
 
 task :fixdates do
     branch = `git branch --no-color -r --merged`.strip
