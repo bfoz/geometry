@@ -107,5 +107,12 @@ system's X-axis:
 		end
 	    end
 	end
+
+	# Transform and return a new {Point}
+	# @param [Point] point	The {Point} to transform
+	# @return [Point]   The transformed {Point}
+	def transform(point)
+	    @translation + point
+	end
     end
 end

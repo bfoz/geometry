@@ -93,4 +93,11 @@ describe Geometry::Transformation do
 	    (transformation - [1,2,3]).rotation.identity?.must_equal true
 	end
     end
+
+    describe "when transforming a Point" do
+	it "must translate" do
+	    Geometry::Transformation.new(origin:[0,1]).transform([1,0]).must_equal Point[1,1]
+	end
+    end
+
 end
