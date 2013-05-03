@@ -26,11 +26,11 @@ Circles come in all shapes and sizes, but they're usually round.
 	#   Construct a {Circle} using a centerpoint and radius
 	#   @param [Point]	center  The center point of the {Circle}
 	#   @param [Number]	radius	The radius of the {Circle}
-	# @overload new(options)
+	# @overload new(center, radius)
 	#   Construct a circle using named center and radius parameters
 	#   @option options [Point]	:center
 	#   @option options [Number]	:radius
-	# @overload new(options)
+	# @overload new(center, diameter)
 	#   Construct a circle using named center and diameter parameters
 	#   @option options [Point]	:center
 	#   @option options [Number]	:diameter

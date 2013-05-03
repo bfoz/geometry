@@ -44,8 +44,8 @@ describe Geometry::Circle do
 	end
     end
 
-    describe "when constructed with a center and diameter" do
-	let(:circle) { Circle.new [1,2], :diameter => 4 }
+    describe "when constructed with named center and diameter arguments" do
+	let(:circle) { Circle.new center:[1,2], diameter:4 }
 
 	it "must be a CenterDiameterCircle" do
 	    circle.must_be_instance_of(Geometry::CenterDiameterCircle)
