@@ -2,6 +2,19 @@ require 'minitest/autorun'
 require 'geometry/line'
 
 describe Geometry::Line do
+    Line = Geometry::Line
+    Point = Geometry::Point
+
+    describe "when initializing" do
+	it "must accept two named points" do
+	    line = Line.new(from:Point[0,0], to:Point[10,10])
+	    line.must_be_kind_of(Line)
+	    line.must_be_instance_of(Geometry::TwoPointLine)
+	    line.first.must_equal Point[0,0]
+	    line.last.must_equal Point[10,10]
+	end
+    end
+
     it "create a Line object from 2 Points" do
 	line = Geometry::Line[Geometry::Point[0,0], Geometry::Point[10,10]]
 	assert_kind_of(Geometry::Line, line)

@@ -1,3 +1,4 @@
+require_relative 'cluster_factory'
 require_relative 'point'
 
 module Geometry
@@ -28,6 +29,7 @@ Supports two-point, slope-intercept, and point-slope initializer forms
 =end
 
     class Line
+	include ClusterFactory
 
 	# @overload [](Array, Array)
 	#   @return [TwoPointLine]
@@ -53,6 +55,15 @@ Supports two-point, slope-intercept, and point-slope initializer forms
 		return SlopeInterceptLine.new(*args)
 	    else
 		nil
+	    end
+	end
+
+	def self.new(*args)
+	    options, args = args.partition {|a| a.is_a? Hash}
+	    options = options.reduce({}, :merge)
+
+	    if options.has_key?(:from) and options.has_key?(:to)
+		TwoPointLine.new(options[:from], options[:to])
 	    end
 	end
 
