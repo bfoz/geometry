@@ -43,9 +43,14 @@ describe Geometry::PointZero do
 		(left + zero).must_be_kind_of Point
 	    end
 	    
-	    it "must return a Point when adding an array" do
+	    it "must return an Array when adding an array" do
 		(zero + [5,6]).must_equal [5,6]
 #		([5,6] + zero).must_equal [5,6]
+	    end
+
+	    it "must return a Point when adding a Size" do
+		(zero + Size[5,6]).must_be_instance_of(Point)
+		(zero + Size[5,6]).must_equal Point[5,6]
 	    end
 	end
 	
@@ -63,6 +68,11 @@ describe Geometry::PointZero do
 	    it "must return a Point when subtracting an array" do
 		(zero - [5,6]).must_equal [-5, -6]
 #		([5,6] - zero).must_equal [5,6]
+	    end
+
+	    it "must return a Point when subtracting a Size" do
+		(zero - Size[5,6]).must_be_instance_of(Point)
+		(zero - Size[5,6]).must_equal Point[-5,-6]
 	    end
 	end
 	

@@ -73,11 +73,17 @@ everything else, regardless of size.
 # @endgroup
 
 	def +(other)
-	    other
+	    case other
+		when Array, Numeric then other
+		else
+		    Point[other]
+	    end
 	end
 
 	def -(other)
-	    if other.respond_to? :-@
+	    if other.is_a? Size
+		-Point[other]
+	    elsif other.respond_to? :-@
 		-other
 	    elsif other.respond_to? :map
 		other.map {|a| -a }
