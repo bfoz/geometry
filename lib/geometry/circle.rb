@@ -39,10 +39,7 @@ Circles come in all shapes and sizes, but they're usually round.
 	    options = options.reduce({}, :merge)
 	    center, radius = args[0..1]
 
-	    center ||= options[:center]
-	    center = center ? Point[center] : nil
-	    raise ArgumentError, "Circle.new requires a center" unless center
-
+	    center ||= (options[:center] || PointZero.new)
 	    radius ||= options[:radius]
 
 	    if radius

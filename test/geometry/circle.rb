@@ -69,6 +69,27 @@ describe Geometry::Circle do
 	end
     end
 
+    describe "when constructed with a diameter and no center" do
+	let(:circle) { Circle.new :diameter => 4 }
+
+	it "must be a CenterDiameterCircle" do
+	    circle.must_be_instance_of(Geometry::CenterDiameterCircle)
+	    circle.must_be_kind_of(Circle)
+	end
+
+	it "must have a nil center" do
+	    circle.center.must_be_kind_of Geometry::PointZero
+	end
+
+	it "must have a diameter" do
+	    circle.diameter.must_equal 4
+	end
+
+	it "must calculate the correct radius" do
+	    circle.radius.must_equal 2
+	end
+    end
+
     describe "properties" do
 	subject { Circle.new center:[1,2], :diameter => 4 }
 

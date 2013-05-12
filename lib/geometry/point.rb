@@ -27,7 +27,7 @@ geometry class (x, y, z).
 	# @overload [](Point)
 	# @overload [](Vector)
 	def self.[](*array)
-	    return array[0] if array[0].is_a? Point
+	    return array[0] if array[0].is_a?(Point) or array[0].is_a?(PointZero)
 	    array = array[0] if array[0].is_a?(Array)
 	    array = array[0].to_a if array[0].is_a?(Vector)
 	    super *array

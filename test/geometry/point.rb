@@ -11,6 +11,12 @@ describe Geometry::Point do
 	    point.x.must_equal 3
 	    point.y.must_equal 4
 	end
+
+	it "must return the PointZero when constructed from a PointZero" do
+	    original_point = Geometry::PointZero.new
+	    point = Geometry::Point[original_point]
+	    point.must_be_same_as original_point
+	end
     end
 
     it "create a Point object using list syntax" do
