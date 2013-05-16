@@ -1,5 +1,7 @@
 require 'matrix'
 
+require_relative 'point_zero'
+
 module Geometry
     DimensionMismatch = Class.new(StandardError)
     OperationNotDefined = Class.new(StandardError)

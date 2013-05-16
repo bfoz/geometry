@@ -29,7 +29,7 @@ describe Geometry::Path do
 	end
 
 	it "with Points and Arcs" do
-	    path = Geometry::Path.new [0,0], [1.0,0.0], Geometry::Arc.new([1,1], 1, -90*Math::PI/180, 0), [2.0,1.0], [1,2]
+	    path = Geometry::Path.new [0,0], [1.0,0.0], Arc.new(center:[1,1], radius:1, start:-90*Math::PI/180, end:0), [2.0,1.0], [1,2]
 	    path.elements.size.must_equal 3
 	    path.elements[0].must_be_kind_of Geometry::Edge
 	    path.elements[1].must_be_kind_of Geometry::Arc
@@ -37,7 +37,7 @@ describe Geometry::Path do
 	end
 
 	it "with Edges and Arcs" do
-	    path = Geometry::Path.new Edge.new([0,0], [1.0,0.0]), Geometry::Arc.new([1,1], 1, -90*Math::PI/180, 0), Edge.new([2.0,1.0], [1,2])
+	    path = Geometry::Path.new Edge.new([0,0], [1.0,0.0]), Arc.new(center:[1,1], radius:1, start:-90*Math::PI/180, end:0), Edge.new([2.0,1.0], [1,2])
 	    path.elements.size.must_equal 3
 	    path.elements[0].must_be_kind_of Geometry::Edge
 	    path.elements[1].must_be_kind_of Geometry::Arc
@@ -45,7 +45,7 @@ describe Geometry::Path do
 	end
 
 	it "with disjoint Edges and Arcs" do
-	    path = Geometry::Path.new Edge.new([0,0], [1,0]), Geometry::Arc.new([2,1], 1, -90*Math::PI/180, 0), Edge.new([3,1], [1,2])
+	    path = Geometry::Path.new Edge.new([0,0], [1,0]), Arc.new(center:[2,1], radius:1, start:-90*Math::PI/180, end:0), Edge.new([3,1], [1,2])
 	    path.elements.size.must_equal 4
 	    path.elements[0].must_be_kind_of Geometry::Edge
 	    path.elements[1].must_be_kind_of Geometry::Edge
@@ -54,7 +54,7 @@ describe Geometry::Path do
 	end
 
 	it "with disjoint Arcs" do
-	    path = Geometry::Path.new Geometry::Arc.new([2,1], 1, -90*Math::PI/180, 0), Geometry::Arc.new([3,1], 1, -90*Math::PI/180, 0)
+	    path = Geometry::Path.new Arc.new(center:[2,1], radius:1, start:-90*Math::PI/180, end:0), Arc.new(center:[3,1], radius:1, start:-90*Math::PI/180, end:0)
 	    path.elements.size.must_equal 3
 	    path.elements[0].must_be_kind_of Geometry::Arc
 	    path.elements[1].must_be_kind_of Geometry::Edge
@@ -62,6 +62,5 @@ describe Geometry::Path do
 
 	    path.elements[0].last.must_equal path.elements[1].first
 	end
-
     end
 end

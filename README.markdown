@@ -21,7 +21,7 @@ Primitives
 - Size
 - Line
 - Edge
-- Circle
+- [Arc](http://en.wikipedia.org/wiki/Arc_(geometry)), Circle
 - Rectangle, Square
 - Path, [Polyline](http://en.wikipedia.org/wiki/Polyline), [Polygon](http://en.wikipedia.org/wiki/Polygon), [RegularPolygon](http://en.wikipedia.org/wiki/Regular_polygon)
 - Transformation
@@ -83,7 +83,7 @@ Examples
 ### Circle
 ```ruby
     # A circle at Point[1,2] with a radius of 3
-    circle = Geometry::Circle.new [1,2], 3
+    circle = Geometry::Circle.new center:[1,2], radius:3
 ```
 
 ### Polygon
