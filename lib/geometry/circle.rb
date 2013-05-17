@@ -8,9 +8,9 @@ Circles come in all shapes and sizes, but they're usually round.
 
 == Usage
     circle = Geometry::Circle.new [1,2], 3
-    circle = Geometry::Circle.new [1,2], :radius => 3
-    circle = Geometry::Circle.new [1,2], :diameter => 6
-    circle = Geometry::Circle.new :center => [1,2], :diameter => 6
+    circle = Geometry::Circle.new center:[1,2], radius:3
+    circle = Geometry::Circle.new center:[1,2], diameter:6
+    circle = Geometry::Circle.new diameter:6
 =end
 
     class Circle
@@ -22,17 +22,17 @@ Circles come in all shapes and sizes, but they're usually round.
 	# @return [Number]  The {Circle}'s radius
 	attr_reader :radius
 
-	# @overload new(circle, radius)
+	# @overload new(center, radius)
 	#   Construct a {Circle} using a centerpoint and radius
 	#   @param [Point]	center  The center point of the {Circle}
 	#   @param [Number]	radius	The radius of the {Circle}
 	# @overload new(center, radius)
 	#   Construct a circle using named center and radius parameters
-	#   @option options [Point]	:center
+	#   @option options [Point]	:center (PointZero)
 	#   @option options [Number]	:radius
 	# @overload new(center, diameter)
 	#   Construct a circle using named center and diameter parameters
-	#   @option options [Point]	:center
+	#   @option options [Point]	:center (PointZero)
 	#   @option options [Number]	:diameter
 	def self.new(*args, &block)
 	    options, args = args.partition {|a| a.is_a? Hash}
@@ -113,7 +113,7 @@ Circles come in all shapes and sizes, but they're usually round.
 	alias :== :eql?
 
 # @!group Accessors
-	# @return The {Circle}'s radius
+	# @return [Number] The {Circle}'s radius
 	def radius
 	    @diameter/2
 	end
