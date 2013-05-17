@@ -13,6 +13,18 @@ describe Geometry::Line do
 	    line.first.must_equal Point[0,0]
 	    line.last.must_equal Point[10,10]
 	end
+
+	it "must accept named start and end points" do
+	    line = Line.new(start:Point[0,0], end:Point[10,10])
+	    line.must_be_kind_of(Line)
+	    line.must_be_instance_of(Geometry::TwoPointLine)
+	    line.first.must_equal Point[0,0]
+	    line.last.must_equal Point[10,10]
+	end
+
+	it "must raise an exception when no arguments are given" do
+	    -> { Line.new }.must_raise ArgumentError
+	end
     end
 
     it "create a Line object from 2 Points" do

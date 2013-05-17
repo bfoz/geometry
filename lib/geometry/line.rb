@@ -58,12 +58,22 @@ Supports two-point, slope-intercept, and point-slope initializer forms
 	    end
 	end
 
-	def self.new(*args)
-	    options, args = args.partition {|a| a.is_a? Hash}
-	    options = options.reduce({}, :merge)
+	# @overload new(from, to)
+	# @option options [Point] :from	A starting {Point}
+	# @option options [Point] :to	An end {Point}
+	# @return [TwoPointLine]
+	# @overload new(start, end)
+	# @option options [Point] :start	A starting {Point}
+	# @option options [Point] :end	An end {Point}
+	# @return [TwoPointLine]
+	def self.new(options={})
+	    from = options[:from] || options[:start]
+	    to = options[:end] || options[:to]
 
-	    if options.has_key?(:from) and options.has_key?(:to)
-		TwoPointLine.new(options[:from], options[:to])
+	    if from and to
+		TwoPointLine.new(from, to)
+	    else
+		raise ArgumentError, "Start and end Points must be provided"
 	    end
 	end
 
