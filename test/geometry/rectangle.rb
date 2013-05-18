@@ -6,7 +6,6 @@ def Rectangle(*args)
 end
 
 describe Geometry::Rectangle do
-    Point = Geometry::Point
     Rectangle = Geometry::Rectangle
 
     describe "when initializing" do

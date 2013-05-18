@@ -2,8 +2,6 @@ require 'minitest/autorun'
 require 'geometry/point_zero'
 
 describe Geometry::PointZero do
-    Point = Geometry::Point
-
     let(:zero) { Geometry::PointZero.new }
 
     describe "arithmetic" do

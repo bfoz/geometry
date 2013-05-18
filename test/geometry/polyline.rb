@@ -2,7 +2,6 @@ require 'minitest/autorun'
 require 'geometry/polyline'
 
 describe Geometry::Polyline do
-    Point = Geometry::Point
     Polyline = Geometry::Polyline
 
     let(:unit_square) { Polyline.new [0,0], [1,0], [1,1], [0,1] }

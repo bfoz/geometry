@@ -2,7 +2,6 @@ require 'minitest/autorun'
 require 'geometry/polygon'
 
 describe Geometry::Polygon do
-    Point = Geometry::Point
     Polygon = Geometry::Polygon
 
     let(:cw_unit_square) { Polygon.new [0,0], [0,1], [1,1], [1,0] }
