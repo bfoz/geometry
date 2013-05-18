@@ -1,6 +1,8 @@
 Geometry for Ruby
 =================
 
+[![Build Status](https://travis-ci.org/bfoz/geometry.png)](https://travis-ci.org/bfoz/geometry)
+
 Classes and methods for the handling of all of the basic geometry that you 
 learned in high school (and then forgot).
 
