@@ -3,15 +3,13 @@ require_relative 'polygon'
 
 module Geometry
 =begin rdoc
- A {RegularPolygon} is a lot like a {Polygon}, but more regular.
+A {RegularPolygon} is a lot like a {Polygon}, but more regular.
 
- {http://en.wikipedia.org/wiki/Regular_polygon}
+{http://en.wikipedia.org/wiki/Regular_polygon}
 
 == Usage
-    polygon = Geometry::RegularPolygon.new [1,2], 3
-    polygon = Geometry::RegularPolygon.new [1,2], :radius => 3
-    polygon = Geometry::RegularPolygon.new [1,2], :diameter => 6
-    polygon = Geometry::RegularPolygon.new :center => [1,2], :diameter => 6
+    polygon = Geometry::RegularPolygon.new sides:4, center:[1,2], radius:3
+    polygon = Geometry::RegularPolygon.new sides:6, center:[1,2], diameter:6
 =end
 
     class RegularPolygon < Polygon
@@ -26,37 +24,26 @@ module Geometry
 	# @return [Number]  The {RegularPolygon}'s radius
 	attr_reader :radius
 
-	# @overload new(edge_count, center, radius)
-	#   Construct a {RegularPolygon} using a centerpoint and radius
-	#   @param [Number]	edge_count  The number of edges
-	#   @param [Point]	center  The center point of the {RegularPolygon}
-	#   @param [Number]	radius	The radius of the {RegularPolygon}
-	# @overload new(edge_count, options)
-	#   Construct a {RegularPolygon} using named center and radius parameters
-	#   @param [Number]	edge_count  The number of edges
-	#   @option options [Point]	:center
-	#   @option options [Number]	:radius
-	# @overload new(edge_count, options)
-	#   Construct a {RegularPolygon} using named center and diameter parameters
-	#   @param [Number]	edge_count  The number of edges
-	#   @option options [Point]	:center
-	#   @option options [Number]	:diameter
-	def self.new(edge_count, *args, &block)
-	    options, args = args.partition {|a| a.is_a? Hash}
-	    options = options.reduce({}, :merge)
-	    center, radius = args[0..1]
+	# @overload new(sides, center, radius)
+	#   Construct a {RegularPolygon} using a center point and radius
+	#   @option options [Number]	:sides	The number of edges
+	#   @option options [Point]	:center	The center point of the {RegularPolygon}
+	#   @option options [Number]	:radius The radius of the {RegularPolygon}
+	# @overload new(sides, center, diameter)
+	#   Construct a {RegularPolygon} using a center point and diameter
+	#   @option options [Number]	:sides  The number of edges
+	#   @option options [Point]	:center	The center point of the {RegularPolygon}
+	#   @option options [Number]	:diameter   The diameter of the {RegularPolygon}
+	def self.new(options={}, &block)
+	    raise ArgumentError, "RegularPolygon requires an edge count" unless options[:sides]
 
-	    raise ArgumentError, "RegularPolygon requires an edge count" unless edge_count
-
-	    center ||= options[:center]
+	    center = options[:center]
 	    center = center ? Point[center] : nil
 
-	    radius ||= options[:radius]
-
-	    if radius
-		self.allocate.tap {|circle| circle.send :initialize, edge_count, center, radius, &block }
+	    if options.has_key?(:radius)
+		self.allocate.tap {|polygon| polygon.send :initialize, options[:sides], center, options[:radius], &block }
 	    elsif options.has_key?(:diameter)
-		DiameterRegularPolygon.new edge_count, center, options[:diameter], &block
+		DiameterRegularPolygon.new options[:sides], center, options[:diameter], &block
 	    else
 		raise ArgumentError, "RegularPolygon.new requires a radius or a diameter"
 	    end
@@ -108,7 +95,7 @@ module Geometry
 	alias :== :eql?
 
 # @!group Accessors
-	# @return The {RegularPolygon}'s radius
+	# @return [Number] The {RegularPolygon}'s radius
 	def radius
 	    @diameter/2
 	end
