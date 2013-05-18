@@ -18,38 +18,50 @@ An object representing a set of connected elements, each of which could be an
 	    @elements = []
 
 	    first = args.shift
-	    @elements.push first if first.is_a?(Edge) or first.is_a?(Arc)
+	    push first if first.is_a?(Edge) or first.is_a?(Arc)
 
 	    args.reduce(first) do |previous, n|
 		case n
 		    when Point
 			case previous
-			    when Point	    then @elements.push Edge.new(previous, n)
-			    when Arc, Edge  then @elements.push Edge.new(previous.last, n) unless previous.last == n
+			    when Point	    then push Edge.new(previous, n)
+			    when Arc, Edge  then push Edge.new(previous.last, n) unless previous.last == n
 			end
-			@elements.last
+			last
 		    when Edge
 			case previous
-			    when Point	    then @elements.push Edge.new(previous, n.first)
-			    when Arc, Edge  then @elements.push Edge.new(previous.last, n.first) unless previous.last == n.first
+			    when Point	    then push Edge.new(previous, n.first)
+			    when Arc, Edge  then push Edge.new(previous.last, n.first) unless previous.last == n.first
 			end
-			@elements.push(n).last
+			push(n).last
 		    when Arc
 			case previous
 			    when Point
 				if previous == n.first
 				    raise ArgumentError, "Duplicated point before an Arc"
 				else
-				    @elements.push Edge.new(previous, n.first)
+				    push Edge.new(previous, n.first)
 				end
 			    when Arc, Edge
-				@elements.push Edge.new(previous.last, n.first) unless previous.last == n.first
+				push Edge.new(previous.last, n.first) unless previous.last == n.first
 			end
-			@elements.push(n).last
+			push(n).last
 		    else
 			raise ArgumentError, "Unsupported argument type: #{n}"
 		end
 	    end
+	end
+
+	# @return [Geometry]	The last element in the {Path}
+	def last
+	    @elements.last
+	end
+
+	# Append a new geometry element to the {Path}
+	# @return [Path]
+	def push(arg)
+	    @elements.push arg
+	    self
 	end
     end
 end
