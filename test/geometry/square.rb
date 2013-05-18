@@ -2,25 +2,35 @@ require 'minitest/autorun'
 require 'geometry/square'
 
 describe Geometry::Square do
+    Square = Geometry::Square
+
     describe "when constructed" do
 	it "must create a Square from two Points" do
-	    square = Geometry::Square.new [1,2], [3,4]
+	    square = Square.new from:[1,2], to:[3,4]
 	    square.must_be_kind_of Geometry::Square
 	end
 	
 	it "must reorder swapped points when constructed from two Points" do
-	    square = Geometry::Square.new [3,4], [1,2]
+	    square = Geometry::Square.new from:[3,4], to:[1,2]
 	    square.must_be_kind_of Geometry::Square
 	    square.instance_eval('@points[0]').must_equal Point[1,2]
 	    square.instance_eval('@points[1]').must_equal Point[3,4]
 	end
+
+	it "must accept an origin Point and a size" do
+	    square = Square.new origin:[1,2], size:5
+	    square.must_be_kind_of Geometry::Square
+	    square.origin.must_equal Point[1,2]
+	    square.height.must_equal 5
+	    square.width.must_equal 5
+	end
     end
     
     describe "properties" do
-	let(:square) { Geometry::Square.new [2,3], [3,4] }
+	subject { Square.new from:[2,3], to:[3,4] }
 
 	it "must have an origin accessor" do
-	    square.origin.must_equal Point[2,3]
+	    subject.origin.must_equal Point[2,3]
 	end
     end
 end

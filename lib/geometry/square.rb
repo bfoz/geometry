@@ -8,23 +8,33 @@ The {Square} class cluster is like the {Rectangle} class cluster, but not longer
 
 == Constructors
 
-    square = Square.new [1,2], [2,3]	# Using two corners
-    square = Square.new [3,4], 5	# Using an origin point and a size
-    square = Square.new 6		# Using a size and an origin of [0,0]
+    square = Square.new from:[1,2], to:[2,3]	# Using two corners
+    square = Square.new origin:[3,4], size:5	# Using an origin point and a size
 =end
     class Square
 	attr_reader :origin
 
 	# Creates a {Square} given two {Point}s
-	# @param [Point] point0	A corner (ie. bottom-left)
-	# @param [Point] point1	The other corner (ie. top-right)
-	def initialize(point0, point1)
-	    point0, point1 = Point[point0], Point[point1]
-	    raise(ArgumentError, "Point sizes must match (#{point0.size} != #{point1.size}") unless point0.size == point1.size
+	# @option options [Point] :from	A corner (ie. bottom-left)
+	# @option options [Point] :to	The other corner (ie. top-right)
+	# @option options [Point] :origin   The lower left corner
+	# @option options [Number] :size    Bigness
+	def initialize(options={})
+	    origin = options[:from] || options[:origin]
+	    origin = origin ? Point[origin] : PointZero.new
+
+	    if options.has_key? :to
+		point1 = options[:to]
+	    elsif options.has_key? :size
+		point1 = origin + options[:size]
+	    end
+
+	    point1 = Point[point1]
+	    raise(ArgumentError, "Point sizes must match (#{origin.size} != #{point1.size})") unless origin.is_a?(PointZero) || (origin.size == point1.size)
 
 	    # Reorder the points to get lower-left and upper-right
-	    minx, maxx = [point0.x, point1.x].minmax
-	    miny, maxy = [point0.y, point1.y].minmax
+	    minx, maxx = [origin.x, point1.x].minmax
+	    miny, maxy = [origin.y, point1.y].minmax
 	    @points = [Point[minx, miny], Point[maxx, maxy]]
 
 	    raise(NotSquareError) if height != width
