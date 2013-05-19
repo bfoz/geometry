@@ -27,18 +27,18 @@ A {RegularPolygon} is a lot like a {Polygon}, but more regular.
 	# @overload new(sides, center, radius)
 	#   Construct a {RegularPolygon} using a center point and radius
 	#   @option options [Number]	:sides	The number of edges
-	#   @option options [Point]	:center	The center point of the {RegularPolygon}
+	#   @option options [Point]	:center	(PointZero) The center point of the {RegularPolygon}
 	#   @option options [Number]	:radius The radius of the {RegularPolygon}
 	# @overload new(sides, center, diameter)
 	#   Construct a {RegularPolygon} using a center point and diameter
 	#   @option options [Number]	:sides  The number of edges
-	#   @option options [Point]	:center	The center point of the {RegularPolygon}
+	#   @option options [Point]	:center	(PointZero) The center point of the {RegularPolygon}
 	#   @option options [Number]	:diameter   The diameter of the {RegularPolygon}
 	def self.new(options={}, &block)
 	    raise ArgumentError, "RegularPolygon requires an edge count" unless options[:sides]
 
 	    center = options[:center]
-	    center = center ? Point[center] : nil
+	    center = center ? Point[center] : Point.zero
 
 	    if options.has_key?(:radius)
 		self.allocate.tap {|polygon| polygon.send :initialize, options[:sides], center, options[:radius], &block }

@@ -76,8 +76,8 @@ describe Geometry::RegularPolygon do
 	    polygon.edge_count.must_equal 4
 	end
 
-	it "must have a nil center" do
-	    polygon.center.must_be_nil
+	it "must be at the origin" do
+	    polygon.center.must_equal Point.zero
 	end
 
 	it "must have a diameter" do
