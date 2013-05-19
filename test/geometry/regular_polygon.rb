@@ -6,6 +6,7 @@ describe Geometry::RegularPolygon do
 
     describe "when constructed with named center and radius arguments" do
 	let(:polygon) { RegularPolygon.new sides:4, center:[1,2], radius:3 }
+	subject { RegularPolygon.new sides:4, center:[1,2], radius:3 }
 
 	it "must create a RegularPolygon" do
 	    polygon.must_be_instance_of(RegularPolygon)
@@ -25,6 +26,12 @@ describe Geometry::RegularPolygon do
 
 	it "must compare equal" do
 	    polygon.must_equal RegularPolygon.new(sides:4, center:[1,2], radius:3)
+	end
+
+	describe "properties" do
+	    it "must have vertices" do
+		subject.vertices.must_equal [Point[4.0, 2.0], Point[1.0000000000000002, 5.0], Point[-2.0, 2.0000000000000004], Point[0.9999999999999994, -1.0]]
+	    end
 	end
     end
 
