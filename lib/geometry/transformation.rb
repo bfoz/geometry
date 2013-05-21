@@ -50,7 +50,7 @@ system's X-axis:
 
 	    @dimensions = options[:dimensions] || nil
 
-	    @rotation = options[:rotate] || rotate || Geometry::Rotation.new(options)
+	    @rotation = options[:rotate] || rotate || ((options.key?(:x) || options.key?(:y) || options.key?(:z)) ? Geometry::Rotation.new(options) : nil)
 	    @scale = options[:scale] || scale
 
 	    case options.count {|k,v| [:move, :origin, :translate].include? k }
@@ -77,34 +77,66 @@ system's X-axis:
 	    end
 	end
 
+	def initialize_clone(source)
+	    super
+	    @rotation = @rotation.clone if @rotation
+	    @scale = @scale.clone if @scale
+	    @translation = @translation.clone if @translation
+	end
+
 	# Returns true if the {Transformation} is the identity transformation
 	def identity?
-	    @rotation.identity? && !(@scale || @translation)
+	    !(@rotation || @scale || @translation)
 	end
 
 	def eql?(other)
-	    (self.rotation.eql? other.rotation) && (self.scale.eql? other.scale) && (self.translation.eql? other.translation)
+	    return false unless other
+	    return true if !self.dimensions && !other.dimensions && !self.rotation && !other.rotation && !self.translation && !other.translation && !self.scale && !other.scale
+	    return false if !(self.dimensions && other.dimensions) && !(self.rotation && other.rotation) && !(self.translation && other.translation) && !(self.scale && other.scale)
+
+	    ((self.dimensions && other.dimensions && self.dimensions.eql?(other.dimensions)) || !(self.dimensions && other.dimensions)) &&
+	    ((self.rotation && other.rotation && self.rotation.eql?(other.rotation)) || !(self.rotation && other.rotation)) &&
+	    ((self.scale && other.scale && self.scale.eql?(other.scale)) || !(self.scale && other.rotation)) &&
+	    ((self.translation && other.translation && self.translation.eql?(other.translation)) || !(self.scale && other.rotation))
 	end
 	alias :== :eql?
 
 	# Compose the current {Transformation} with another one
 	def +(other)
-	    if other.is_a?(Array) or other.is_a?(Vector)
-		if @translation
-		    Transformation.new(@translation+other, @rotation, @scale)
-		else
-		    Transformation.new(other, @rotation, @scale)
-		end
+	    return self.clone unless other
+
+	    case other
+		when Array, Vector
+		    if @translation
+			Transformation.new(@translation+other, @rotation, @scale)
+		    else
+			Transformation.new(other, @rotation, @scale)
+		    end
+		when Transformation
+		    if @translation
+			Transformation.new(@translation+other.translation, @rotation, @scale)
+		    else
+			Transformation.new(other.translation, @rotation, @scale)
+		    end
 	    end
 	end
 
 	def -(other)
-	    if other.is_a?(Array) or other.is_a?(Vector)
-		if @translation
-		    Transformation.new(@translation-other, @rotation, @scale)
-		else
-		    Transformation.new(other.map {|e| -e}, @rotation, @scale)
-		end
+	    return self.clone unless other
+
+	    case other
+		when Array, Vector
+		    if @translation
+			Transformation.new(@translation-other, @rotation, @scale)
+		    else
+			Transformation.new(other.map {|e| -e}, @rotation, @scale)
+		    end
+		when Transformation
+		    if @translation
+			Transformation.new(@translation-other.translation, @rotation, @scale)
+		    else
+			Transformation.new(-other.translation, @rotation, @scale)
+		    end
 	    end
 	end
 

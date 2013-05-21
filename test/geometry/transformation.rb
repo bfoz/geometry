@@ -73,24 +73,44 @@ describe Geometry::Transformation do
     end
 
     describe "comparison" do
+	subject { Transformation.new(origin:[1,2]) }
+
 	it "must equate equal transformations" do
-	    Transformation.new(origin:[1,2]).must_equal Transformation.new(origin:[1,2])
+	    subject.must_equal Transformation.new(origin:[1,2])
+	end
+
+	it "must not equal nil" do
+	    subject.eql?(nil).wont_equal true
+	end
+
+	it "must not equate a translation with a rotation" do
+	    subject.wont_equal Transformation.new(x:[0,1,0], y:[1,0,0])
+	end
+
+	it "must equate empty transformations" do
+	    Transformation.new.must_equal Transformation.new
 	end
     end
 
     describe "composition" do
+	let(:translate_left) { Geometry::Transformation.new origin:[-2,-2] }
+	let(:translate_right) { Geometry::Transformation.new origin:[1,1] }
 	let(:transformation) { Geometry::Transformation.new }
+
+	it "must add pure translation" do
+	    (translate_left + translate_right).must_equal Geometry::Transformation.new origin:[-1,-1]
+	end
 
 	it "array addition" do
 	    (transformation + [1,2]).translation.must_equal Point[1,2]
 	    ((transformation + [1,2]) + [2,3]).translation.must_equal Point[3,5]
-	    (transformation + [1,2]).rotation.identity?.must_equal true
+	    (transformation + [1,2]).rotation.must_be_nil
 	end
 
 	it "must update the translation when an array is subtracted" do
 	    (transformation - [1,2]).translation.must_equal Point[-1,-2]
 	    ((transformation - [1,2]) - [2,3]).translation.must_equal Point[-3,-5]
-	    (transformation - [1,2,3]).rotation.identity?.must_equal true
+	    (transformation - [1,2,3]).rotation.must_be_nil
 	end
     end
 
@@ -99,5 +119,4 @@ describe Geometry::Transformation do
 	    Geometry::Transformation.new(origin:[0,1]).transform([1,0]).must_equal Point[1,1]
 	end
     end
-
 end
