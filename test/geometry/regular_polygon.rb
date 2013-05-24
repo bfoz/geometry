@@ -88,4 +88,24 @@ describe Geometry::RegularPolygon do
 	    polygon.radius.must_equal 2
 	end
     end
+
+    describe "properties" do
+	subject { RegularPolygon.new sides:6, diameter:4 }
+
+	it "must have a bounds property that returns a Rectangle" do
+	    subject.bounds.must_equal Rectangle.new([-2,-2], [2,2])
+	end
+
+	it "must have a minmax property that returns the corners of the bounding rectangle" do
+	    subject.minmax.must_equal [Point[-2,-2], Point[2,2]]
+	end
+
+	it "must have a max property that returns the upper right corner of the bounding rectangle" do
+	    subject.max.must_equal Point[2,2]
+	end
+
+	it "must have a min property that returns the lower left corner of the bounding rectangle" do
+	    subject.min.must_equal Point[-2,-2]
+	end
+    end
 end

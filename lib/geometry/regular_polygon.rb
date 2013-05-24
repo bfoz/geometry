@@ -66,6 +66,11 @@ A {RegularPolygon} is a lot like a {Polygon}, but more regular.
 	alias :== :eql?
 
 # @!group Accessors
+	# @return [Rectangle]	The smallest axis-aligned {Rectangle} that bounds the receiver
+	def bounds
+	    return Rectangle.new(self.min, self.max)
+	end
+
 	# @!attribute [r] diameter
 	#   @return [Numeric] The diameter of the {RegularPolygon}
 	def diameter
@@ -76,6 +81,21 @@ A {RegularPolygon} is a lot like a {Polygon}, but more regular.
 	#   @return [Array]
 	def vertices
 	    (0...2*Math::PI).step(2*Math::PI/edge_count).map {|angle| center + Point[Math::cos(angle), Math::sin(angle)]*radius }
+	end
+
+	# @return [Point]   The upper right corner of the bounding {Rectangle}
+	def max
+	    @center+Point[radius, radius]
+	end
+
+	# @return [Point]   The lower left corner of the bounding {Rectangle}
+	def min
+	    @center-Point[radius, radius]
+	end
+
+	# @return [Array<Point>]    The lower left and upper right corners of the bounding {Rectangle}
+	def minmax
+	    [self.min, self.max]
 	end
 # @!endgroup
     end
