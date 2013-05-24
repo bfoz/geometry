@@ -92,6 +92,10 @@ describe Geometry::RegularPolygon do
     describe "properties" do
 	subject { RegularPolygon.new sides:6, diameter:4 }
 
+	it "must have edges" do
+	    subject.edges.must_equal [Edge(Point[2.0, 0.0], Point[1.0000000000000002, 1.7320508075688772]), Edge(Point[1.0000000000000002, 1.7320508075688772], Point[-0.9999999999999996, 1.7320508075688776]), Edge(Point[-0.9999999999999996, 1.7320508075688776], Point[-2.0, 2.4492935982947064e-16]), Edge(Point[-2.0, 2.4492935982947064e-16], Point[-1.0000000000000009, -1.7320508075688767]), Edge(Point[-1.0000000000000009, -1.7320508075688767], Point[0.9999999999999986, -1.732050807568878]), Edge(Point[0.9999999999999986, -1.732050807568878], Point[2.0, 0.0])]
+	end
+
 	it "must have a bounds property that returns a Rectangle" do
 	    subject.bounds.must_equal Rectangle.new([-2,-2], [2,2])
 	end

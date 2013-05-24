@@ -77,6 +77,12 @@ A {RegularPolygon} is a lot like a {Polygon}, but more regular.
 	    @radius*2
 	end
 
+	# !@attribute [r] edges
+	def edges
+	    points = self.vertices
+	    points.each_cons(2).map {|p1,p2| Edge.new(p1,p2) } + [Edge.new(points.last, points.first)]
+	end
+
 	# !@attribute [r] vertices
 	#   @return [Array]
 	def vertices
