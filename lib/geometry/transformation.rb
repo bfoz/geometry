@@ -144,7 +144,7 @@ system's X-axis:
 	# @param [Point] point	The {Point} to transform
 	# @return [Point]   The transformed {Point}
 	def transform(point)
-	    @translation + point
+	    @translation ? (@translation + point) : point
 	end
     end
 end

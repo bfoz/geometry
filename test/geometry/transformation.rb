@@ -115,6 +115,12 @@ describe Geometry::Transformation do
     end
 
     describe "when transforming a Point" do
+	describe "when no transformation is set" do
+	    it "must return the Point" do
+		Transformation.new.transform(Point[1,2]).must_equal Point[1,2];
+	    end
+	end
+
 	it "must translate" do
 	    Geometry::Transformation.new(origin:[0,1]).transform([1,0]).must_equal Point[1,1]
 	end
