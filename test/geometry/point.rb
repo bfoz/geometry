@@ -19,12 +19,6 @@ describe Geometry::Point do
 	end
     end
 
-    it "create a Point object using list syntax" do
-	point = Geometry::Point[2,1]
-	assert_equal(2, point.size)
-	assert_equal(2, point.x)
-	assert_equal(1, point.y)
-    end
     it "create a Point object from an array" do
 	point = Geometry::Point[[3,4]]
 	assert_equal(2, point.size)
@@ -44,12 +38,6 @@ describe Geometry::Point do
 	assert_equal(4, point.y)
     end
 
-    it "create a Point object from a Vector using list syntax" do
-	point = Geometry::Point[Vector[3,4]]
-	assert_equal(2, point.size)
-	assert_equal(3, point.x)
-	assert_equal(4, point.y)
-    end
     it "create a Point object from a Point using list syntax" do
 	point = Geometry::Point[Geometry::Point[13,14]]
 	assert_equal(2, point.size)
@@ -170,12 +158,22 @@ describe Geometry::Point do
     end
 
     describe "coercion" do
+	subject { Point[1,2] }
+
 	it "must coerce Arrays into Points" do
-	    Point[1,2].coerce([3,4]).must_equal [Point[3,4], Point[1,2]]
+	    subject.coerce([3,4]).must_equal [Point[3,4], subject]
 	end
 
 	it "must coerce Vectors into Points" do
-	    Point[1,2].coerce(Vector[3,4]).must_equal [Point[3,4], Point[1,2]]
+	    subject.coerce(Vector[3,4]).must_equal [Point[3,4], subject]
+	end
+
+	it "must coerce a Numeric into a Point" do
+	    subject.coerce(42).must_equal [Point[42,42], subject]
+	end
+
+	it "must reject anything that can't be coerced" do
+	    -> { subject.coerce(NilClass) }.must_raise TypeError
 	end
     end
 
