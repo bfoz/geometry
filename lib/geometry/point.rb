@@ -41,6 +41,11 @@ geometry class (x, y, z).
 	    PointZero.new
 	end
 
+	# Return a copy of the {Point}
+	def clone
+	    Point[@elements.clone]
+	end
+
 	# Allow comparison with an Array, otherwise do the normal thing
 	def eql?(other)
 	    if other.is_a?(Array)

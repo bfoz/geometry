@@ -85,6 +85,16 @@ describe Geometry::Point do
 	Point[1,2][2].must_equal nil
     end
 
+    it "must clone" do
+	Point[1,2].clone.must_be_instance_of(Point)
+	Point[1,2].clone.must_equal Point[1,2]
+    end
+
+    it "must duplicate" do
+	Point[1,2].dup.must_be_instance_of(Point)
+	Point[1,2].dup.must_equal Point[1,2]
+    end
+
     describe "arithmetic" do
 	let(:left) { Point[1,2] }
 	let(:right) { Point[3,4] }
