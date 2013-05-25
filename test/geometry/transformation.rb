@@ -101,6 +101,11 @@ describe Geometry::Transformation do
 	    (translate_left + translate_right).must_equal Geometry::Transformation.new origin:[-1,-1]
 	end
 
+	it "must add translation and no translation" do
+	    (transformation + translate_left).must_equal translate_left
+	    (translate_left + transformation).must_equal translate_left
+	end
+
 	it "array addition" do
 	    (transformation + [1,2]).translation.must_equal Point[1,2]
 	    ((transformation + [1,2]) + [2,3]).translation.must_equal Point[3,5]
@@ -111,6 +116,11 @@ describe Geometry::Transformation do
 	    (transformation - [1,2]).translation.must_equal Point[-1,-2]
 	    ((transformation - [1,2]) - [2,3]).translation.must_equal Point[-3,-5]
 	    (transformation - [1,2,3]).rotation.must_be_nil
+	end
+
+	it "must subtract translation and no translation" do
+	    (transformation - translate_left).must_equal translate_left
+	    (translate_left - transformation).must_equal translate_left
 	end
     end
 

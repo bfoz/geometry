@@ -122,6 +122,13 @@ describe Geometry::Point do
 		(Vector[5,6] + right).must_equal Vector[8,10]
 	    end
 
+	    it "must return self when adding a PointZero" do
+		(left + Point.zero).must_equal left
+	    end
+
+	    it "must return self when adding a NilClass" do
+		(left + nil).must_equal left
+	    end
 	end
 
 	describe "when subtracting" do
@@ -140,6 +147,14 @@ describe Geometry::Point do
 
 	    it "must raise an exception when subtracting mismatched sizes" do
 		lambda { left - [1,2,3,4] }.must_raise Geometry::DimensionMismatch
+	    end
+
+	    it "must return self when subtracting a PointZero" do
+		(left - Point.zero).must_equal left
+	    end
+
+	    it "must return self when subtracting a NilClass" do
+		(left - nil).must_equal left
 	    end
 	end
     end

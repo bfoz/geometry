@@ -128,8 +128,8 @@ geometry class (x, y, z).
 	    case other
 		when Numeric
 		    Point[@elements.map {|e| e + other}]
-		when PointZero
-		    self
+		when PointZero, NilClass
+		    self.dup
 		else
 		    raise OperationNotDefined, "#{other.class} must respond to :size and :[]" unless other.respond_to?(:size) && other.respond_to?(:[])
 		    raise DimensionMismatch,  "Can't add #{other} to #{self}" if size != other.size
@@ -141,8 +141,8 @@ geometry class (x, y, z).
 	    case other
 		when Numeric
 		    Point[@elements.map {|e| e - other}]
-		when PointZero
-		    self
+		when PointZero, NilClass
+		    self.dup
 		else
 		    raise OperationNotDefined, "#{other.class} must respond to :size and :[]" unless other.respond_to?(:size) && other.respond_to?(:[])
 		    raise DimensionMismatch, "Can't subtract #{other} from #{self}" if size != other.size
