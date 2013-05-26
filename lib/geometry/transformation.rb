@@ -116,11 +116,15 @@ system's X-axis:
 			Transformation.new(other, @rotation, @scale)
 		    end
 		when Transformation
-		    if @translation
-			Transformation.new(@translation+other.translation, @rotation, @scale)
+		    if @rotation
+			rotation = other.rotation ? (@rotation + other.rotation) : other.rotation
 		    else
-			Transformation.new(other.translation, @rotation, @scale)
+			rotation = other.rotation
 		    end
+
+		    translation = @translation ? (@translation + other.translation) : other.translation
+
+		    Transformation.new(translation, rotation, @scale)
 	    end
 	end
 
@@ -135,11 +139,17 @@ system's X-axis:
 			Transformation.new(other.map {|e| -e}, @rotation, @scale)
 		    end
 		when Transformation
-		    if @translation
-			Transformation.new(@translation-other.translation, @rotation, @scale)
+		    if @rotation
+			rotation = other.rotation ? (@rotation - other.rotation) : @rotation
+		    elsif other.rotation
+			rotation = -other.rotation
 		    else
-			Transformation.new(-other.translation, @rotation, @scale)
+			rotation = nil
 		    end
+
+		    translation = @translation ? (@translation - other.translation) : -other.translation
+
+		    Transformation.new(translation, rotation, @scale)
 	    end
 	end
 

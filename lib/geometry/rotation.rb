@@ -131,6 +131,15 @@ A generalized representation of a rotation transformation.
 	    end
 	end
 
+	def eql?(other)
+	    case other
+		when RotationAngle then angle.eql? other.angle
+		else
+		    false
+	    end
+	end
+	alias :== :eql?
+
 # @group Accessors
 	# !@attribute [r] matrix
 	#   @return [Matrix] the transformation {Matrix} representing the {Rotation}
@@ -151,6 +160,30 @@ A generalized representation of a rotation transformation.
 	#   @return [Point] the Y-axis expressed in the parent coordinate frame
 	def y
 	    Point[-Math.sin(angle), Math.cos(angle)]
+	end
+# @endgroup
+
+# @group Composition
+	def -@
+	    RotationAngle.new(-angle)
+	end
+
+	def +(other)
+	    case other
+		when RotationAngle
+		    RotationAngle.new(angle + other.angle)
+		else
+		    raise TypeError, "Can't compose a #{self.class} with a #{other.class}"
+	    end
+	end
+
+	def -(other)
+	    case other
+		when RotationAngle
+		    RotationAngle.new(angle - other.angle)
+		else
+		    raise TypeError, "Can't subtract #{other.class} from #{self.class}"
+	    end
 	end
 # @endgroup
     end

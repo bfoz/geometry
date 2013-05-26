@@ -68,6 +68,30 @@ describe Geometry::Rotation do
 	end
     end
 
+    describe "comparison" do
+	it "must equate equal angles" do
+	    Rotation.new(angle:45).must_equal Rotation.new(angle:45)
+	end
+
+	it "must not equate unequal angles" do
+	    Rotation.new(angle:10).wont_equal Rotation.new(angle:45)
+	end
+    end
+
+    describe "composition" do
+	it "must add angles" do
+	    (Rotation.new(angle:45) + Rotation.new(angle:45)).must_equal Rotation.new(angle:90)
+	end
+
+	it "must subtract angles" do
+	    (Rotation.new(angle:45) - Rotation.new(angle:45)).must_equal Rotation.new(angle:0)
+	end
+
+	it "must negate angles" do
+	    (-Rotation.new(angle:45)).must_equal Rotation.new(angle:-45)
+	end
+    end
+
     describe "when transforming a Point" do
 	describe "when no rotation is set" do
 	    it "must return the Point" do
