@@ -58,16 +58,28 @@ describe Geometry::Transformation do
 	end
 
 	describe "rotation" do
-	    it "must accept an x axis option" do
-		t = Transformation.new :x => [0,1]
-		t.rotation.x.must_equal [0,1]
-		t.identity?.wont_equal true
-	    end
-
 	    it "must accept a y axis option" do
 		t = Transformation.new :y => [1,0]
 		t.rotation.y.must_equal [1,0]
 		t.identity?.wont_equal true
+	    end
+
+	    it "must accept a rotation angle" do
+		transformation = Transformation.new angle:90
+		transformation.identity?.wont_equal true
+		transformation.rotation.wont_be_nil
+		transformation.rotation.angle.must_equal 90
+	    end
+
+	    it "must accept a rotation angle specified by an X-axis" do
+		transformation = Transformation.new x:[0,1]
+		rotation = transformation.rotation
+		rotation.must_be_instance_of(RotationAngle)
+		rotation.angle.must_equal Math::PI/2
+		rotation.x.x.must_be_close_to 0
+		rotation.x.y.must_be_close_to 1
+		rotation.y.x.must_be_close_to -1
+		rotation.y.y.must_be_close_to 0
 	    end
 	end
     end
@@ -134,5 +146,12 @@ describe Geometry::Transformation do
 	it "must translate" do
 	    Geometry::Transformation.new(origin:[0,1]).transform([1,0]).must_equal Point[1,1]
 	end
+
+	it "must rotate" do
+	    rotated_point = Transformation.new(angle:Math::PI/2).transform([1,0])
+	    rotated_point.x.must_be_close_to 0
+	    rotated_point.y.must_be_close_to 1
+	end
+
     end
 end

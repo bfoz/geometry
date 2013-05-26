@@ -155,6 +155,12 @@ describe Geometry::Point do
 		(left - nil).must_equal left
 	    end
 	end
+
+	describe "when multiplying" do
+	    it "must return a Point when multiplied by a Matrix" do
+		(Matrix[[1,2],[3,4]]*Point[5,6]).must_equal Point[17, 39]
+	    end
+	end
     end
 
     describe "coercion" do

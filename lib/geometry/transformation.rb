@@ -3,7 +3,7 @@ require 'geometry/rotation'
 
 module Geometry
 =begin
-{Transformation} represents a relationship between two coordinate frames
+{Transformation} represents a relationship between two coordinate frames.
 
 To create a pure translation relationship:
 
@@ -38,6 +38,7 @@ system's X-axis:
     	# @option options [Point]	:origin	    Same as :translate
     	# @option options [Point]	:move	    Same as :translate
     	# @option options [Point]	:translate  Linear displacement
+	# @option options [Angle]	:angle	    Rotation angle (assumes planar geometry)
     	# @option options [Rotation]	:rotate	    Rotation
     	# @option options [Vector]	:scale	    Scaling
 	# @option options [Vector]	:x	    X-axis
@@ -50,7 +51,8 @@ system's X-axis:
 
 	    @dimensions = options[:dimensions] || nil
 
-	    @rotation = options[:rotate] || rotate || ((options.key?(:x) || options.key?(:y) || options.key?(:z)) ? Geometry::Rotation.new(options) : nil)
+	    rotation_options = options.select {|key, value| [:angle, :x, :y, :z].include? key }
+	    @rotation = options[:rotate] || rotate || ((rotation_options.size > 0) ? Geometry::Rotation.new(rotation_options) : nil)
 	    @scale = options[:scale] || scale
 
 	    case options.count {|k,v| [:move, :origin, :translate].include? k }
@@ -62,6 +64,7 @@ system's X-axis:
 		    raise ArgumentError, "Too many translation parameters in #{options}"
 	    end
 
+	    raise ArgumentError, "Bad translation" if @translation.is_a? Hash
 	    @translation = Point[*@translation]
 	    if @translation
 		@translation = nil if @translation.all? {|v| v == 0}
@@ -140,10 +143,11 @@ system's X-axis:
 	    end
 	end
 
-	# Transform and return a new {Point}
-	# @param [Point] point	The {Point} to transform
+	# Transform and return a new {Point}. Rotation is applied before translation.
+	# @param [Point] point	the {Point} to transform into the parent coordinate frame
 	# @return [Point]   The transformed {Point}
 	def transform(point)
+	    point = @rotation.transform(point) if @rotation
 	    @translation ? (@translation + point) : point
 	end
     end

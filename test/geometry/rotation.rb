@@ -2,7 +2,29 @@ require 'minitest/autorun'
 require 'geometry/rotation'
 
 describe Geometry::Rotation do
+    Point = Geometry::Point
     Rotation = Geometry::Rotation
+    RotationAngle = Geometry::RotationAngle
+
+    describe "when constructed" do
+	it "must accept a rotation angle" do
+	    rotation = Rotation.new angle:Math::PI/2
+	    rotation.must_be_instance_of(RotationAngle)
+	    rotation.angle.must_equal Math::PI/2
+	    rotation.x.x.must_be_close_to 0
+	    rotation.x.y.must_be_close_to 1
+	    rotation.y.x.must_be_close_to -1
+	    rotation.y.y.must_be_close_to 0
+	end
+
+	it "must accept an X axis" do
+	    rotation = Rotation.new x:[1,0]
+	    rotation.must_be_instance_of(RotationAngle)
+	    rotation.angle.must_equal 0
+	    rotation.x.must_equal Point[1,0]
+	    rotation.y.must_equal Point[0,1]
+	end
+    end
 
     it "must accept x and y axes" do
 	rotation = Geometry::Rotation.new :x => [1,2,3], :y => [4,5,6]
@@ -43,6 +65,20 @@ describe Geometry::Rotation do
     describe "when comparing" do
 	it "must equate equal objects" do
 	    Rotation.new(x:[1,2,3], y:[4,5,6]).must_equal Rotation.new(x:[1,2,3], y:[4,5,6])
+	end
+    end
+
+    describe "when transforming a Point" do
+	describe "when no rotation is set" do
+	    it "must return the Point" do
+		Rotation.new.transform(Point[1,0]).must_equal Point[1,0]
+	    end
+	end
+
+	it "must rotate" do
+	    rotated_point = Rotation.new(angle:Math::PI/2).transform(Point[1,0])
+	    rotated_point.x.must_be_close_to 0
+	    rotated_point.y.must_be_close_to 1
 	end
     end
 end

@@ -1,16 +1,39 @@
 require 'matrix'
 
+require_relative 'cluster_factory'
+require_relative 'point'
+
 module Geometry
 =begin
 A generalized representation of a rotation transformation.
+
+== Usage
+    Rotation.new angle:45*Math.PI/180	# Rotate 45 degrees counterclockwise
+    Rotation.new x:[0,1]		# Rotate 90 degrees counterclockwise
 =end
     class Rotation
-	# @attribute [r] dimensions
-	# @return [Integer]
+	include ClusterFactory
+
+	# @return [Integer] dimensions
 	attr_reader :dimensions
 	attr_reader :x, :y, :z
 
+	# @overload new(angle)
+	#   Create a planar {Rotation} with an angle
+	def self.new(*args)
+	    options = args.select {|a| a.is_a? Hash}.reduce({}, :merge)
+
+	    if options.has_key? :angle
+		RotationAngle.new options[:angle]
+	elsif options.has_key?(:x) && [:x, :y, :z].one? {|k| options.has_key? k }
+		RotationAngle.new x:options[:x]
+	    else
+		self.allocate.tap {|rotation| rotation.send :initialize, *args }
+	    end
+	end
+
 	# @overload initialize(options={})
+	# @option options [Radians]	:angle	    Planar rotation angle
 	# @option options [Integer]	:dimensions Dimensionality of the rotation
 	# @option options [Vector]	:x	    X-axis
 	# @option options [Vector]	:y	    Y-axis
@@ -53,8 +76,10 @@ A generalized representation of a rotation transformation.
 	end
 
 	# @attribute [r] matrix
-	# @return [Matrix]
+	# @return [Matrix] the transformation {Matrix} representing the {Rotation}
 	def matrix
+	    return nil unless [@x, @y, @z].compact.size >= 2
+
 	    # Force all axes to be Vectors
 	    x,y,z = [@x, @y, @z].map {|a| a.is_a?(Array) ? Vector[*a] : a}
 
@@ -74,5 +99,59 @@ A generalized representation of a rotation transformation.
 
 	    Matrix[*rows]
 	end
+
+
+	# Transform and return a new {Point}
+	# @param [Point] point	the {Point} to rotate into the parent coordinate frame
+	# @return [Point]   the rotated {Point}
+	def transform(point)
+	    m = matrix
+	    m ? Point[m * Point[point]] : point
+	end
+    end
+
+    class RotationAngle < Rotation
+	# @return [Radians] the planar rotation angle
+	attr_accessor :angle
+
+	# @option options [Radians] :angle	the rotation angle from the parent coordinate frame
+	# @option options [Point]   :x		the X-axis expressed in the parent coordinate frame
+	def initialize(*args)
+	    options, args = args.partition {|a| a.is_a? Hash}
+	    options = options.reduce({}, :merge)
+
+	    angle = options[:angle] || args[0]
+
+	    if angle
+		@angle = angle
+	    elsif options.has_key? :x
+		@angle = Math.atan2(*options[:x].to_a.reverse)
+	    else
+		@angle = 0
+	    end
+	end
+
+# @group Accessors
+	# !@attribute [r] matrix
+	#   @return [Matrix] the transformation {Matrix} representing the {Rotation}
+	def matrix
+	    return nil unless angle
+
+	    c, s = Math.cos(angle), Math.sin(angle)
+	    Matrix[[c, -s], [s, c]]
+	end
+
+	# !@attribute [r] x
+	#   @return [Point] the X-axis expressed in the parent coordinate frame
+	def x
+	    Point[Math.cos(angle), Math.sin(angle)]
+	end
+
+	# !@attribute [r] y
+	#   @return [Point] the Y-axis expressed in the parent coordinate frame
+	def y
+	    Point[-Math.sin(angle), Math.cos(angle)]
+	end
+# @endgroup
     end
 end
