@@ -1,6 +1,8 @@
 require 'geometry/point'
 require 'geometry/rotation'
 
+require_relative 'transformation/composition'
+
 module Geometry
 =begin
 {Transformation} represents a relationship between two coordinate frames.
@@ -115,16 +117,15 @@ system's X-axis:
 		    else
 			Transformation.new(other, @rotation, @scale)
 		    end
+		when Composition
+		    Composition.new(self, *other.transformations)
 		when Transformation
-		    if @rotation
-			rotation = other.rotation ? (@rotation + other.rotation) : other.rotation
+		    if @rotation || other.rotation
+			Composition.new(self, other)
 		    else
-			rotation = other.rotation
+			translation = @translation ? (@translation + other.translation) : other.translation
+			Transformation.new(translation, @rotation, @scale)
 		    end
-
-		    translation = @translation ? (@translation + other.translation) : other.translation
-
-		    Transformation.new(translation, rotation, @scale)
 	    end
 	end
 
