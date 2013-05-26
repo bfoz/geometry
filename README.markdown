@@ -45,6 +45,11 @@ Examples
     point.x
     point.y
     point[2]	# Same as point.z
+
+    # Zero
+    PointZero.new   # A Point full of zeros of unspecified length
+    Point.zero      # Another way to do the same thing
+    Point.zero(3)   # => Point[0,0,0]
 ```
 
 ### Line

@@ -35,10 +35,11 @@ geometry class (x, y, z).
 	    super *array
 	end
 
-	# Creates and returns a new {PointZero} instance
+	# Creates and returns a new {PointZero} instance. Or, a {Point} full of zeros if the size argument is given.
+	# @param size [Number] the size of the new {Point} full of zeros
 	# @return [PointZero] A new {PointZero} instance
-	def self.zero
-	    PointZero.new
+	def self.zero(size=nil)
+	    size ? Point[Array.new(size, 0)] : PointZero.new
 	end
 
 	# Return a copy of the {Point}

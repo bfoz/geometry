@@ -2,6 +2,18 @@ require 'minitest/autorun'
 require 'geometry/point'
 
 describe Geometry::Point do
+    PointZero = Geometry::PointZero
+
+    describe "class methods" do
+	it "must generate a PointZero" do
+	    Point.zero.must_be_instance_of(PointZero)
+	end
+
+	it "must generate a Point full of zeros" do
+	    Point.zero(3).must_equal Point[0,0,0]
+	end
+    end
+
     describe "constructor" do
 	it "must return the Point when constructed from a Point" do
 	    original_point = Point[3,4]
