@@ -5,7 +5,8 @@ module Geometry
 An object repesenting a zero {Size} in N-dimensional space
 
 A {SizeZero} object is a {Size} that will always compare equal to zero and unequal to
-everything else, regardless of dimensionality.
+everything else, regardless of dimensionality. You can think of it as an application of the
+{http://en.wikipedia.org/wiki/Null_Object_pattern Null Object Pattern}.
 =end
     class SizeZero
 	def eql?(other)

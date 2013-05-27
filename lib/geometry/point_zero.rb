@@ -5,7 +5,8 @@ module Geometry
 An object repesenting a {Point} at the origin in N-dimensional space
 
 A {PointZero} object is a {Point} that will always compare equal to zero and unequal to
-everything else, regardless of size.
+everything else, regardless of size. You can think of it as an application of the
+{http://en.wikipedia.org/wiki/Null_Object_pattern Null Object Pattern}.
 =end
     class PointZero
 	def eql?(other)
@@ -42,19 +43,19 @@ everything else, regardless of size.
 	end
 
 	# @attribute [r] x
-	# @return [Numeric] X-component
+	#   @return [Numeric] X-component
 	def x
 	    0
 	end
 
 	# @attribute [r] y
-	# @return [Numeric] Y-component
+	#   @return [Numeric] Y-component
 	def y
 	    0
 	end
 
 	# @attribute [r] z
-	# @return [Numeric] Z-component
+	#   @return [Numeric] Z-component
 	def z
 	    0
 	end
