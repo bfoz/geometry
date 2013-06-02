@@ -18,6 +18,12 @@ module Geometry
 	    end
 
 # @group Accessors
+	    # !@attribute [r] has_rotation?
+	    #   @return [Bool] true if the transformation has any rotation components
+	    def has_rotation?
+		transformations.any? {|t| t.is_a?(Rotation) || t.has_rotation? }
+	    end
+
 	    # !@attribute [r] size
 	    #   @return [Number] the number of composed {Transformation}s
 	    def size

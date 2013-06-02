@@ -89,6 +89,12 @@ system's X-axis:
 	    @translation = @translation.clone if @translation
 	end
 
+	# !@attribute [r] has_rotation?
+	#   @return [Bool] true if the transformation has any rotation components
+	def has_rotation?
+	    !!@rotation
+	end
+
 	# Returns true if the {Transformation} is the identity transformation
 	def identity?
 	    !(@rotation || @scale || @translation)

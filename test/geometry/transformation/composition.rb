@@ -18,6 +18,18 @@ describe Geometry::Transformation::Composition do
 	end
     end
 
+    describe "attributes" do
+	describe "has_rotation?" do
+	    it "must properly be true" do
+		Composition.new(Transformation.new angle:90).has_rotation?.must_equal true
+	    end
+
+	    it "must properly be false" do
+		subject.has_rotation?.must_equal false
+	    end
+	end
+    end
+
     describe "when composing" do
 	it "must append a Transformation" do
 	    (Composition.new(Transformation.new) + Transformation.new).size.must_equal 2

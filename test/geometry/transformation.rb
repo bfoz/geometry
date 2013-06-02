@@ -104,6 +104,18 @@ describe Geometry::Transformation do
 	end
     end
 
+    describe "attributes" do
+	describe "has_rotation?" do
+	    it "must properly be true" do
+		Transformation.new(angle:90).has_rotation?.must_equal true
+	    end
+
+	    it "must properly be false" do
+		Transformation.new.has_rotation?.must_equal false
+	    end
+	end
+    end
+
     describe "composition" do
 	let(:translate_left) { Geometry::Transformation.new origin:[-2,-2] }
 	let(:translate_right) { Geometry::Transformation.new origin:[1,1] }
