@@ -87,6 +87,9 @@ Supports two-point, slope-intercept, and point-slope initializer forms
 
     # @private
     class PointSlopeLine < Line
+	# @return [Number]  the slope of the {Line}
+	attr_reader :slope
+
 	def initialize(point, slope)
 	    @point = Point[point]
 	    @slope = slope
@@ -98,6 +101,9 @@ Supports two-point, slope-intercept, and point-slope initializer forms
 
     # @private
     class SlopeInterceptLine < Line
+	# @return [Number]  the slope of the {Line}
+	attr_reader :slope
+
 	def initialize(slope, intercept)
 	    @slope = slope
 	    @intercept = intercept
@@ -118,9 +124,6 @@ Supports two-point, slope-intercept, and point-slope initializer forms
 		    vertical? ? nil : @intercept
 	    end
 	end
-	def slope
-	    @slope
-	end
 
 	def to_s
 	    'Line(' + @slope.to_s + ',' + @intercept.to_s + ')'
@@ -138,6 +141,14 @@ Supports two-point, slope-intercept, and point-slope initializer forms
 	    'Line(' + @first.inspect + ', ' + @last.inspect + ')'
 	end
 	alias :to_s :inspect
+
+# @group Accessors
+	# !@attribute [r[ slope
+	#   @return [Number]	the slope of the {Line}
+	def slope
+	    (last.y - first.y)/(last.x - first.x)
+	end
+# @endgroup
     end
 end
 

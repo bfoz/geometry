@@ -106,3 +106,27 @@ describe Geometry::Line do
 	assert_equal('Line(Point[0, 0], Point[10, 10])', line.to_s)
     end
 end
+
+describe Geometry::PointSlopeLine do
+    subject { Geometry::PointSlopeLine.new [1,2], 3 }
+
+    it "must have a slope attribute" do
+	subject.slope.must_equal 3
+    end
+end
+
+describe Geometry::SlopeInterceptLine do
+    subject { Geometry::SlopeInterceptLine.new 3, 2 }
+
+    it "must have a slope attribute" do
+	subject.slope.must_equal 3
+    end
+end
+
+describe Geometry::TwoPointLine do
+    subject { Geometry::TwoPointLine.new [1,2], [3,4] }
+
+    it "must have a slope attribute" do
+	subject.slope.must_equal 1
+    end
+end
