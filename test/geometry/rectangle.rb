@@ -76,13 +76,30 @@ describe Geometry::Rectangle do
 	    -> { Rectangle.new height:1 }.must_raise ArgumentError
 	    -> { Rectangle.new width:1 }.must_raise ArgumentError
 	end
-
     end
 
     describe "comparison" do
 	it "must compare equal" do
 	    rectangle = Rectangle [1,2], [3,4]
 	    rectangle.must_equal Rectangle([1,2], [3, 4])
+	end
+    end
+
+    describe "inset" do
+	subject { Rectangle.new [0,0], [10,10] }
+
+	it "must inset equally" do
+	    subject.inset(1).must_equal Rectangle.new [1,1], [9,9]
+	end
+
+	it "must inset vertically and horizontally" do
+	    subject.inset(1,2).must_equal Rectangle.new [1,2], [9,8]
+	    subject.inset(x:1, y:2).must_equal Rectangle.new [1,2], [9,8]
+	end
+
+	it "must inset from individual sides" do
+	    subject.inset(1,2,3,4).must_equal Rectangle.new [2,3], [6,9]
+	    subject.inset(top:1, left:2, bottom:3, right:4).must_equal Rectangle.new [2,3], [6,9]
 	end
     end
 

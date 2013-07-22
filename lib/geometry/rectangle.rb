@@ -171,6 +171,39 @@ The {Rectangle} class cluster represents your typical arrangement of 4 corners a
 	    max.x - min.x
 	end
 # @endgroup
+
+	# Create a new {Rectangle} from the receiver that's inset by the given amount
+	# @overload inset(x, y)
+	# @overload inset(top, left, bottom, right)
+	# @overload inset(x, y)
+	#   @option options [Number] :x	    Inset from the left and right sides
+	#   @option options [Number] :y	    Inset from the top and bottom
+	# @overload inset(top, left, bottom, right)
+	#   @option options [Number] :bottom	The inset from the bottom of the {Rectangle}
+	#   @option options [Number] :left	The inset from the left side of the {Rectangle}
+	#   @option options [Number] :right	The inset from the right side of the {Rectangle}
+	#   @option options [Number] :top	The inset from the top of the {Rectangle}
+	def inset(*args)
+	    options, args = args.partition {|a| a.is_a? Hash}
+	    options = options.reduce({}, :merge)
+	    raise ArumentError, "Can't specify both arguments and options" if !args.empty? && !options.empty?
+
+	    if 1 == args.size
+		distance = args.shift
+		Rectangle.new from:(min + distance), to:(max - distance)
+	    elsif 2 == args.size
+		distance = Point[*args]
+		Rectangle.new from:(min + distance), to:(max - distance)
+	    elsif 4 == args.size
+		top, left, bottom, right = *args
+		Rectangle.new from:(min + Point[left, bottom]), to:(max - Point[right, top])
+	    elsif options[:x] && options[:y]
+		distance = Point[options[:x], options[:y]]
+		Rectangle.new from:(min + distance), to:(max - distance)
+	    elsif options[:top] && options[:left] && options[:bottom] && options[:right]
+		Rectangle.new from:(min + Point[options[:left], options[:bottom]]), to:(max - Point[options[:right], options[:top]])
+	    end
+	end
     end
 
     class CenteredRectangle < Rectangle
