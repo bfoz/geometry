@@ -6,6 +6,7 @@ describe Geometry::Polyline do
 
     let(:closed_unit_square) { Polyline.new [0,0], [1,0], [1,1], [0,1], [0,0] }
     let(:unit_square) { Polyline.new [0,0], [1,0], [1,1], [0,1] }
+    let(:reverse_unit_square)	{ Polyline.new [0,1], [1,1], [1,0], [0,0] }
 
     it "must create a Polyline object with no arguments" do
 	polyline = Geometry::Polyline.new
@@ -22,6 +23,8 @@ describe Geometry::Polyline do
     end
 
     describe "when the Polyline is closed" do
+	let(:closed_concave_polyline) { Polyline.new [-2,0], [0,0], [0,-2], [2,-2], [2,2], [-2,2], [-2,0] }
+
 	it "must be closed" do
 	    closed_unit_square.closed?.must_equal true
 	end
@@ -29,15 +32,42 @@ describe Geometry::Polyline do
 	it "must generate bisectors" do
 	    closed_unit_square.bisectors.must_equal [Vector[1, 1], Vector[-1, 1], Vector[-1, -1], Vector[1, -1]]
 	end
+
+	it "must generate bisectors with an inside corner" do
+	    closed_concave_polyline.bisectors.must_equal [Vector[1,1], Vector[-1,-1], Vector[1,1], Vector[-1,1], Vector[-1,-1], Vector[1,-1]]
+	end
+
+	it "must generate left bisectors" do
+	    closed_unit_square.left_bisectors.must_equal [Vector[1, 1], Vector[-1, 1], Vector[-1, -1], Vector[1, -1]]
+	end
+
+	it "must generate left bisectors with an inside corner" do
+	    closed_concave_polyline.left_bisectors.must_equal [Vector[1,1], Vector[1,1], Vector[1,1], Vector[-1,1], Vector[-1,-1], Vector[1,-1]]
+	end
     end
 
     describe "when the Polyline is open" do
+	let(:concave_polyline) { Polyline.new [-2,0], [0,0], [0,-2], [2,-2], [2,2], [-2,2] }
+
 	it "must not be closed" do
 	    unit_square.closed?.must_equal false
 	end
 
 	it "must generate bisectors" do
 	    unit_square.bisectors.must_equal [Vector[0, 1], Vector[-1, 1], Vector[-1, -1], Vector[0, -1]]
+	end
+
+	it "must generate bisectors with an inside corner" do
+	    concave_polyline.bisectors.must_equal [Vector[0,1], Vector[-1,-1], Vector[1,1], Vector[-1,1], Vector[-1,-1], Vector[0,-1]]
+	end
+
+	it "must generate left bisectors" do
+	    unit_square.left_bisectors.must_equal [Vector[0, 1], Vector[-1, 1], Vector[-1, -1], Vector[0, -1]]
+	    reverse_unit_square.left_bisectors.must_equal [Vector[0, 1], Vector[1, 1], Vector[1, -1], Vector[0, -1]]
+	end
+
+	it "must generate left bisectors with an inside corner" do
+	    concave_polyline.left_bisectors.must_equal [Vector[0,1], Vector[1,1], Vector[1,1], Vector[-1,1], Vector[-1,-1], Vector[0,-1]]
 	end
     end
 

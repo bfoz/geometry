@@ -100,57 +100,38 @@ also like a {Path} in that it isn't necessarily closed.
 	    @edges.last.last == @edges.first.first
 	end
 
+	# @group Bisectors
+
 	# Generate the angle bisector unit vectors for each vertex
 	# @note If the {Polyline} isn't closed (the normal case), then the first and
 	#   last vertices will be given bisectors that are perpendicular to themselves.
 	# @return [Array<Vector>]   the unit {Vector}s representing the angle bisector of each vertex
 	def bisectors
-	    vectors = edges.map {|e| e.direction }
-
-	    # Generating a bisector for each vertex requires an edge on both sides of each vertex.
-	    #  Obviously, the first and last vertices each have only a single adjacent edge, unless the
-	    #  Polyline happens to be closed (like a Polygon). When not closed, duplicate the
-	    #  first and last direction vectors to fake the adjacent edges. This causes the first and last
-	    #  edges to have bisectors that are perpendicular to themselves.
-	    if closed?
-		# Prepend the last direction vector so that the last edge can be used to find the bisector for the first vertex
-		vectors.unshift vectors.last
-	    else
-		# Duplicate the first and last direction vectors to compensate for not having edges adjacent to the first and last vertices
-		vectors.unshift(vectors.first)
-		vectors.push(vectors.last)
-	    end
-
-	    winding = 0
-	    vectors.each_cons(2).map do |v1,v2|
-		k = v1[0]*v2[1] - v1[1]*v2[0]	# z-component of v1 x v2
-		winding += k
-		if v1 == v2			# collinear, same direction?
-		    Vector[-v1[1], v1[0]]
-		elsif 0 == k			# collinear, reverse direction
-		    nil
-		else
-		    by = (v2[1] - v1[1])/k
-		    v = (0 == v1[1]) ? v2 : v1
-		    Vector[(v[0]*by - 1)/v[1], by]
-		end
-	    end
+	    # Multiplying each bisector by the sign of k flips any bisectors that aren't pointing towards the interior of the angle
+	    bisector_map {|b, k| k <=> 0 }
 	end
 
-	# Offset the receiver by the specified distance. A positive distance
-	#  will offset to the left, and a negative distance to the right.
+	# Generate left angle bisector unit vectors for each vertex
+	# @note This is similar to the #bisector method, but generates vectors that always point to the left side of the {Polyline} instead of towards the inside of each corner
+	# @return [Array<Vector>]   the unit {Vector}s representing the left angle bisector of each vertex
+	def left_bisectors
+	    bisector_map
+	end
+
+	# @endgroup Bisectors
+
 	# @param [Number] distance	The distance to offset by
 	# @return [Polygon] A new {Polygon} outset by the given distance
 	def offset(distance)
-	    offsets = offset_bisectors(distance).each_cons(2).to_a
+	    bisector_pairs = offset_bisectors(distance).each_cons(2)
 
 	    # Create the offset edges and then wrap them in Hashes so the edges
 	    #  can be altered while walking the array
-	    active_edges = edges.zip(offsets).map do |e,offset|
-		offset = Edge.new(e.first+offset.first.vector, e.last+offset.last.vector)
+	    active_edges = edges.zip(bisector_pairs).map do |e,offset|
+		offset_edge = Edge.new(e.first+offset.first.vector, e.last+offset.last.vector)
 
 		# Skip zero-length edges
-		{:edge => (offset.first == offset.last) ? nil : offset}
+		{:edge => (offset_edge.first == offset_edge.last) ? nil : offset_edge}
 	    end
 
 	    # Walk the array and handle any intersections
@@ -192,13 +173,55 @@ also like a {Path} in that it isn't necessarily closed.
 
 	private
 
+	# Generate bisectors and k values with an optional mapping block
+	# @note If the {Polyline} isn't closed (the normal case), then the first and
+	#   last vertices will be given bisectors that are perpendicular to themselves.
+	# @return [Array<Vector>]   the unit {Vector}s representing the angle bisector of each vertex
+	def bisector_map
+	    winding = 0
+	    tangent_loop.each_cons(2).map do |v1,v2|
+		k = v1[0]*v2[1] - v1[1]*v2[0]	# z-component of v1 x v2
+		winding += k
+		if v1 == v2			# collinear, same direction?
+		    Vector[-v1[1], v1[0]]
+		elsif 0 == k			# collinear, reverse direction
+		    nil
+		else
+		    bisector_y = (v2[1] - v1[1])/k
+		    v = (0 == v1[1]) ? v2 : v1
+		    bisector = Vector[(v[0]*bisector_y - 1)/v[1], bisector_y]
+		    block_given? ? (bisector * yield(bisector, k)) : bisector
+		end
+	    end
+	end
+
 	# @group Helpers for offset()
 
 	# Vertex bisectors suitable for offsetting
-	# @param [Number] length    The distance to offset by
+	# @param [Number] length    The distance to offset by. Positive generates left offset bisectors, negative generates right offset bisectors
 	# @return [Array<Edge>]	{Edge}s representing the bisectors
 	def offset_bisectors(length)
-	    vertices.zip(bisectors).map {|v,b| b ? Edge.new(v, v+(b * length)) : nil}
+	    vertices.zip(left_bisectors).map {|v,b| b ? Edge.new(v, v+(b * length)) : nil}
+	end
+
+	# Generate the tangents and fake a circular buffer while accounting for closedness
+	# @return [Array<Vector>]   the tangents
+	def tangent_loop
+	    edges.map {|e| e.direction }.tap do |tangents|
+		# Generating a bisector for each vertex requires an edge on both sides of each vertex.
+		# Obviously, the first and last vertices each have only a single adjacent edge, unless the
+		# Polyline happens to be closed (like a Polygon). When not closed, duplicate the
+		# first and last direction vectors to fake the adjacent edges. This causes the first and last
+		# edges to have bisectors that are perpendicular to themselves.
+		if closed?
+		    # Prepend the last direction vector so that the last edge can be used to find the bisector for the first vertex
+		    tangents.unshift tangents.last
+		else
+		    # Duplicate the first and last direction vectors to compensate for not having edges adjacent to the first and last vertices
+		    tangents.unshift(tangents.first)
+		    tangents.push(tangents.last)
+		end
+	    end
 	end
 
 	# Find the next edge that intersects with e, starting at index i
