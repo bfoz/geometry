@@ -4,6 +4,7 @@ require 'geometry/polyline'
 describe Geometry::Polyline do
     Polyline = Geometry::Polyline
 
+    let(:closed_unit_square) { Polyline.new [0,0], [1,0], [1,1], [0,1], [0,0] }
     let(:unit_square) { Polyline.new [0,0], [1,0], [1,1], [0,1] }
 
     it "must create a Polyline object with no arguments" do
@@ -18,6 +19,36 @@ describe Geometry::Polyline do
 	polyline.must_be_kind_of Polyline
 	polyline.edges.count.must_equal 3
 	polyline.vertices.count.must_equal 4
+    end
+
+    describe "when the Polyline is closed" do
+	it "must be closed" do
+	    closed_unit_square.closed?.must_equal true
+	end
+
+	it "must generate bisectors" do
+	    closed_unit_square.bisectors.must_equal [Vector[1, 1], Vector[-1, 1], Vector[-1, -1], Vector[1, -1]]
+	end
+    end
+
+    describe "when the Polyline is open" do
+	it "must not be closed" do
+	    unit_square.closed?.must_equal false
+	end
+
+	it "must generate bisectors" do
+	    unit_square.bisectors.must_equal [Vector[0, 1], Vector[-1, 1], Vector[-1, -1], Vector[0, -1]]
+	end
+    end
+
+    describe "when checking for closedness" do
+	it "must be closed when it is closed" do
+	    closed_unit_square.closed?.must_equal true
+	end
+
+	it "must not be closed when it is not closed" do
+	    unit_square.closed?.must_equal false
+	end
     end
 
     describe "when creating a Polyline from an array of Points" do

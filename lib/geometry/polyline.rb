@@ -94,13 +94,55 @@ also like a {Path} in that it isn't necessarily closed.
 	end
 	alias :== :eql?
 
+	# Check to see if the {Polyline} is closed (ie. is it a {Polygon}?)
+	# @return [Bool] true if the {Polyline} is closed (the first vertex is equal to the last vertex)
+	def closed?
+	    @edges.last.last == @edges.first.first
+	end
+
+	# Generate the angle bisector unit vectors for each vertex
+	# @note If the {Polyline} isn't closed (the normal case), then the first and
+	#   last vertices will be given bisectors that are perpendicular to themselves.
+	# @return [Array<Vector>]   the unit {Vector}s representing the angle bisector of each vertex
+	def bisectors
+	    vectors = edges.map {|e| e.direction }
+
+	    # Generating a bisector for each vertex requires an edge on both sides of each vertex.
+	    #  Obviously, the first and last vertices each have only a single adjacent edge, unless the
+	    #  Polyline happens to be closed (like a Polygon). When not closed, duplicate the
+	    #  first and last direction vectors to fake the adjacent edges. This causes the first and last
+	    #  edges to have bisectors that are perpendicular to themselves.
+	    if closed?
+		# Prepend the last direction vector so that the last edge can be used to find the bisector for the first vertex
+		vectors.unshift vectors.last
+	    else
+		# Duplicate the first and last direction vectors to compensate for not having edges adjacent to the first and last vertices
+		vectors.unshift(vectors.first)
+		vectors.push(vectors.last)
+	    end
+
+	    winding = 0
+	    vectors.each_cons(2).map do |v1,v2|
+		k = v1[0]*v2[1] - v1[1]*v2[0]	# z-component of v1 x v2
+		winding += k
+		if v1 == v2			# collinear, same direction?
+		    Vector[-v1[1], v1[0]]
+		elsif 0 == k			# collinear, reverse direction
+		    nil
+		else
+		    by = (v2[1] - v1[1])/k
+		    v = (0 == v1[1]) ? v2 : v1
+		    Vector[(v[0]*by - 1)/v[1], by]
+		end
+	    end
+	end
+
 	# Offset the receiver by the specified distance. A positive distance
 	#  will offset to the left, and a negative distance to the right.
 	# @param [Number] distance	The distance to offset by
 	# @return [Polygon] A new {Polygon} outset by the given distance
 	def offset(distance)
-	    bisectors = offset_bisectors(distance)
-	    offsets = bisectors.each_cons(2).to_a
+	    offsets = offset_bisectors(distance).each_cons(2).to_a
 
 	    # Create the offset edges and then wrap them in Hashes so the edges
 	    #  can be altered while walking the array
@@ -156,23 +198,7 @@ also like a {Path} in that it isn't necessarily closed.
 	# @param [Number] length    The distance to offset by
 	# @return [Array<Edge>]	{Edge}s representing the bisectors
 	def offset_bisectors(length)
-	    vectors = edges.map {|e| e.direction }
-	    winding = 0
-	    sums = vectors.unshift(vectors.first).push(vectors.last).each_cons(2).map do |v1,v2|
-		k = v1[0]*v2[1] - v1[1]*v2[0]	# z-component of v1 x v2
-		winding += k
-		if v1 == v2			# collinear, same direction?
-		    Vector[-v1[1], v1[0]]
-		elsif 0 == k			# collinear, reverse direction
-		    nil
-		else
-		    by = (v2[1] - v1[1])/k
-		    v = (0 == v1[1]) ? v2 : v1
-		    Vector[(v[0]*by - 1)/v[1], by]
-		end
-	    end
-
-	    vertices.zip(sums).map {|v,b| b ? Edge.new(v, v+(b * length)) : nil}
+	    vertices.zip(bisectors).map {|v,b| b ? Edge.new(v, v+(b * length)) : nil}
 	end
 
 	# Find the next edge that intersects with e, starting at index i
