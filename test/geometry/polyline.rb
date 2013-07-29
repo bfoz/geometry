@@ -146,6 +146,12 @@ describe Geometry::Polyline do
 		offset_polyline = concave_polyline.offset(-2)
 		offset_polyline.must_equal Polyline.new [0,-2], [7,-2], [7,4], [0,4]
 	    end
+
+	    it "must rightset a closed concave polyline with multiply-intersecting edges" do
+		concave_polyline = Polyline.new [0,0], [5,0], [5,2], [4,2], [4,1], [3,1], [3,2], [2,2], [2,1], [1,1], [1,2], [0,2], [0,0]
+		offset_polyline = concave_polyline.offset(-2)
+		offset_polyline.must_equal Polyline.new [-2,-2], [7,-2], [7,4], [-2,4]
+	    end
 	end
     end
 end

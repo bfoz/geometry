@@ -123,7 +123,12 @@ also like a {Path} in that it isn't necessarily closed.
 	# @param [Number] distance	The distance to offset by
 	# @return [Polygon] A new {Polygon} outset by the given distance
 	def offset(distance)
-	    bisector_pairs = offset_bisectors(distance).each_cons(2)
+	    bisector_pairs = if closed?
+		bisector_edges = offset_bisectors(distance)
+		bisector_edges.push(bisector_edges.first).each_cons(2)
+	    else
+		offset_bisectors(distance).each_cons(2)
+	    end
 
 	    # Create the offset edges and then wrap them in Hashes so the edges
 	    #  can be altered while walking the array
