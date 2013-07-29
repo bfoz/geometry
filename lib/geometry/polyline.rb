@@ -193,7 +193,13 @@ also like a {Path} in that it isn't necessarily closed.
 		    nil
 		else
 		    bisector_y = (v2[1] - v1[1])/k
-		    v = (0 == v1[1]) ? v2 : v1
+
+		    # If v1 or v2 happens to be horizontal, then the other one must be used when calculating
+		    #  the x-component of the bisector (to avoid a divide by zero). But, comparing floats
+		    #  with zero is problematic, so use the one with the largest y-component instead checking
+		    #  for a y-component equal to zero.
+		    v = (v2[1].abs > v1[1].abs) ? v2 : v1
+
 		    bisector = Vector[(v[0]*bisector_y - 1)/v[1], bisector_y]
 		    block_given? ? (bisector * yield(bisector, k)) : bisector
 		end

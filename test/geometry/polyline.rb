@@ -152,6 +152,15 @@ describe Geometry::Polyline do
 		offset_polyline = concave_polyline.offset(-2)
 		offset_polyline.must_equal Polyline.new [-2,-2], [7,-2], [7,4], [-2,4]
 	    end
+
+	    # Naturally, this test is very sensitive to the input coordinate values. This is a painfully contrived example that
+	    #  checks for sensitivity to edges that are very close to horizontal, but not quite.
+	    # When the test fails, the first point of the offset polyline is at [0,-1]
+	    it "must not be sensitive to floating point rounding errors" do
+		polyline = Polyline.new [0, 0], [0, -2], [10, -2], [10, 10], [-100, 10], [-100, -22], [-69, -22], [-69, 3.552713678800501e-15], [0,0]
+		outset = polyline.offset(-1)
+		outset.edges.first.first.must_equal Geometry::Point[-1,-1]
+	    end
 	end
     end
 end
