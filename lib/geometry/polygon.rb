@@ -205,16 +205,16 @@ but there's currently nothing that enforces simplicity.
 	# @param [Number] distance	The distance to offset by
 	# @return [Polygon] A new {Polygon} outset by the given distance
 	def outset(distance)
-	    bisectors = offset_bisectors(distance)
-	    offsets = (bisectors.each_cons(2).to_a << [bisectors.last, bisectors.first])
+	    bisector_edges = outset_bisectors(distance)
+	    bisector_pairs = bisector_edges.push(bisector_edges.first).each_cons(2)
 
 	    # Create the offset edges and then wrap them in Hashes so the edges
 	    #  can be altered while walking the array
-	    active_edges = edges.zip(offsets).map do |e,offset|
-		offset = Edge.new(e.first+offset.first.vector, e.last+offset.last.vector)
+	    active_edges = edges.zip(bisector_pairs).map do |e,offset|
+		offset_edge = Edge.new(e.first+offset.first.vector, e.last+offset.last.vector)
 
 		# Skip zero-length edges
-		{:edge => (offset.first == offset.last) ? nil : offset}
+		{:edge => (offset_edge.first == offset_edge.last) ? nil : offset_edge}
 	    end
 
 	    # Walk the array and handle any intersections
@@ -263,29 +263,15 @@ but there's currently nothing that enforces simplicity.
 	    Polygon.new *(active_edges.map {|e| e[:edge]}.compact.map {|e| [e.first, e.last]}.flatten)
 	end
 
-	# Vertex bisectors suitable for offsetting
+	# Vertex bisectors suitable for outsetting
 	# @param [Number] length    The distance to offset by
 	# @return [Array<Edge>]	{Edge}s representing the bisectors
-	def offset_bisectors(length)
-	    vectors = edges.map {|e| e.direction }
-	    winding = 0
-	    sums = vectors.unshift(vectors.last).each_cons(2).map do |v1,v2|
-		k = v1[0]*v2[1] - v1[1]*v2[0]	# z-component of v1 x v2
-		winding += k
-		if v1 == v2			# collinear, same direction?
-		    Vector[-v1[1], v1[0]]
-		elsif 0 == k			# collinear, reverse direction
-		    nil
-		else
-		    by = (v2[1] - v1[1])/k
-		    v = (0 == v1[1]) ? v2 : v1
-		    Vector[(v[0]*by - 1)/v[1], by]
-		end
-	    end
-
-	    # Check the polygon's orientation. If clockwise, negate length as a hack for injecting a -1 into the final result
-	    length = -length if winding >= 0
-	    vertices.zip(sums).map {|v,b| b ? Edge.new(v, v+(b * length)) : nil}
+	def outset_bisectors(length)
+	    # If the polygon is counterclockwise, the left bisectors will all
+	    #  point towards the interior. Negate the length as a hack for
+	    #  flipping the bisectors so that they point towards the exterior.
+	    length = -length unless clockwise?
+	    vertices.zip(left_bisectors).map {|v,b| b ? Edge.new(v, v+(b * length)) : nil}
 	end
 
 	private

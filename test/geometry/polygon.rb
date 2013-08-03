@@ -151,6 +151,15 @@ describe Geometry::Polygon do
 	    polygon.edges.count.must_equal 8
 	    polygon.outset(1).must_equal Polygon.new [3, 0], [3, 3], [-2, 3], [-2, -2], [3, -2]
 	end
+
+	# Naturally, this test is very sensitive to the input coordinate values. This is a painfully contrived example that
+	#  checks for sensitivity to edges that are very close to horizontal, but not quite.
+	# When the test fails, the first point of the offset polygon is at [0,-1]
+	it "must not be sensitive to floating point rounding errors" do
+	    polygon = Polygon.new [0, 0], [0, -2], [10, -2], [10, 10], [-100, 10], [-100, -22], [-69, -22], [-69, 3.552713678800501e-15], [0,0]
+	    outset = polygon.outset(1)
+	    outset.edges.first.first.must_equal Geometry::Point[-1,-1]
+	end
     end
 
     describe "set operations" do
