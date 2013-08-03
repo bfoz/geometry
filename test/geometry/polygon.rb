@@ -6,6 +6,7 @@ describe Geometry::Polygon do
 
     let(:cw_unit_square) { Polygon.new [0,0], [0,1], [1,1], [1,0] }
     let(:unit_square) { Polygon.new [0,0], [1,0], [1,1], [0,1] }
+    subject { unit_square }
 
     it "must create a Polygon object with no arguments" do
 	polygon = Geometry::Polygon.new
@@ -46,8 +47,7 @@ describe Geometry::Polygon do
     end
 
     it "must create closed polygons" do
-	polygon = Geometry::Polygon.new([0,0], [1,0], [1,1], [0,1])
-	assert_equal(polygon.edges.first.first, polygon.edges.last.last)
+	subject.closed?.must_equal true
     end
 
     it "must handle already closed polygons" do
@@ -56,6 +56,13 @@ describe Geometry::Polygon do
 	assert_equal(4, polygon.edges.size)
 	assert_equal(4, polygon.vertices.size)
 	assert_equal(polygon.edges.first.first, polygon.edges.last.last)
+    end
+
+    it "must return itself on close" do
+	closed = subject.close
+	closed.closed?.must_equal true
+	closed.must_equal subject
+	closed.must_be_same_as subject
     end
 
     describe "orientation" do

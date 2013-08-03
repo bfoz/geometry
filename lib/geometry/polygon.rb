@@ -29,9 +29,13 @@ but there's currently nothing that enforces simplicity.
 	#   @return [Polygon]
 	def initialize(*args)
 	    super
+	    close!	# A Polygon is always closed
+	end
 
-	    # Close the polygon if needed
-	    @edges.push Edge.new(@edges.last.last, @edges.first.first) unless @edges.empty? || (@edges.last.last == @edges.first.first)
+	# This method returns the receiver because a {Polygon} is always closed
+	# @return [Polygon]	the receiver
+	def close
+	    close!
 	end
 
 	# Check the orientation of the {Polygon}

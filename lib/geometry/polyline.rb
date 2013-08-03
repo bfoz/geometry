@@ -94,6 +94,19 @@ also like a {Path} in that it isn't necessarily closed.
 	end
 	alias :== :eql?
 
+	# Clone the receiver, close it, then return it
+	# @return [Polyline]	the closed clone of the receiver
+	def close
+	    clone.close!
+	end
+
+	# Close the receiver and return it
+	# @return [Polyline]	the receiver after closing
+	def close!
+	    push_edge Edge.new(@edges.last.last, @edges.first.first) unless @edges.empty? || closed?
+	    self
+	end
+
 	# Check to see if the {Polyline} is closed (ie. is it a {Polygon}?)
 	# @return [Bool] true if the {Polyline} is closed (the first vertex is equal to the last vertex)
 	def closed?

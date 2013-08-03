@@ -24,9 +24,23 @@ describe Geometry::Polyline do
 
     describe "when the Polyline is closed" do
 	let(:closed_concave_polyline) { Polyline.new [-2,0], [0,0], [0,-2], [2,-2], [2,2], [-2,2], [-2,0] }
+	subject { closed_concave_polyline }
 
 	it "must be closed" do
 	    closed_unit_square.closed?.must_equal true
+	end
+
+	it "must clone and close" do
+	    closed = subject.close
+	    closed.closed?.must_equal true
+	    closed.must_equal subject
+	    closed.wont_be_same_as subject
+	end
+
+	it "must be able to close itself" do
+	    subject.close!
+	    subject.closed?.must_equal true
+	    subject.must_equal subject
 	end
 
 	it "must generate bisectors" do
@@ -44,13 +58,34 @@ describe Geometry::Polyline do
 	it "must generate left bisectors with an inside corner" do
 	    closed_concave_polyline.left_bisectors.must_equal [Vector[1,1], Vector[1,1], Vector[1,1], Vector[-1,1], Vector[-1,-1], Vector[1,-1]]
 	end
+
+	it "must rightset a closed concave polyline where the first outset edge intersects with the last outset edge" do
+	    skip
+	    polyline = Polyline.new [0,0], [0,1], [2,1], [2,2], [-1,2], [-1,-1], [2,-1], [2,0], [0,0]
+	    polyline.offset(-1).must_equal Polyline.new [1, 0], [3, 0], [3, 3], [-2, 3], [-2, -2], [3, -2]
+	end
     end
 
     describe "when the Polyline is open" do
 	let(:concave_polyline) { Polyline.new [-2,0], [0,0], [0,-2], [2,-2], [2,2], [-2,2] }
+	subject { concave_polyline }
 
 	it "must not be closed" do
 	    unit_square.closed?.must_equal false
+	end
+
+	it "must clone and close" do
+	    closed = subject.close
+	    closed.closed?.must_equal true
+	    closed.must_equal subject
+	    closed.wont_be_same_as subject
+	end
+
+	it "must be able to close it" do
+	    closed = subject.close!
+	    closed.closed?.must_equal true
+	    closed.must_equal subject
+	    closed.must_be_same_as subject
 	end
 
 	it "must generate bisectors" do
@@ -103,6 +138,12 @@ describe Geometry::Polyline do
 	(unit_square.eql? unit_square).must_equal true
     end
 
+    it "must rightset a closed concave polyline where the first outset edge intersects with the last outset edge" do
+	skip
+	polyline = Polyline.new [0,0], [0,1], [2,1], [2,2], [-1,2], [-1,-1], [2,-1], [2,0], [0,0]
+	polyline.offset(-1).must_equal Polyline.new [1, 0], [3, 0], [3, 3], [-2, 3], [-2, -2], [3, -2]
+    end
+
     describe "when offsetting" do
 	describe "with a positive offset" do
 	    it "must leftset a unit square" do
@@ -151,6 +192,11 @@ describe Geometry::Polyline do
 		concave_polyline = Polyline.new [0,0], [5,0], [5,2], [4,2], [4,1], [3,1], [3,2], [2,2], [2,1], [1,1], [1,2], [0,2], [0,0]
 		offset_polyline = concave_polyline.offset(-2)
 		offset_polyline.must_equal Polyline.new [-2,-2], [7,-2], [7,4], [-2,4]
+	    end
+
+	    it "must rightset a concave polyline where the first outset edge intersects with the last outset edge" do
+		polyline = Polyline.new [0,0], [0,1], [2,1], [2,2], [-1,2], [-1,-1], [2,-1], [2,0]
+		polyline.offset(-1).must_equal Polyline.new [1, 0], [3, 0], [3, 3], [-2, 3], [-2, -2], [3, -2]
 	    end
 
 	    # Naturally, this test is very sensitive to the input coordinate values. This is a painfully contrived example that
