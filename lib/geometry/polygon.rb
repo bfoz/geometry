@@ -239,6 +239,7 @@ but there's currently nothing that enforces simplicity.
 			# Handle the collinear case
 			active_edges[i][:edge] = Edge.new(e1.first, e2.last)
 			active_edges[j].delete(:edge)
+			wrap_around_is_shortest = false
 		    end
 
 		    # Delete everything between e1 and e2

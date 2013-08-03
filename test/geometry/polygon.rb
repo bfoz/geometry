@@ -64,7 +64,7 @@ describe Geometry::Polygon do
 	    Polygon.new([1,1], [1,3], [3,3], [3,1]).clockwise?.must_equal true
 	end
 
-	it "must return fale for counterclockwise" do
+	it "must return false for counterclockwise" do
 	    Polygon.new([0,0], [1,0], [1,1], [0,1]).clockwise?.must_equal false
 	    Polygon.new([1,1], [3,1], [3,3], [1,3]).clockwise?.must_equal false
 	end
@@ -140,10 +140,9 @@ describe Geometry::Polygon do
 	end
 
 	it "must outset a concave polygon with multiply-intersecting edges" do
-	    skip
 	    concave_polygon = Polygon.new [0,0], [5,0], [5,2], [4,2], [4,1], [3,1], [3,2], [2,2], [2,1], [1,1], [1,2], [0,2]
-	    outset_polygon = concave_polygon.outset(2)
-	    outset_polygon.must_equal Polygon.new [-2,-2], [7,-2], [7,4], [-2,4]
+	    outset_polygon = concave_polygon.outset(1)
+	    outset_polygon.must_equal Polygon.new [-1,-1], [6,-1], [6,3], [-1,3]
 	end
 
 	it "must outset a concave polygon where the first outset edge intersects with the last outset edge" do
