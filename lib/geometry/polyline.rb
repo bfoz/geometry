@@ -16,7 +16,7 @@ also like a {Path} in that it isn't necessarily closed.
 	attr_reader :edges, :vertices
 
 	# Construct a new Polyline from Points and/or Edges
-	#  The constructor will try to convert all of its arguments into {Point}s and
+	# @note The constructor will try to convert all of its arguments into {Point}s and
 	#   {Edge}s. Then successive {Point}s will be collpased into {Edge}s. Successive
 	#   {Edge}s that share a common vertex will be added to the new {Polyline}. If
 	#   there's a gap between {Edge}s it will be automatically filled with a new
@@ -120,8 +120,10 @@ also like a {Path} in that it isn't necessarily closed.
 
 	# @endgroup Bisectors
 
+	# Offset the receiver by the specified distance
+	# @note A positive distance will offset to the left, and a negative distance to the right.
 	# @param [Number] distance	The distance to offset by
-	# @return [Polygon] A new {Polygon} outset by the given distance
+	# @return [Polyline] A new {Polyline} outset by the given distance
 	def offset(distance)
 	    bisector_pairs = if closed?
 		bisector_edges = offset_bisectors(distance)
@@ -171,7 +173,7 @@ also like a {Path} in that it isn't necessarily closed.
 
 	# Rightset the receiver by the specified distance
 	# @param [Number] distance	The distance to offset by
-	# @return [Polygon] A new {Polygon} rightset by the given distance
+	# @return [Polyline] A new {Polyline} rightset by the given distance
 	def rightset(distance)
 	    offset(-distance)
 	end
