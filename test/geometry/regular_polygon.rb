@@ -93,7 +93,12 @@ describe Geometry::RegularPolygon do
 	subject { RegularPolygon.new sides:6, diameter:4 }
 
 	it "must have edges" do
-	    subject.edges.must_equal [Edge(Point[2.0, 0.0], Point[1.0000000000000002, 1.7320508075688772]), Edge(Point[1.0000000000000002, 1.7320508075688772], Point[-0.9999999999999996, 1.7320508075688776]), Edge(Point[-0.9999999999999996, 1.7320508075688776], Point[-2.0, 2.4492935982947064e-16]), Edge(Point[-2.0, 2.4492935982947064e-16], Point[-1.0000000000000009, -1.7320508075688767]), Edge(Point[-1.0000000000000009, -1.7320508075688767], Point[0.9999999999999986, -1.732050807568878]), Edge(Point[0.9999999999999986, -1.732050807568878], Point[2.0, 0.0])]
+	    expected_edges = [Edge(Point[2, 0], Point[1, 1.732]), Edge(Point[1, 1.732], Point[-1, 1.732]), Edge(Point[-1, 1.732], Point[-2, 0]), Edge(Point[-2, 0], Point[-1, -1.732]), Edge(Point[-1, -1.732], Point[1, -1.732]), Edge(Point[1, -1.732], Point[2, 0])]
+	    subject.edges.zip(expected_edges) do |edge1, edge2|
+		edge1.to_a.zip(edge2.to_a) do |point1, point2|
+		    point1.to_a.zip(point2.to_a) {|a, b| a.must_be_close_to b }
+		end
+	    end
 	end
 
 	it "must have a bounds property that returns a Rectangle" do
