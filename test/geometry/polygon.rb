@@ -6,6 +6,7 @@ describe Geometry::Polygon do
 
     let(:cw_unit_square) { Polygon.new [0,0], [0,1], [1,1], [1,0] }
     let(:unit_square) { Polygon.new [0,0], [1,0], [1,1], [0,1] }
+    let(:simple_concave) { Polygon.new [0,0], [4,0], [4,2], [3,2], [3,1], [1,1], [1,2], [0,2] }
     subject { unit_square }
 
     it "must create a Polygon object with no arguments" do
@@ -107,6 +108,12 @@ describe Geometry::Polygon do
 	convex_hull.must_be_kind_of Geometry::Polygon
 	convex_hull.edges.size.must_equal 5
 	convex_hull.vertices.must_equal [[0,0], [0,1], [2,1], [2,0], [1,-1]].map {|a| Point[*a]}
+    end
+
+    it "must generate spokes" do
+	unit_square.spokes.must_equal [Vector[-1,-1], Vector[1,-1], Vector[1,1], Vector[-1,1]]
+	cw_unit_square.spokes.must_equal [Vector[-1,-1], Vector[-1,1], Vector[1,1], Vector[1,-1]]
+	simple_concave.spokes.must_equal [Vector[-1,-1], Vector[1,-1], Vector[1,1], Vector[-1,1], Vector[-1,1], Vector[1,1], Vector[1,1], Vector[-1,1]]
     end
 
     describe "spaceship" do

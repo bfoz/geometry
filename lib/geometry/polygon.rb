@@ -285,11 +285,13 @@ but there's currently nothing that enforces simplicity.
 	# @param [Number] length    The distance to offset by
 	# @return [Array<Edge>]	{Edge}s representing the bisectors
 	def outset_bisectors(length)
-	    # If the polygon is counterclockwise, the left bisectors will all
-	    #  point towards the interior. Negate the length as a hack for
-	    #  flipping the bisectors so that they point towards the exterior.
-	    length = -length unless clockwise?
-	    vertices.zip(left_bisectors).map {|v,b| b ? Edge.new(v, v+(b * length)) : nil}
+	    vertices.zip(spokes).map {|v,b| b ? Edge.new(v, v+(b * length)) : nil}
+	end
+
+	# Generate the unit-length spokes for each vertex
+	# @return [Array<Vector>]   the unit {Vector}s representing the spoke of each vertex
+	def spokes
+	    clockwise? ? left_bisectors : right_bisectors
 	end
 
 	private
