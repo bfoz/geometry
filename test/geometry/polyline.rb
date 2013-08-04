@@ -75,6 +75,14 @@ describe Geometry::Polyline do
 	    closed_concave_polyline.left_bisectors.must_equal [Vector[1,1], Vector[1,1], Vector[1,1], Vector[-1,1], Vector[-1,-1], Vector[1,-1]]
 	end
 
+	it "must generate right bisectors" do
+	    closed_unit_square.right_bisectors.must_equal [Vector[-1,-1], Vector[1,-1], Vector[1,1], Vector[-1,1]]
+	end
+
+	it "must generate right bisectors with an inside corner" do
+	    closed_concave_polyline.right_bisectors.must_equal [Vector[-1,-1], Vector[-1,-1], Vector[-1,-1], Vector[1,-1], Vector[1,1], Vector[-1,1]]
+	end
+
 	it "must generate spokes" do
 	    closed_unit_square.spokes.must_equal [Vector[-1,-1], Vector[1,-1], Vector[1,1], Vector[-1,1]]
 	end
@@ -133,6 +141,14 @@ describe Geometry::Polyline do
 	it "must generate left bisectors" do
 	    unit_square.left_bisectors.must_equal [Vector[0, 1], Vector[-1, 1], Vector[-1, -1], Vector[0, -1]]
 	    reverse_unit_square.left_bisectors.must_equal [Vector[0, 1], Vector[1, 1], Vector[1, -1], Vector[0, -1]]
+	end
+
+	it "must generate right bisectors" do
+	    unit_square.right_bisectors.must_equal [Vector[0,-1], Vector[1,-1], Vector[1,1], Vector[0,1]]
+	end
+
+	it "must generate right bisectors with an inside corner" do
+	    concave_polyline.right_bisectors.must_equal [Vector[0,-1], Vector[-1,-1], Vector[-1,-1], Vector[1,-1], Vector[1,1], Vector[0,1]]
 	end
 
 	it "must generate left bisectors with an inside corner" do

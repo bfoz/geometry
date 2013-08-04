@@ -138,11 +138,18 @@ also like a {Path} in that it isn't necessarily closed.
 	    bisector_map {|b, k| k <=> 0 }
 	end
 
-	# Generate left angle bisector unit vectors for each vertex
+	# Generate left-side angle bisector unit vectors for each vertex
 	# @note This is similar to the #bisector method, but generates vectors that always point to the left side of the {Polyline} instead of towards the inside of each corner
-	# @return [Array<Vector>]   the unit {Vector}s representing the left angle bisector of each vertex
+	# @return [Array<Vector>]   the unit {Vector}s representing the left-side angle bisector of each vertex
 	def left_bisectors
 	    bisector_map
+	end
+
+	# Generate right-side angle bisector unit vectors for each vertex
+	# @note This is similar to the #bisector method, but generates vectors that always point to the right side of the {Polyline} instead of towards the inside of each corner
+	# @return [Array<Vector>]   the unit {Vector}s representing the ride-side angle bisector of each vertex
+	def right_bisectors
+	    bisector_map {|b, k| -1 }
 	end
 
 	# Generate the spokes for each vertex. A spoke is the same as a bisector, but in the oppostire direction (bisectors point towards the inside of each corner; spokes point towards the outside)
