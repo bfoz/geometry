@@ -49,6 +49,19 @@ but there's currently nothing that enforces simplicity.
 	    self.class.new *(self.vertices.reverse)
 	end
 
+	# Reverse the receiver and return it
+	# @return [Polygon]	the reversed receiver
+	def reverse!
+	    super
+
+	    # Simply reversing the vertex array causes the reversed polygon to
+	    #  start at what had been the last vertex, instead of starting at
+	    #  the same vertex and just going the other direction.
+	    vertices.unshift vertices.pop
+
+	    self
+	end
+
 	# @group Boolean operators
 
 	# Test a {Point} for inclusion in the receiver using a simplified winding number algorithm

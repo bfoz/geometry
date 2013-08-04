@@ -113,6 +113,20 @@ also like a {Path} in that it isn't necessarily closed.
 	    @edges.last.last == @edges.first.first
 	end
 
+	# Clone the receiver, reverse it, then return it
+	# @return [Polyline]	the reversed clone
+	def reverse
+	    self.class.new *(edges.reverse.map! {|edge| edge.reverse! })
+	end
+
+	# Reverse the receiver and return it
+	# @return [Polyline]	the reversed receiver
+	def reverse!
+	    vertices.reverse!
+	    edges.reverse!.map! {|edge| edge.reverse! }
+	    self
+	end
+
 	# @group Bisectors
 
 	# Generate the angle bisector unit vectors for each vertex

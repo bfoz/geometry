@@ -43,6 +43,22 @@ describe Geometry::Polyline do
 	    subject.must_equal subject
 	end
 
+	it "must clone and reverse" do
+	    vertices = subject.vertices
+	    vertices.push vertices.shift
+	    reversed = subject.reverse
+	    reversed.vertices.must_equal vertices.reverse
+	    reversed.wont_be_same_as subject
+	    reversed.closed?.must_equal true
+	end
+
+	it "must reverse itself" do
+	    original = subject.vertices.dup
+	    subject.reverse!
+	    subject.vertices.to_a.must_equal original.reverse
+	    subject.closed?.must_equal true
+	end
+
 	it "must generate bisectors" do
 	    closed_unit_square.bisectors.must_equal [Vector[1, 1], Vector[-1, 1], Vector[-1, -1], Vector[1, -1]]
 	end
@@ -86,6 +102,20 @@ describe Geometry::Polyline do
 	    closed.closed?.must_equal true
 	    closed.must_equal subject
 	    closed.must_be_same_as subject
+	end
+
+	it "must clone and reverse" do
+	    reversed = subject.reverse
+	    reversed.vertices.must_equal subject.vertices.reverse
+	    reversed.wont_be_same_as subject
+	    reversed.closed?.wont_equal true
+	end
+
+	it "must reverse itself" do
+	    original = subject.vertices.dup
+	    subject.reverse!
+	    subject.vertices.to_a.must_equal original.reverse
+	    subject.closed?.wont_equal true
 	end
 
 	it "must generate bisectors" do

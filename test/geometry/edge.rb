@@ -7,6 +7,7 @@ end
 
 describe Geometry::Edge do
     Edge = Geometry::Edge
+    subject { Geometry::Edge.new [0,0], [1,1] }
 
     it "must create an Edge object" do
 	edge = Edge.new([0,0], [1,0])
@@ -14,13 +15,7 @@ describe Geometry::Edge do
 	assert_equal(Geometry::Point[0,0], edge.first)
 	assert_equal(Geometry::Point[1,0], edge.last)
     end
-    it "must create swap endpoints in place" do
-	edge = Edge.new([0,0], [1,0])
-	assert_kind_of(Edge, edge)
-	edge.reverse!
-	assert_equal(Geometry::Point[1,0], edge.first)
-	assert_equal(Geometry::Point[0,0], edge.last)
-    end
+
     it "must handle equality" do
 	edge1 = Edge.new([1,0], [0,1])
 	edge2 = Edge.new([1,0], [0,1])
@@ -56,6 +51,18 @@ describe Geometry::Edge do
 
     it "must return false for non-parallel edges" do
 	Edge.new([0,0], [2,0]).parallel?(Edge.new([1,-1], [1,1])).must_equal false
+    end
+
+    it "must clone and reverse" do
+	reversed = subject.reverse
+	reversed.to_a.must_equal subject.to_a.reverse
+	reversed.wont_be_same_as subject
+    end
+
+    it "must reverse itself" do
+	original = subject.to_a
+	subject.reverse!
+	subject.to_a.must_equal original.reverse
     end
 
     describe "spaceship" do
