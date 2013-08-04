@@ -75,6 +75,10 @@ describe Geometry::Polyline do
 	    closed_concave_polyline.left_bisectors.must_equal [Vector[1,1], Vector[1,1], Vector[1,1], Vector[-1,1], Vector[-1,-1], Vector[1,-1]]
 	end
 
+	it "must generate spokes" do
+	    closed_unit_square.spokes.must_equal [Vector[-1,-1], Vector[1,-1], Vector[1,1], Vector[-1,1]]
+	end
+
 	it "must rightset a closed concave polyline where the first outset edge intersects with the last outset edge" do
 	    skip
 	    polyline = Polyline.new [0,0], [0,1], [2,1], [2,2], [-1,2], [-1,-1], [2,-1], [2,0], [0,0]
@@ -133,6 +137,10 @@ describe Geometry::Polyline do
 
 	it "must generate left bisectors with an inside corner" do
 	    concave_polyline.left_bisectors.must_equal [Vector[0,1], Vector[1,1], Vector[1,1], Vector[-1,1], Vector[-1,-1], Vector[0,-1]]
+	end
+
+	it "must generate spokes" do
+	    unit_square.spokes.must_equal [Vector[0,-1], Vector[1,-1], Vector[1,1], Vector[0,1]]
 	end
     end
 

@@ -145,6 +145,15 @@ also like a {Path} in that it isn't necessarily closed.
 	    bisector_map
 	end
 
+	# Generate the spokes for each vertex. A spoke is the same as a bisector, but in the oppostire direction (bisectors point towards the inside of each corner; spokes point towards the outside)
+	# @note If the {Polyline} isn't closed (the normal case), then the first and
+	#   last vertices will be given bisectors that are perpendicular to themselves.
+	# @return [Array<Vector>]   the unit {Vector}s representing the spoke of each vertex
+	def spokes
+	    # Multiplying each bisector by the negated sign of k flips any bisectors that aren't pointing towards the exterior of the angle
+	    bisector_map {|b, k| 0 <=> k }
+	end
+
 	# @endgroup Bisectors
 
 	# Offset the receiver by the specified distance
@@ -217,7 +226,8 @@ also like a {Path} in that it isn't necessarily closed.
 		k = v1[0]*v2[1] - v1[1]*v2[0]	# z-component of v1 x v2
 		winding += k
 		if v1 == v2			# collinear, same direction?
-		    Vector[-v1[1], v1[0]]
+		    bisector = Vector[-v1[1], v1[0]]
+		    block_given? ? (bisector * yield(bisector, 1)) : bisector
 		elsif 0 == k			# collinear, reverse direction
 		    nil
 		else
