@@ -78,6 +78,8 @@ The {Rectangle} class cluster represents your typical arrangement of 4 corners a
 		SizedRectangle.new(height: options[:height], width: options[:width])
 	    elsif (2==args.count) and (args.all? {|a| a.is_a?(Array) || a.is_a?(Point) })
 		original_new(*args)
+	    elsif options.empty?
+		raise ArgumentError, "#{self} arguments must be named, not: #{args}"
 	    else
 		raise ArgumentError, "Bad Rectangle arguments: #{args}, #{options}"
 	    end
