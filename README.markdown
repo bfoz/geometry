@@ -14,7 +14,7 @@ that don't work in higher dimensions and I'll do my best to fix them.
 License
 -------
 
-Copyright 2012-2013 Brandon Fosdick <bfoz@bfoz.net> and released under the BSD license.
+Copyright 2012-2014 Brandon Fosdick <bfoz@bfoz.net> and released under the BSD license.
 
 Primitives
 ----------
