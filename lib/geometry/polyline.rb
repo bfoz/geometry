@@ -94,6 +94,25 @@ also like a {Path} in that it isn't necessarily closed.
 	end
 	alias :== :eql?
 
+	# @group Attributes
+
+	# @return [Point]   The upper-right corner of the bounding rectangle that encloses the {Polyline}
+	def max
+	    vertices.reduce {|memo, vertex| Point[[memo.x, vertex.x].max, [memo.y, vertex.y].max] }
+	end
+
+	# @return [Point]   The lower-left corner of the bounding rectangle that encloses the {Polyline}
+	def min
+	    vertices.reduce {|memo, vertex| Point[[memo.x, vertex.x].min, [memo.y, vertex.y].min] }
+	end
+
+	# @return [Array<Point>]    The lower-left and upper-right corners of the enclosing bounding rectangle
+	def minmax
+	    vertices.reduce([vertices.first, vertices.first]) {|memo, vertex| [Point[[memo.first.x, vertex.x].min, [memo.first.y, vertex.y].min], Point[[memo.last.x, vertex.x].max, [memo.last.y, vertex.y].max]] }
+	end
+
+	# @endgroup
+
 	# Clone the receiver, close it, then return it
 	# @return [Polyline]	the closed clone of the receiver
 	def close

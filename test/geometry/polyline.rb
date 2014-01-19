@@ -22,6 +22,18 @@ describe Geometry::Polyline do
 	polyline.vertices.count.must_equal 4
     end
 
+    it 'must know the max' do
+	unit_square.max.must_equal Point[1,1]
+    end
+
+    it 'must know the min' do
+	unit_square.min.must_equal Point[0,0]
+    end
+
+    it 'must know the min and the max' do
+	unit_square.minmax.must_equal [Point[0,0], Point[1,1]]
+    end
+
     describe "when the Polyline is closed" do
 	let(:closed_concave_polyline) { Polyline.new [-2,0], [0,0], [0,-2], [2,-2], [2,2], [-2,2], [-2,0] }
 	subject { closed_concave_polyline }
