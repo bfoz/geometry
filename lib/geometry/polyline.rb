@@ -48,8 +48,7 @@ also like a {Path} in that it isn't necessarily closed.
 			if @edges.last
 			    new_edge = Edge.new(previous, n)
 			    if @edges.last.parallel?(new_edge)
-				popped_edge = @edges.pop		# Remove the previous Edge
-				@vertices.pop(@edges.size ? 1 : 2)	# Remove the now unused vertex, or vertices
+				popped_edge = pop_edge		# Remove the previous Edge
 				if n == popped_edge.first
 				    popped_edge.first
 				else
@@ -122,7 +121,36 @@ also like a {Path} in that it isn't necessarily closed.
 	# Close the receiver and return it
 	# @return [Polyline]	the receiver after closing
 	def close!
-	    push_edge Edge.new(@edges.last.last, @edges.first.first) unless @edges.empty? || closed?
+	    unless @edges.empty?
+		# NOTE: parallel? is use here instead of collinear? because the
+		#	edges are connected, and will therefore be collinear if
+		#	they're parallel
+
+		if closed?
+		    if @edges.first.parallel?(@edges.last)
+			unshift_edge Edge.new(@edges.last.first, shift_edge.last)
+		    end
+		elsif
+		    closing_edge = Edge.new(@edges.last.last, @edges.first.first)
+
+		    # If the closing edge is collinear with the last edge, then
+		    #  simply extened the last edge to fill the gap
+		    if @edges.last.parallel?(closing_edge)
+			closing_edge = Edge.new(pop_edge.first, @edges.first.first)
+		    end
+
+		    # Check that the new closing_edge isn't zero-length
+		    if closing_edge.first != closing_edge.last
+			# If the closing edge is collinear with the first edge, then
+			#  extend the first edge "backwards" to fill the gap
+			if @edges.first.parallel?(closing_edge)
+			    unshift_edge Edge.new(closing_edge.first, shift_edge.last)
+			else
+			    push_edge closing_edge
+			end
+		    end
+		end
+	    end
 	    self
 	end
 
@@ -324,6 +352,18 @@ also like a {Path} in that it isn't necessarily closed.
 	end
 	# @endgroup
 
+	# Pop the last edge, and its associated vertices
+	# @return [Edge]    the popped {Edge}
+	def pop_edge
+	    old = @edges.pop			# Remove the last Edge
+	    if 0 == @edges.length		# Remove all vertices if the only Edge was popped
+		@vertices.clear
+	    elsif old.last == @vertices.last	# Remove the last vertex if it was used by the popped Edge
+		@vertices.pop
+	    end
+	    old
+	end
+
 	def push_edge(*e)
 	    @edges.push *e
 	    @edges.uniq!
@@ -332,6 +372,22 @@ also like a {Path} in that it isn't necessarily closed.
 	def push_vertex(*v)
 	    @vertices.push *v
 	    @vertices.uniq!
+	end
+
+	# Remove the first {Edge} and its associated vertices
+	# @return [Edge]    the shifted {Edge}
+	def shift_edge
+	    @vertices.shift((@edges.size > 1) ? 1 : 2)
+	    @edges.shift
+	end
+
+	# Prepend an {Edge} and its vertices
+	# @param edge [Edge]	the {Edge} to unshift
+	def unshift_edge(edge)
+	    @vertices.unshift(edge.last) unless edge.last == @edges.first.first
+	    @vertices.unshift(edge.first) # unless edge.first == @edges.last.last
+	    @vertices.pop if @vertices.last == @vertices.first
+	    @edges.unshift(edge)
 	end
     end
 end

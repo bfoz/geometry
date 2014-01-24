@@ -34,6 +34,39 @@ describe Geometry::Polyline do
 	unit_square.minmax.must_equal [Point[0,0], Point[1,1]]
     end
 
+    it 'must close when the first and last edges are collinear' do
+	polygon = Polyline.new([1,0], [2,0], [2,1], [-1,1], [-1,0], [0,0]).close!
+	polygon.must_equal Polyline.new([-1,0], [2,0], [2,1], [-1,1])
+    end
+
+    it 'must close when the closing edge is collinear with the last edge' do
+	polygon = Polyline.new([1,0], [1,1], [-1,1], [-1,0], [0,0]).close!
+	polygon.must_equal Polyline.new([1,0], [1,1], [-1,1], [-1,0], [1,0])
+    end
+
+    it 'must close when the closing edge is collinear with the first edge' do
+	polygon = Polyline.new([0,0], [1,0], [1,1], [-1,1], [-1, 0]).close!
+	polygon.must_equal Polyline.new([-1,0], [1,0], [1,1], [-1,1], [-1,0])
+    end
+
+    it 'must close when the closing edge backtracks over the first edge' do
+	polygon = Polyline.new([0,0], [2,0], [2,1], [-1,1], [-1, -1], [1,-1], [1,0]).close!
+	polygon.must_equal Polyline.new([1,0], [2,0], [2,1], [-1,1], [-1,-1], [1,-1])
+
+	polygon = Polyline.new([0,-1], [0,1], [1,1], [1,0], [0,0]).close!
+	polygon.must_equal Polyline.new([0,0], [0,1], [1,1], [1,0], [0,0])
+    end
+
+    it 'must close when already closed and the first and last edges are collinear' do
+	polygon = Polyline.new([1,0], [1,1], [0,1], [0,-1], [1,-1], [1,0]).close!
+	polygon.must_equal Polyline.new([1,-1], [1,1], [0,1], [0,-1])
+    end
+
+    it 'must close when the closing edge exactly backtracks the last edge' do
+	polygon = Polyline.new([0,0], [0,1], [1,1], [1,0], [0,0], [0,1]).close!
+	polygon.must_equal Polyline.new([0,0], [0,1], [1,1], [1,0], [0,0])
+    end
+
     describe "when the Polyline is closed" do
 	let(:closed_concave_polyline) { Polyline.new [-2,0], [0,0], [0,-2], [2,-2], [2,2], [-2,2], [-2,0] }
 	subject { closed_concave_polyline }
