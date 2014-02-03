@@ -112,6 +112,18 @@ system's X-axis:
 	end
 	alias :== :eql?
 
+	# Update the translation property with the given {Point}
+	# @param point [Point]	the distance to translate by
+	# @return [Transformation]
+	def translate(point)
+	    if translation
+		@translation += Point[point]
+	    else
+		@translation = Point[point]
+	    end
+	    self
+	end
+
 	# Compose the current {Transformation} with another one
 	def +(other)
 	    return self.clone unless other

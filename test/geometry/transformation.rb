@@ -84,6 +84,14 @@ describe Geometry::Transformation do
 	end
     end
 
+    it 'must translate with a Point' do
+	Transformation.new(translate:[1,2]).translate(Point[3,4]).translation.must_equal Point[4,6]
+    end
+
+    it 'must translate with an Array' do
+	Transformation.new(translate:[1,2]).translate([3,4]).translation.must_equal Point[4,6]
+    end
+
     describe "comparison" do
 	subject { Transformation.new(origin:[1,2]) }
 
