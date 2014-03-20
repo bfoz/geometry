@@ -41,6 +41,21 @@ The {Square} class cluster is like the {Rectangle} class cluster, but not longer
 	end
 
 # !@group Accessors
+	# @return [Point]   The upper right corner of the bounding {Rectangle}
+	def max
+	    @points.last
+	end
+
+	# @return [Point]   The lower left corner of the bounding {Rectangle}
+	def min
+	    @points.first
+	end
+
+	# @return [Array<Point>]    The lower left and upper right corners of the bounding {Rectangle}
+	def minmax
+	    [self.min, self.max]
+	end
+
 	# @attribute [r] origin
 	# @return [Point] The lower left corner
 	def origin
@@ -73,6 +88,23 @@ The {Square} class cluster is like the {Rectangle} class cluster, but not longer
 	end
 
 # @group Accessors
+	# @return [Point]   The upper right corner of the bounding {Rectangle}
+	def max
+	    half_size = @size/2
+	    Point[@center.x + half_size, @center.y + half_size]
+	end
+
+	# @return [Point]   The lower left corner of the bounding {Rectangle}
+	def min
+	    half_size = @size/2
+	    Point[@center.x - half_size, @center.y - half_size]
+	end
+
+	# @return [Array<Point>]    The lower left and upper right corners of the bounding {Rectangle}
+	def minmax
+	    [self.min, self.max]
+	end
+
 	# @attribute [r] origin
 	# @return [Point] The lower left corner
 	def origin

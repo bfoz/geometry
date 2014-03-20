@@ -32,6 +32,18 @@ describe Geometry::Square do
 	it "must have an origin accessor" do
 	    subject.origin.must_equal Point[2,3]
 	end
+
+	it "must have a minmax property that returns the corners of the bounding rectangle" do
+	    subject.minmax.must_equal [Point[2, 3], Point[3, 4]]
+	end
+
+	it "must have a max property that returns the upper right corner of the bounding rectangle" do
+	    subject.max.must_equal Point[3, 4]
+	end
+
+	it "must have a min property that returns the lower left corner of the bounding rectangle" do
+	    subject.min.must_equal Point[2, 3]
+	end
     end
 end
 
@@ -61,6 +73,18 @@ describe Geometry::CenteredSquare do
 
 	it "must have a width property" do
 	    square.width.must_equal 4
+	end
+
+	it "must have a minmax property that returns the corners of the bounding rectangle" do
+	    square.minmax.must_equal [Point[0, 1], Point[4, 5]]
+	end
+
+	it "must have a max property that returns the upper right corner of the bounding rectangle" do
+	    square.max.must_equal Point[4, 5]
+	end
+
+	it "must have a min property that returns the lower left corner of the bounding rectangle" do
+	    square.min.must_equal Point[0, 1]
 	end
     end
 end
