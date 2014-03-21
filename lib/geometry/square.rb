@@ -8,25 +8,53 @@ The {Square} class cluster is like the {Rectangle} class cluster, but not longer
 
 == Constructors
 
-    square = Square.new from:[1,2], to:[2,3]	# Using two corners
-    square = Square.new origin:[3,4], size:5	# Using an origin point and a size
+    Square.new from:[1,2], to:[2,3]	# Using two corners
+    Square.new origin:[3,4], size:5	# Using an origin point and a size
+    Square.new center:[5,5], size:5	# Using a center point and a size
+    Square.new size:5			# Centered on the origin
 =end
     class Square
+	include ClusterFactory
+
+	# @!attribute origin
+	#   @return [Point]  The {Square}'s origin
 	attr_reader :origin
+
+	# @overload new(:origin, :size)
+	#  Creates a {Square} with the given origin and size
+	#  @option [Point]  :origin The lower-left corner
+	#  @option [Number] :size   Bigness
+	#  @return [CenteredSquare]
+	def self.new(*args)
+	    options, args = args.partition {|a| a.is_a? Hash}
+	    options = options.reduce({}, :merge)
+
+	    if options.key?(:size)
+		unless options[:size].is_a? Numeric
+		    raise NotSquareError, 'Size must be a square' unless options[:size].all? {|a| a == options[:size].first}
+		    options[:size] = options[:size].first
+		end
+
+		if options.key? :origin
+		    SizedSquare.new(options[:origin], options[:size])
+		else
+		    CenteredSquare.new(options[:center] || PointZero.new, options[:size])
+		end
+	    elsif options.key?(:from) and options.key?(:to)
+		original_new(from: options[:from], to: options[:to])
+	    end
+	end
 
 	# Creates a {Square} given two {Point}s
 	# @option options [Point] :from	A corner (ie. bottom-left)
 	# @option options [Point] :to	The other corner (ie. top-right)
 	# @option options [Point] :origin   The lower left corner
-	# @option options [Number] :size    Bigness
 	def initialize(options={})
 	    origin = options[:from] || options[:origin]
 	    origin = origin ? Point[origin] : PointZero.new
 
 	    if options.has_key? :to
 		point1 = options[:to]
-	    elsif options.has_key? :size
-		point1 = origin + options[:size]
 	    end
 
 	    point1 = Point[point1]
@@ -79,6 +107,10 @@ The {Square} class cluster is like the {Rectangle} class cluster, but not longer
 	# @attribute [r] center
 	# @return [Point]   The center of the {Square}
 	attr_reader :center
+
+	# @!attribute size
+	#   @return [Size]  The {Size} of the {Square}
+	attr_accessor :size
 
 	# @param [Point]	center	The center point
 	# @param [Numeric]	size	The length of each side
@@ -135,11 +167,60 @@ The {Square} class cluster is like the {Rectangle} class cluster, but not longer
 
     # A {Square} created with an origin point and a size
     class SizedSquare < Square
+	# @!attribute size
+	#   @return [Size]  The {Size} of the {Square}
+	attr_accessor :size
+
 	# @param [Point]    origin  The origin point (bottom-left corner)
 	# @param [Numeric]  size    The length of each side
 	def initialize(origin, size)
 	    @origin = Point[origin]
 	    @size = size
 	end
+
+# @group Accessors
+	# @!attribute center
+	#   @return [Point]  The center of it all
+	def center
+	    origin + size/2
+	end
+
+	# @return [Point]   The upper right corner of the bounding {Rectangle}
+	def max
+	    origin + size
+	end
+
+	# @return [Point]   The lower left corner of the bounding {Rectangle}
+	def min
+	    origin
+	end
+
+	# @attribute [r] origin
+	# @return [Point] The lower left corner
+	def origin
+	    @origin
+	end
+
+	# @attribute [r] points
+	# @return [Array<Point>]    The {Square}'s four points (counterclockwise)
+	def points
+	    minx = origin.x
+	    maxx = origin.x + size
+	    miny = origin.y
+	    maxy = origin.y + size
+
+	    [origin, Point[maxx, miny], Point[maxx, maxy], Point[minx,maxy]]
+	end
+
+	# @return [Number]  The size of the {Square} along the y-axis
+	def height
+	    @size
+	end
+
+	# @return [Number]  The size of the {Square} along the x-axis
+	def width
+	    @size
+	end
+# @endgroup
     end
 end
