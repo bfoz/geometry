@@ -25,7 +25,8 @@ methods (width, height and depth).
 	# @overload [](Vector)
 	# @return [Size]    A new {Size} object
 	def self.[](*array)
-	    array = array[0].to_a unless array[0].is_a?(Numeric)
+	    array.map! {|a| a.respond_to?(:to_a) ? a.to_a : a }
+	    array.flatten!
 	    super *array
 	end
 	
