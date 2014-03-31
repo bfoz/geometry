@@ -130,7 +130,7 @@ An edge. It's a line segment between 2 points. Generally part of a {Polygon}.
 
 	# @return [Vector]  A {Vector} pointing from first to last
 	def vector
-	    Vector[*((last-first).to_a)]
+	    last - first
 	end
 
 	def to_a
