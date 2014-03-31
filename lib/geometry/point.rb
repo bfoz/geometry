@@ -156,6 +156,33 @@ geometry class (x, y, z).
 	    end
 	end
 
+	def *(other)
+	    case other
+		when NilClass
+		    nil
+		when Numeric
+		    Point[@elements.map {|e| e * other}]
+		when PointZero
+		    Point.zero
+		else
+		    if other.respond_to?(:[])
+			raise OperationNotDefined, "#{other.class} must respond to :size" unless other.respond_to?(:size)
+			raise DimensionMismatch, "Can't multiply #{self} by #{other}" if size != other.size
+			Point[Array.new(size) {|i| @elements[i] * other[i] }]
+		    else
+			Point[@elements.map {|e| e * other}]
+		    end
+	    end
+	end
+
+	def /(other)
+	    case other
+		when Matrix, Vector, Point, Size, NilClass, PointZero, SizeZero
+		    raise OperationNotDefined, "Can't divide #{self} by #{other}"
+		else
+		    Point[@elements.map {|e| e / other}]
+	    end
+	end
 # @endgroup
 
     end
