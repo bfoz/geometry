@@ -2,6 +2,8 @@ require 'minitest/autorun'
 require 'geometry/size'
 
 describe Geometry::Size do
+    subject { Geometry::Size[10,10] }
+
     describe "when constructed" do
 	it "create a Size object using list syntax" do
 	    size = Geometry::Size[2,1]
@@ -93,5 +95,29 @@ describe Geometry::Size do
     it "implement to_s" do
 	size = Geometry::Size[10,11]
 	assert_equal('Size[10, 11]', size.to_s)
+    end
+
+    it 'must inset with horizontal and vertical insets' do
+	subject.inset(4).must_equal Geometry::Size[6, 6]
+	subject.inset(2,3).must_equal Geometry::Size[8, 7]
+	subject.inset(x:2, y:3).must_equal Geometry::Size[8, 7]
+	subject.inset(left:2, top:3).must_equal Geometry::Size[8, 7]
+	subject.inset(right:2, bottom:3).must_equal Geometry::Size[8, 7]
+    end
+
+    it 'must inset with insets for top, left, bottom, right' do
+	subject.inset(top:1, left:2, bottom:3, right:4).must_equal Geometry::Size[4, 6]
+    end
+
+    it 'must outset' do
+	subject.outset(4).must_equal Geometry::Size[14, 14]
+	subject.outset(2,3).must_equal Geometry::Size[12, 13]
+	subject.outset(x:2, y:3).must_equal Geometry::Size[12, 13]
+	subject.outset(left:2, top:3).must_equal Geometry::Size[12, 13]
+	subject.outset(right:2, bottom:3).must_equal Geometry::Size[12, 13]
+    end
+
+    it 'must inset with insets for top, left, bottom, right' do
+	subject.outset(top:1, left:2, bottom:3, right:4).must_equal Geometry::Size[16, 14]
     end
 end

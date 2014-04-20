@@ -72,5 +72,73 @@ methods (width, height and depth).
 	def z
 	    @elements[2]
 	end
+
+	# Create a new {Size} that is smaller than the receiver by the specified amounts
+	# @overload inset(x,y)
+	# @param x [Number] the horizontal inset
+	# @param y [Number] the vertical inset
+	# @overload inset(options)
+	# @option options [Number] :left    the left inset
+	# @option options [Number] :right   the right inset
+	# @option options [Number] :top	    the top inset
+	# @option options [Number] :bottom  the bottom inset
+	def inset(*args)
+	    options, args = args.partition {|a| a.is_a? Hash}
+	    options = options.reduce({}, :merge)
+
+	    left = right = top = bottom = 0
+	    if 1 == args.size
+		left = top = -args.shift
+		right = bottom = 0
+	    elsif 2 == args.size
+		left = -args.shift
+		top = -args.shift
+		right = bottom = 0
+	    end
+
+	    left = -options[:x] if options[:x]
+	    top = -options[:y] if options[:y]
+
+	    top = -options[:top] if options[:top]
+	    left = -options[:left] if options[:left]
+	    bottom = -options[:bottom] if options[:bottom]
+	    right = -options[:right] if options[:right]
+
+	    self.class[left + width + right, top + height + bottom]
+	end
+
+	# Create a new {Size} that is larger than the receiver by the specified amounts
+	# @overload outset(x,y)
+	# @param x [Number] the horizontal inset
+	# @param y [Number] the vertical inset
+	# @overload outset(options)
+	# @option options [Number] :left    the left inset
+	# @option options [Number] :right   the right inset
+	# @option options [Number] :top	    the top inset
+	# @option options [Number] :bottom  the bottom inset
+	def outset(*args)
+	    options, args = args.partition {|a| a.is_a? Hash}
+	    options = options.reduce({}, :merge)
+
+	    left = right = top = bottom = 0
+	    if 1 == args.size
+		left = top = args.shift
+		right = bottom = 0
+	    elsif 2 == args.size
+		left = args.shift
+		top = args.shift
+		right = bottom = 0
+	    end
+
+	    left = options[:x] if options[:x]
+	    top = options[:y] if options[:y]
+
+	    top = options[:top] if options[:top]
+	    left = options[:left] if options[:left]
+	    bottom = options[:bottom] if options[:bottom]
+	    right = options[:right] if options[:right]
+
+	    self.class[left + width + right, top + height + bottom]
+	end
     end
 end
