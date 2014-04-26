@@ -30,6 +30,11 @@ everything else, regardless of size. You can think of it as an application of th
 	    end
 	end
 
+	def is_a?(klass)
+	    (klass == Point) || super
+	end
+	alias :kind_of? :is_a?
+
 	# This is a hack to get Array#== to work properly. It works on ruby 2.0 and 1.9.3.
 	def to_ary
 	    []

@@ -2,12 +2,24 @@ require 'minitest/autorun'
 require 'geometry/point_zero'
 
 describe Geometry::PointZero do
+    subject { Geometry::PointZero.new }
     let(:zero) { Geometry::PointZero.new }
 
     describe "arithmetic" do
 	let(:left) { Point[1,2] }
 	let(:right) { Point[3,4] }
-	
+
+	it 'must pretend to be a Point' do
+	    subject.is_a?(Point).must_equal true
+	    subject.kind_of?(Point).must_equal true
+
+	    subject.is_a?(PointZero).must_equal true
+	    subject.kind_of?(PointZero).must_equal true
+
+	    subject.instance_of?(Point).must_equal false
+	    subject.instance_of?(PointZero).must_equal true
+	end
+
 	it "must have +@" do
 	    (+zero).must_be :eql?, 0
 	    (+zero).must_be_instance_of(Geometry::PointZero)
