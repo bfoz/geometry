@@ -1,5 +1,6 @@
 require 'matrix'
 
+require_relative 'point_one'
 require_relative 'point_zero'
 
 module Geometry
@@ -35,6 +36,13 @@ geometry class (x, y, z).
 	    super *array
 	end
 
+	# Creates and returns a new {PointOne} instance. Or, a {Point} full of ones if the size argument is given.
+	# @param size [Number] the size of the new {Point} full of ones
+	# @return [PointOne] A new {PointOne} instance
+	def self.one(size=nil)
+	    size ? Point[Array.new(size, 1)] : PointOne.new
+	end
+
 	# Creates and returns a new {PointZero} instance. Or, a {Point} full of zeros if the size argument is given.
 	# @param size [Number] the size of the new {Point} full of zeros
 	# @return [PointZero] A new {PointZero} instance
@@ -51,6 +59,8 @@ geometry class (x, y, z).
 	def eql?(other)
 	    if other.is_a?(Array)
 		@elements.eql? other
+	    elsif other.is_a?(PointOne)
+		@elements.all? {|e| e.eql? 1 }
 	    elsif other.is_a?(PointZero)
 		@elements.all? {|e| e.eql? 0 }
 	    else
@@ -62,6 +72,8 @@ geometry class (x, y, z).
 	def ==(other)
 	    if other.is_a?(Array)
 		@elements.eql? other
+	    elsif other.is_a?(PointOne)
+		@elements.all? {|e| e.eql? 1 }
 	    elsif other.is_a?(PointZero)
 		@elements.all? {|e| e.eql? 0 }
 	    else
@@ -134,6 +146,8 @@ geometry class (x, y, z).
 	    case other
 		when Numeric
 		    Point[@elements.map {|e| e + other}]
+		when PointOne
+		    Point[@elements.map {|e| e + 1}]
 		when PointZero, NilClass
 		    self.dup
 		else
@@ -147,6 +161,8 @@ geometry class (x, y, z).
 	    case other
 		when Numeric
 		    Point[@elements.map {|e| e - other}]
+		when PointOne
+		    Point[@elements.map {|e| e - 1}]
 		when PointZero, NilClass
 		    self.dup
 		else

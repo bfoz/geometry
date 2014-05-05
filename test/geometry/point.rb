@@ -2,9 +2,18 @@ require 'minitest/autorun'
 require 'geometry/point'
 
 describe Geometry::Point do
+    PointOne = Geometry::PointOne
     PointZero = Geometry::PointZero
 
     describe "class methods" do
+	it 'must generate a PointOne' do
+	    Point.one.must_be_instance_of PointOne
+	end
+
+	it 'must generate a Point full of ones' do
+	    Point.one(3).must_equal Point[1,1,1]
+	end
+
 	it "must generate a PointZero" do
 	    Point.zero.must_be_instance_of(PointZero)
 	end
@@ -132,6 +141,10 @@ describe Geometry::Point do
 		(Vector[5,6] + right).must_equal Vector[8,10]
 	    end
 
+	    it 'must add a PointOne' do
+		(left + Point.one).must_equal Point[2,3]
+	    end
+
 	    it "must return self when adding a PointZero" do
 		(left + Point.zero).must_equal left
 	    end
@@ -157,6 +170,10 @@ describe Geometry::Point do
 
 	    it "must raise an exception when subtracting mismatched sizes" do
 		lambda { left - [1,2,3,4] }.must_raise Geometry::DimensionMismatch
+	    end
+
+	    it 'must subtract a PointOne' do
+		(left - Point.one).must_equal Point[0,1]
 	    end
 
 	    it "must return self when subtracting a PointZero" do
@@ -218,6 +235,14 @@ describe Geometry::Point do
 	it "must not compare equal to an unequal Point" do
 	    point.wont_equal Point[3,2]
 	    Point[3,2].wont_equal point
+	end
+
+	it 'must compare to a PointOne' do
+	    point.wont_equal Point.one
+	    Point.one.wont_equal point
+
+	    Point[1,1].must_equal Point.one
+	    Point.one.must_equal Point[1,1]
 	end
 
 	it "must compare equal to an equal Vector" do
