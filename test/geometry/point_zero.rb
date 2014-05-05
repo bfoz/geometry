@@ -43,8 +43,9 @@ describe Geometry::PointZero do
 	end
 
 	describe "when adding" do
-	    it "must return a number" do
+	    it "must return a PointIso when adding a number" do
 		(zero + 3).must_equal 3
+		(zero + 3).must_be_instance_of Geometry::PointIso
 		(3 + zero).must_equal 3
 	    end
 

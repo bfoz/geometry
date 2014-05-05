@@ -1,4 +1,5 @@
 require_relative 'point'
+require_relative 'point_iso'
 
 module Geometry
 =begin rdoc
@@ -80,7 +81,9 @@ everything else, regardless of size. You can think of it as an application of th
 
 	def +(other)
 	    case other
-		when Array, Numeric then other
+		when Array then other
+		when Numeric
+		    Point.iso(other)
 		else
 		    Point[other]
 	    end
@@ -89,6 +92,8 @@ everything else, regardless of size. You can think of it as an application of th
 	def -(other)
 	    if other.is_a? Size
 		-Point[other]
+	    elsif other.is_a? Numeric
+		Point.iso(-other)
 	    elsif other.respond_to? :-@
 		-other
 	    elsif other.respond_to? :map

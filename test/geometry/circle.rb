@@ -88,6 +88,38 @@ describe Geometry::Circle do
 	it "must calculate the correct radius" do
 	    circle.radius.must_equal 2
 	end
+
+	it 'must have the correct min values' do
+	    circle.min.must_equal Point[-2, -2]
+	    circle.min.must_be_instance_of Geometry::PointIso
+	end
+
+	it 'must have the correct max values' do
+	    circle.max.must_equal Point[2, 2]
+	    circle.max.must_be_instance_of Geometry::PointIso
+	end
+
+	it 'must have the correct minmax values' do
+	    circle.minmax.must_equal [Point[-2, -2], Point[2,2]]
+	end
+    end
+
+    describe 'when constructed with a Rational diameter and no center' do
+	let(:circle) { Circle.new :diameter => Rational(5,3) }
+
+	it 'must have the correct min values' do
+	    circle.min.must_equal Point[-5/6, -5/6]
+	    circle.min.must_be_instance_of Geometry::PointIso
+	end
+
+	it 'must have the correct max values' do
+	    circle.max.must_equal Point[5/6, 5/6]
+	    circle.max.must_be_instance_of Geometry::PointIso
+	end
+
+	it 'must have the correct minmax values' do
+	    circle.minmax.must_equal [Point[-5/6, -5/6], Point[5/6,5/6]]
+	end
     end
 
     describe "properties" do

@@ -1,5 +1,6 @@
 require 'matrix'
 
+require_relative 'point_iso'
 require_relative 'point_one'
 require_relative 'point_zero'
 
@@ -30,10 +31,18 @@ geometry class (x, y, z).
 	# @overload [](Point)
 	# @overload [](Vector)
 	def self.[](*array)
-	    return array[0] if array[0].is_a?(Point) or array[0].is_a?(PointZero)
+	    return array[0] if array[0].is_a?(Point)
 	    array = array[0] if array[0].is_a?(Array)
 	    array = array[0].to_a if array[0].is_a?(Vector)
 	    super *array
+	end
+
+	# Creates and returns a new {PointIso} instance. Or, a {Point} full of ones if the size argument is given.
+	# @param value [Number]	the value of the elements
+	# @param size [Number] the size of the new {Point} full of ones
+	# @return [PointIso] A new {PointIso} instance
+	def self.iso(value, size=nil)
+	    size ? Point[Array.new(size, 1)] : PointIso.new(value)
 	end
 
 	# Creates and returns a new {PointOne} instance. Or, a {Point} full of ones if the size argument is given.
@@ -59,6 +68,9 @@ geometry class (x, y, z).
 	def eql?(other)
 	    if other.is_a?(Array)
 		@elements.eql? other
+	    elsif other.is_a?(PointIso)
+		value = other.value
+		@elements.all? {|e| e.eql? value }
 	    elsif other.is_a?(PointOne)
 		@elements.all? {|e| e.eql? 1 }
 	    elsif other.is_a?(PointZero)
@@ -72,6 +84,9 @@ geometry class (x, y, z).
 	def ==(other)
 	    if other.is_a?(Array)
 		@elements.eql? other
+	    elsif other.is_a?(PointIso)
+		value = other.value
+		@elements.all? {|e| e.eql? value }
 	    elsif other.is_a?(PointOne)
 		@elements.all? {|e| e.eql? 1 }
 	    elsif other.is_a?(PointZero)
@@ -146,6 +161,9 @@ geometry class (x, y, z).
 	    case other
 		when Numeric
 		    Point[@elements.map {|e| e + other}]
+		when PointIso
+		    value = other.value
+		    Point[@elements.map {|e| e + value}]
 		when PointOne
 		    Point[@elements.map {|e| e + 1}]
 		when PointZero, NilClass
@@ -161,6 +179,9 @@ geometry class (x, y, z).
 	    case other
 		when Numeric
 		    Point[@elements.map {|e| e - other}]
+		when PointIso
+		    value = other.value
+		    Point[@elements.map {|e| e - value}]
 		when PointOne
 		    Point[@elements.map {|e| e - 1}]
 		when PointZero, NilClass
