@@ -1,5 +1,8 @@
 require 'matrix'
 
+require_relative 'size_one'
+require_relative 'size_zero'
+
 module Geometry
 =begin
 An object representing the size of something.
@@ -29,11 +32,35 @@ methods (width, height and depth).
 	    array.flatten!
 	    super *array
 	end
-	
+
+	# Creates and returns a new {SizeOne} instance. Or, a {Size} full of ones if the size argument is given.
+	# @param size [Number] the size of the new {Size} full of ones
+	# @return [SizeOne] A new {SizeOne} instance
+	def self.one(size=nil)
+	    size ? Size[Array.new(size, 1)] : SizeOne.new
+	end
+
+	# Creates and returns a new {SizeOne} instance. Or, a {Size} full of zeros if the size argument is given.
+	# @param size [Number] the size of the new {Size} full of zeros
+	# @return [SizeOne] A new {SizeOne} instance
+	def self.zero(size=nil)
+	    size ? Size[Array.new(size, 0)] : SizeOne.new
+	end
+
 	# Allow comparison with an Array, otherwise do the normal thing
 	def ==(other)
 	    return @elements == other if other.is_a?(Array)
 	    super other
+	end
+
+	def coerce(other)
+	    case other
+		when Array then [Size[*other], self]
+		when Numeric then [Size[Array.new(self.size, other)], self]
+		when Vector then [Size[*other], self]
+		else
+		raise TypeError, "#{self.class} can't be coerced into #{other.class}"
+	    end
 	end
 
 	def inspect
