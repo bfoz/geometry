@@ -15,6 +15,10 @@ also like a {Path} in that it isn't necessarily closed.
     class Polyline
 	attr_reader :edges, :vertices
 
+	# @!attribute points
+	#   @return [Array<Point>]  all of the vertices of the {Polyline} (alias of #vertices)
+	alias :points :vertices
+
 	# Construct a new Polyline from Points and/or Edges
 	# @note The constructor will try to convert all of its arguments into {Point}s and
 	#   {Edge}s. Then successive {Point}s will be collpased into {Edge}s. Successive

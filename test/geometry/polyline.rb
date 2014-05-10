@@ -22,6 +22,10 @@ describe Geometry::Polyline do
 	polyline.vertices.count.must_equal 4
     end
 
+    it 'must have a points attribute' do
+	unit_square.points.must_equal [Point[0,0], Point[1,0], Point[1,1], Point[0,1]]
+    end
+
     it 'must know the max' do
 	unit_square.max.must_equal Point[1,1]
     end
