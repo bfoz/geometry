@@ -122,8 +122,8 @@ geometry class (x, y, z).
 # @group Accessors
 	# @param [Integer]  i	Index into the {Point}'s elements
 	# @return [Numeric] Element i (starting at 0)
-	def [](i)
-	    @elements[i]
+	def [](*args)
+	    @elements[*args]
 	end
 
 	# @attribute [r] x

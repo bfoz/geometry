@@ -65,12 +65,22 @@ describe Geometry::Point do
 	assert_equal(13, point.x)
 	assert_equal(14, point.y)
     end
-    it "allow indexed element access" do
-	point = Geometry::Point[5,6]
-	assert_equal(2, point.size)
-	assert_equal(5, point[0])
-	assert_equal(6, point[1])
+
+    describe 'when array access' do
+	it 'must allow indexed access' do
+	    point = Geometry::Point[5,6]
+	    point.size.must_equal 2
+	    point[0].must_equal 5
+	    point[1].must_equal 6
+	end
+
+	it 'must slize with a start index and a length' do
+	    point = Geometry::Point[5, 6, 7]
+	    slice = point[1,2]
+	    slice.length.must_equal 2
+	end
     end
+
     it "allow named element access" do
 	point = Geometry::Point[5,6,7]
 	assert_equal(3, point.size)

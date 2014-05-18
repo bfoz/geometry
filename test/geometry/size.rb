@@ -41,12 +41,21 @@ describe Geometry::Size do
 	end
     end
 
-    it "allow indexed element access" do
-	size = Geometry::Size[5,6]
-	assert_equal(2, size.size)
-	assert_equal(5, size[0])
-	assert_equal(6, size[1])
+    describe 'when array access' do
+	it 'must allow indexed access' do
+	    size = Geometry::Size[5,6]
+	    size.size.must_equal 2
+	    size[0].must_equal 5
+	    size[1].must_equal 6
+	end
+
+	it 'must slize with a start index and a length' do
+	    size = Geometry::Size[5, 6, 7]
+	    slice = size[1,2]
+	    slice.length.must_equal 2
+	end
     end
+
     it "allow named element access" do
 	size = Geometry::Size[5,6,7]
 	assert_equal(3, size.size)

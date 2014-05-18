@@ -53,6 +53,11 @@ methods (width, height and depth).
 	    super other
 	end
 
+	# Override Vector#[] to allow for regular array slicing
+	def [](*args)
+	    @elements[*args]
+	end
+
 	def coerce(other)
 	    case other
 		when Array then [Size[*other], self]
