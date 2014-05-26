@@ -65,6 +65,12 @@ A {RegularPolygon} is a lot like a {Polygon}, but more regular.
 	end
 	alias :== :eql?
 
+	# Check to see if the {Polygon} is closed (always true)
+	# @return [True] Always true because a {Polygon} is always closed
+	def closed?
+	    true
+	end
+
 # @!group Accessors
 	# @return [Rectangle]	The smallest axis-aligned {Rectangle} that bounds the receiver
 	def bounds

@@ -4,6 +4,12 @@ require 'geometry/regular_polygon'
 describe Geometry::RegularPolygon do
     RegularPolygon = Geometry::RegularPolygon
 
+    subject { RegularPolygon.new sides:4, center:[1,2], radius:3 }
+
+    it 'must always be closed' do
+	subject.closed?.must_equal true
+    end
+
     describe "when constructed with named center and radius arguments" do
 	let(:polygon) { RegularPolygon.new sides:4, center:[1,2], radius:3 }
 	subject { RegularPolygon.new sides:4, center:[1,2], radius:3 }
