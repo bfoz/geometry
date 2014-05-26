@@ -94,6 +94,7 @@ A {RegularPolygon} is a lot like a {Polygon}, but more regular.
 	def vertices
 	    (0...2*Math::PI).step(2*Math::PI/edge_count).map {|angle| center + Point[Math::cos(angle), Math::sin(angle)]*radius }
 	end
+	alias :points :vertices
 
 	# @return [Point]   The upper right corner of the bounding {Rectangle}
 	def max

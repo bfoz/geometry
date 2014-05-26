@@ -107,6 +107,13 @@ describe Geometry::RegularPolygon do
 	    end
 	end
 
+	it 'must have points' do
+	    expected_points = [Point[2, 0], Point[1, 1.732], Point[-1, 1.732], Point[-2, 0], Point[-1, -1.732], Point[1, -1.732]]
+	    subject.points.zip(expected_points) do |point0, point1|
+		point0.to_a.zip(point1.to_a) {|a, b| a.must_be_close_to b }
+	    end
+	end
+
 	it "must have a bounds property that returns a Rectangle" do
 	    subject.bounds.must_equal Rectangle.new([-2,-2], [2,2])
 	end
