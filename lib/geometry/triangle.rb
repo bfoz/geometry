@@ -35,6 +35,21 @@ An isoscoles right {Triangle} created with an origin and leg length
 		RightTriangle.new args[0], args[1], args[1]
 	     end
 	end
+
+	# @return [Point]   The upper-right corner of the bounding rectangle that encloses the {Polyline}
+	def max
+	    points.reduce {|memo, vertex| Point[[memo.x, vertex.x].max, [memo.y, vertex.y].max] }
+	end
+
+	# @return [Point]   The lower-left corner of the bounding rectangle that encloses the {Polyline}
+	def min
+	    points.reduce {|memo, vertex| Point[[memo.x, vertex.x].min, [memo.y, vertex.y].min] }
+	end
+
+	# @return [Array<Point>]    The lower-left and upper-right corners of the enclosing bounding rectangle
+	def minmax
+	    points.reduce([points.first, points.first]) {|memo, vertex| [Point[[memo.first.x, vertex.x].min, [memo.first.y, vertex.y].min], Point[[memo.last.x, vertex.x].max, [memo.last.y, vertex.y].max]] }
+	end
     end
 
     # {http://en.wikipedia.org/wiki/Equilateral_triangle Equilateral Triangle}

@@ -15,6 +15,18 @@ describe Geometry::Triangle do
 	it "must have a points accessor" do
 	    triangle.points.must_equal [Point[0,0], Point[0,1], Point[1,0]]
 	end
+
+	it 'must know the max' do
+	    triangle.max.must_equal Point[1,1]
+	end
+
+	it 'must know the min' do
+	    triangle.min.must_equal Point[0,0]
+	end
+
+	it 'must know the min and the max' do
+	    triangle.minmax.must_equal [Point[0,0], Point[1,1]]
+	end
     end
 
     describe "when constructed with a point and a leg length" do
