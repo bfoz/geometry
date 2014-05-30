@@ -105,6 +105,7 @@ A generalized representation of a rotation transformation.
 	# @param [Point] point	the {Point} to rotate into the parent coordinate frame
 	# @return [Point]   the rotated {Point}
 	def transform(point)
+	    return point if point.is_a?(PointZero)
 	    m = matrix
 	    m ? Point[m * Point[point]] : point
 	end

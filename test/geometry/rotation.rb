@@ -93,6 +93,8 @@ describe Geometry::Rotation do
     end
 
     describe "when transforming a Point" do
+	subject { Rotation.new(angle:Math::PI/2) }
+
 	describe "when no rotation is set" do
 	    it "must return the Point" do
 		Rotation.new.transform(Point[1,0]).must_equal Point[1,0]
@@ -103,6 +105,10 @@ describe Geometry::Rotation do
 	    rotated_point = Rotation.new(angle:Math::PI/2).transform(Point[1,0])
 	    rotated_point.x.must_be_close_to 0
 	    rotated_point.y.must_be_close_to 1
+	end
+
+	it 'must transform a PointZero' do
+	    subject.transform(Point.zero).must_equal Point.zero
 	end
     end
 end
