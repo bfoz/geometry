@@ -187,4 +187,12 @@ describe Geometry::PointZero do
 	    Vector[3,2].wont_equal zero
 	end
     end
+
+    describe 'when enumerating' do
+	it 'must have a first method' do
+	    subject.first.must_equal 0
+	    subject.first(1).must_equal [0]
+	    subject.first(5).must_equal [0,0,0,0,0]
+	end
+    end
 end

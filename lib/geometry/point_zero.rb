@@ -112,6 +112,14 @@ everything else, regardless of size. You can think of it as an application of th
 	end
 # @endgroup
 
+	# @group Enumerable
+
+	# Return the first, or first n, elements (always 0)
+	# @param n [Number]	the number of elements to return
+	def first(n=nil)
+	    Array.new(n, 0) rescue 0
+	end
+	# @endgroup
     end
 end
 

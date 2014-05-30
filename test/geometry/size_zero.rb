@@ -150,4 +150,12 @@ describe Geometry::SizeZero do
 	    Vector[3,2].wont_equal zero
 	end
     end
+
+    describe 'when enumerating' do
+	it 'must have a first method' do
+	    zero.first.must_equal 0
+	    zero.first(1).must_equal [0]
+	    zero.first(5).must_equal [0,0,0,0,0]
+	end
+    end
 end

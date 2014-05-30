@@ -188,4 +188,12 @@ describe Geometry::PointOne do
 	    Vector[3,2].wont_equal one
 	end
     end
+
+    describe 'when enumerating' do
+	it 'must have a first method' do
+	    one.first.must_equal 1
+	    one.first(1).must_equal [1]
+	    one.first(5).must_equal [1,1,1,1,1]
+	end
+    end
 end

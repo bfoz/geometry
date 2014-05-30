@@ -118,6 +118,14 @@ everything else, regardless of size. It's similar to the
 	end
 # @endgroup
 
+	# @group Enumerable
+
+	# Return the first, or first n, elements (always 0)
+	# @param n [Number]	the number of elements to return
+	def first(n=nil)
+	    Array.new(n, 1) rescue 1
+	end
+	# @endgroup
     end
 end
 
