@@ -22,4 +22,9 @@ describe Geometry::Obround do
 	    obround.must_equal Obround.new([1,2], [3,4])
 	end
     end
+
+    it 'must always be closed' do
+	obround = Geometry::Obround.new 2, 3
+	obround.closed?.must_equal true
+    end
 end

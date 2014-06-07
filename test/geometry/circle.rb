@@ -129,6 +129,10 @@ describe Geometry::Circle do
 	    subject.bounds.must_equal Rectangle.new([-1,0], [3,4])
 	end
 
+	it 'must always be closed' do
+	    subject.closed?.must_equal true
+	end
+
 	it "must have a minmax property that returns the corners of the bounding rectangle" do
 	    subject.minmax.must_equal [Point[-1,0], Point[3,4]]
 	end

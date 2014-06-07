@@ -61,6 +61,10 @@ describe Geometry::Square do
     describe "properties" do
 	subject { Square.new from:[2,3], to:[3,4] }
 
+	it 'must always be closed' do
+	    subject.closed?.must_equal true
+	end
+
 	it "must have an origin accessor" do
 	    subject.origin.must_equal Point[2,3]
 	end

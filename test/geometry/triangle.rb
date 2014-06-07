@@ -4,6 +4,10 @@ require 'geometry/triangle'
 describe Geometry::Triangle do
     Triangle = Geometry::Triangle
 
+    it 'must always be closed' do
+	Triangle.new([0,0], [0,1], [1,0]).closed?.must_equal true
+    end
+
     describe "when constructed with 3 points" do
 	let(:triangle) { Triangle.new [0,0], [0,1], [1,0] }
 

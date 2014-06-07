@@ -71,6 +71,12 @@ Circles come in all shapes and sizes, but they're usually round.
 	    return Rectangle.new(self.min, self.max)
 	end
 
+	# @!attribute closed?
+	#   @return [Bool]  always true
+	def closed?
+	    true
+	end
+
 	# @!attribute [r] diameter
 	#   @return [Numeric] The diameter of the {Circle}
 	def diameter

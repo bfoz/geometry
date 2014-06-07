@@ -123,6 +123,12 @@ The {Rectangle} class cluster represents your typical arrangement of 4 corners a
 	    Point[(max.x+min.x)/2, (max.y+min.y)/2]
 	end
 
+	# @!attribute closed?
+	#   @return [Bool]  always true
+	def closed?
+	    true
+	end
+
 	# @return [Array<Edge>]   The {Rectangle}'s four edges (counterclockwise)
 	def edges
 	    point0, point2 = *@points

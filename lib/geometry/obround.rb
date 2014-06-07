@@ -90,6 +90,12 @@ The {Obround} class cluster represents a rectangle with semicircular end caps
 	    Point[(max.x+min.x)/2, (max.y+min.y)/2]
 	end
 
+	# @!attribute closed?
+	#   @return [Bool]  always true
+	def closed?
+	    true
+	end
+
 	# @return [Array<Point>]    The {Obround}'s four points (counterclockwise)
 	def points
 	    point0, point2 = *@points

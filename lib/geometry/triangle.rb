@@ -36,6 +36,12 @@ An isoscoles right {Triangle} created with an origin and leg length
 	     end
 	end
 
+	# @!attribute closed?
+	#   @return [Bool]  always true
+	def closed?
+	    true
+	end
+
 	# @return [Point]   The upper-right corner of the bounding rectangle that encloses the {Polyline}
 	def max
 	    points.reduce {|memo, vertex| Point[[memo.x, vertex.x].max, [memo.y, vertex.y].max] }

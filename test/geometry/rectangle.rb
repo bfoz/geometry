@@ -111,6 +111,10 @@ describe Geometry::Rectangle do
 	    rectangle.center.must_equal Point[2,3]
 	end
 
+	it 'must always be closed' do
+	    subject.closed?.must_equal true
+	end
+
 	it "have a width property" do
 	    assert_equal(2, rectangle.width)
 	end

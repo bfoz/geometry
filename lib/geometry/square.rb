@@ -69,6 +69,12 @@ The {Square} class cluster is like the {Rectangle} class cluster, but not longer
 	end
 
 # !@group Accessors
+	# @!attribute closed?
+	#   @return [Bool]  always true
+	def closed?
+	    true
+	end
+
 	# @return [Point]   The upper right corner of the bounding {Rectangle}
 	def max
 	    @points.last
