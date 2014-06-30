@@ -23,17 +23,23 @@ A {RegularPolygon} is a lot like a {Polygon}, but more regular.
 
 	# @return [Number]  The {RegularPolygon}'s radius
 	attr_reader :radius
+	alias :circumradius :radius
 
 	# @overload new(sides, center, radius)
 	#   Construct a {RegularPolygon} using a center point and radius
 	#   @option options [Number]	:sides	The number of edges
 	#   @option options [Point]	:center	(PointZero) The center point of the {RegularPolygon}
-	#   @option options [Number]	:radius The radius of the {RegularPolygon}
+	#   @option options [Number]	:radius The circumradius of the {RegularPolygon}
+	# @overload new(sides, center, inradius)
+	#   Construct a {RegularPolygon} using a center point and radius
+	#   @option options [Number]	:sides	The number of edges
+	#   @option options [Point]	:center	(PointZero) The center point of the {RegularPolygon}
+	#   @option options [Number]	:inradius   The inradius of the {RegularPolygon}
 	# @overload new(sides, center, diameter)
 	#   Construct a {RegularPolygon} using a center point and diameter
 	#   @option options [Number]	:sides  The number of edges
 	#   @option options [Point]	:center	(PointZero) The center point of the {RegularPolygon}
-	#   @option options [Number]	:diameter   The diameter of the {RegularPolygon}
+	#   @option options [Number]	:diameter   The circumdiameter of the {RegularPolygon}
 	def self.new(options={}, &block)
 	    raise ArgumentError, "RegularPolygon requires an edge count" unless options[:sides]
 
@@ -42,6 +48,8 @@ A {RegularPolygon} is a lot like a {Polygon}, but more regular.
 
 	    if options.has_key?(:radius)
 		self.allocate.tap {|polygon| polygon.send :initialize, options[:sides], center, options[:radius], &block }
+	    elsif options.has_key?(:inradius)
+		InradiusRegularPolygon.new options[:sides], center, options[:inradius], &block
 	    elsif options.has_key?(:diameter)
 		DiameterRegularPolygon.new options[:sides], center, options[:diameter], &block
 	    else
@@ -52,7 +60,7 @@ A {RegularPolygon} is a lot like a {Polygon}, but more regular.
 	# Construct a new {RegularPolygon} from a centerpoint and radius
 	# @param    [Number]	edge_count  The number of edges
 	# @param    [Point]	center  The center point of the {Circle}
-	# @param    [Number]	radius  The radius of the {Circle}
+	# @param    [Number]	radius  The circumradius of the {RegularPolygon}
 	# @return   [RegularPolygon]	A new {RegularPolygon} object
 	def initialize(edge_count, center, radius)
 	    @center = Point[center]
@@ -110,7 +118,44 @@ A {RegularPolygon} is a lot like a {Polygon}, but more regular.
 	def minmax
 	    [self.min, self.max]
 	end
+
+	# @!attribute inradius
+	#   @return [Number]  The inradius
+	def inradius
+	    circumradius * Math.cos(Math::PI/edge_count)
+	end
+
+	# @!attribute [r] side_length
+	#   @return [Number]  The length of each side
+	def side_length
+	    2 * circumradius * Math.sin(Math::PI/edge_count)
+	end
+
 # @!endgroup
+    end
+
+    class InradiusRegularPolygon < RegularPolygon
+	# @!attribute inradius
+	#   @return [Number]  the inradius
+	attr_reader :inradius
+
+	# Construct a new {RegularPolygon} from a centerpoint and a diameter
+	# @param    [Number]	edge_count  The number of edges
+	# @param    [Point]	center  The center point of the {RegularPolygon}
+	# @param    [Number]	diameter  The radius of the {RegularPolygon}
+	# @return   [InradiusRegularPolygon]	A new {RegularPolygon} object
+	def initialize(edge_count, center, inradius)
+	    @center = center ? Point[center] : nil
+	    @edge_count = edge_count
+	    @inradius = inradius
+	end
+
+	# @!attribute circumradius
+	#   @return [Number]  the circumradius (calculated from inradius)
+	def circumradius
+	    inradius / Math.cos(Math::PI/edge_count)
+	end
+	alias :radius :circumradius
     end
 
     class DiameterRegularPolygon < RegularPolygon

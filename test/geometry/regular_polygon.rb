@@ -10,7 +10,7 @@ describe Geometry::RegularPolygon do
 	subject.closed?.must_equal true
     end
 
-    describe "when constructed with named center and radius arguments" do
+    describe 'when constructed with a center and circumradius' do
 	let(:polygon) { RegularPolygon.new sides:4, center:[1,2], radius:3 }
 	subject { RegularPolygon.new sides:4, center:[1,2], radius:3 }
 
@@ -38,6 +38,10 @@ describe Geometry::RegularPolygon do
 	    it "must have vertices" do
 		subject.vertices.must_equal [Point[4.0, 2.0], Point[1.0000000000000002, 5.0], Point[-2.0, 2.0000000000000004], Point[0.9999999999999994, -1.0]]
 	    end
+	end
+
+	it 'must have an inradius' do
+	    subject.inradius.must_be_close_to 2.121
 	end
     end
 
@@ -92,6 +96,25 @@ describe Geometry::RegularPolygon do
 
 	it "must calculate the correct radius" do
 	    polygon.radius.must_equal 2
+	end
+    end
+
+    describe 'when constructed with an inradius and center' do
+	subject { RegularPolygon.new sides:6, inradius:4 }
+
+	it 'must be an InradiusRegularPolygon' do
+	    subject.must_be_instance_of Geometry::InradiusRegularPolygon
+	end
+
+	it 'must have a circumradius' do
+	    subject.circumradius.must_be_close_to 4.618
+	end
+
+	it 'must have points' do
+	    expected_points = [Point[4.618, 0], Point[2.309, 4], Point[-2.309, 4], Point[-4.618, 0], Point[-2.309, -4], Point[2.309, -4]]
+	    subject.points.zip(expected_points) do |point0, point1|
+		point0.to_a.zip(point1.to_a) {|a, b| a.must_be_close_to b }
+	    end
 	end
     end
 
