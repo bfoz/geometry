@@ -40,6 +40,10 @@ describe Geometry::RegularPolygon do
 	    end
 	end
 
+	it 'must have an indiameter' do
+	    subject.indiameter.must_be_close_to 4.242
+	end
+
 	it 'must have an inradius' do
 	    subject.inradius.must_be_close_to 2.121
 	end
@@ -96,6 +100,30 @@ describe Geometry::RegularPolygon do
 
 	it "must calculate the correct radius" do
 	    polygon.radius.must_equal 2
+	end
+    end
+
+    describe 'when constructed with an indiameter and center' do
+	subject { RegularPolygon.new sides:6, indiameter:4 }
+
+	it 'must be an InradiusRegularPolygon' do
+	    subject.must_be_instance_of Geometry::IndiameterRegularPolygon
+	end
+
+	it 'must have a circumdiameter' do
+	    subject.diameter.must_be_close_to 4.618
+	end
+
+	it 'must have a circumradius' do
+	    subject.circumradius.must_be_close_to 2.309
+	end
+
+	it 'must have an indiameter' do
+	    subject.indiameter.must_be_close_to 4
+	end
+
+	it 'must have an inradius' do
+	    subject.inradius.must_be_close_to 2
 	end
     end
 
