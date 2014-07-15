@@ -1,4 +1,3 @@
-require_relative 'cluster_factory'
 require_relative 'polygon'
 
 module Geometry
@@ -10,20 +9,17 @@ A {RegularPolygon} is a lot like a {Polygon}, but more regular.
 == Usage
     polygon = Geometry::RegularPolygon.new sides:4, center:[1,2], radius:3
     polygon = Geometry::RegularPolygon.new sides:6, center:[1,2], diameter:6
+
+    polygon = Geometry::RegularPolygon.new sides:4, center:[1,2], inradius:3
+    polygon = Geometry::RegularPolygon.new sides:6, center:[1,2], indiameter:6
 =end
 
     class RegularPolygon < Polygon
-	include ClusterFactory
-
 	# @return [Point]   The {RegularPolygon}'s center point
 	attr_reader :center
 
 	# @return [Number]  The {RegularPolygon}'s number of sides
 	attr_reader :edge_count
-
-	# @return [Number]  The {RegularPolygon}'s radius
-	attr_reader :radius
-	alias :circumradius :radius
 
 	# @overload new(sides, center, radius)
 	#   Construct a {RegularPolygon} using a center point and radius
@@ -45,33 +41,17 @@ A {RegularPolygon} is a lot like a {Polygon}, but more regular.
 	#   @option options [Number]	:sides  The number of edges
 	#   @option options [Point]	:center	(PointZero) The center point of the {RegularPolygon}
 	#   @option options [Number]	:indiameter   The circumdiameter of the {RegularPolygon}
-	def self.new(options={}, &block)
-	    raise ArgumentError, "RegularPolygon requires an edge count" unless options[:sides]
-
-	    center = options[:center]
-	    center = center ? Point[center] : Point.zero
-
-	    if options.has_key?(:radius)
-		self.allocate.tap {|polygon| polygon.send :initialize, options[:sides], center, options[:radius], &block }
-	    elsif options.has_key?(:inradius)
-		InradiusRegularPolygon.new options[:sides], center, options[:inradius], &block
-	    elsif options.has_key?(:indiameter)
-		IndiameterRegularPolygon.new options[:sides], center, options[:indiameter], &block
-	    elsif options.has_key?(:diameter)
-		DiameterRegularPolygon.new options[:sides], center, options[:diameter], &block
-	    else
-		raise ArgumentError, "RegularPolygon.new requires a radius or a diameter"
-	    end
-	end
-
-	# Construct a new {RegularPolygon} from a centerpoint and radius
-	# @param    [Number]	edge_count  The number of edges
-	# @param    [Point]	center  The center point of the {Circle}
-	# @param    [Number]	radius  The circumradius of the {RegularPolygon}
 	# @return   [RegularPolygon]	A new {RegularPolygon} object
-	def initialize(edge_count, center, radius)
-	    @center = Point[center]
-	    @edge_count = edge_count
+	def initialize(edge_count:nil, sides:nil, center:nil, radius:nil, diameter:nil, indiameter:nil, inradius:nil)
+	    @edge_count = edge_count || sides
+	    raise ArgumentError, "RegularPolygon requires an edge count" unless @edge_count
+
+	    raise ArgumentError, "RegularPolygon.new requires a radius or a diameter" unless diameter || indiameter || inradius || radius
+
+	    @center = center ? Point[center] : Point.zero
+	    @diameter = diameter
+	    @indiameter = indiameter
+	    @inradius = inradius
 	    @radius = radius
 	end
 
@@ -95,8 +75,9 @@ A {RegularPolygon} is a lot like a {Polygon}, but more regular.
 	# @!attribute [r] diameter
 	#   @return [Numeric] The diameter of the {RegularPolygon}
 	def diameter
-	    @radius*2
+	    @diameter || (@radius && 2*@radius) || (@indiameter && @indiameter/cosine_half_angle)
 	end
+	alias :circumdiameter :diameter
 
 	# !@attribute [r] edges
 	def edges
@@ -129,14 +110,21 @@ A {RegularPolygon} is a lot like a {Polygon}, but more regular.
 	# @!attribute indiameter
 	#   @return [Number]  the indiameter
 	def indiameter
-	    2*inradius
+	    @indiameter || (@inradius && 2*@inradius) || (@diameter && (@diameter * cosine_half_angle)) || (@radius && (2 * @radius * cosine_half_angle))
 	end
 
 	# @!attribute inradius
 	#   @return [Number]  The inradius
 	def inradius
-	    circumradius * Math.cos(Math::PI/edge_count)
+	    @inradius || (@indiameter && @indiameter/2) || (@radius && (@radius * cosine_half_angle))
 	end
+
+	# @!attribute [r] radius
+	# @return [Number]  The {RegularPolygon}'s radius
+	def radius
+	    @radius || (@diameter && @diameter/2) || (@inradius && (@inradius / cosine_half_angle)) || (@indiameter && @indiameter/cosine_half_angle/2)
+	end
+	alias :circumradius :radius
 
 	# @!attribute [r] side_length
 	#   @return [Number]  The length of each side
@@ -144,95 +132,11 @@ A {RegularPolygon} is a lot like a {Polygon}, but more regular.
 	    2 * circumradius * Math.sin(Math::PI/edge_count)
 	end
 
-# @!endgroup
-    end
-
-    class InradiusRegularPolygon < RegularPolygon
-	# @!attribute inradius
-	#   @return [Number]  the inradius
-	attr_reader :inradius
-
-	# Construct a new {RegularPolygon} from a centerpoint and a diameter
-	# @param    [Number]	edge_count  The number of edges
-	# @param    [Point]	center  The center point of the {RegularPolygon}
-	# @param    [Number]	diameter  The radius of the {RegularPolygon}
-	# @return   [InradiusRegularPolygon]	A new {RegularPolygon} object
-	def initialize(edge_count, center, inradius)
-	    @center = center ? Point[center] : nil
-	    @edge_count = edge_count
-	    @inradius = inradius
+private
+	def cosine_half_angle
+	    Math.cos(Math::PI/edge_count)
 	end
 
-	# @!attribute circumradius
-	#   @return [Number]  the circumradius (calculated from inradius)
-	def circumradius
-	    inradius / Math.cos(Math::PI/edge_count)
-	end
-	alias :radius :circumradius
-    end
-
-    class IndiameterRegularPolygon < RegularPolygon
-	# @!attribute inradius
-	#   @return [Number]  the inradius
-	attr_reader :indiameter
-
-	# Construct a new {RegularPolygon} from a centerpoint and a diameter
-	# @param    [Number]	edge_count  The number of edges
-	# @param    [Point]	center  The center point of the {RegularPolygon}
-	# @param    [Number]	diameter  The radius of the {RegularPolygon}
-	# @return   [InradiusRegularPolygon]	A new {RegularPolygon} object
-	def initialize(edge_count, center, indiameter)
-	    @center = center ? Point[center] : nil
-	    @edge_count = edge_count
-	    @indiameter = indiameter
-	end
-
-	# @!attribute circumdiameter
-	#   @return [Number]  the circumdiameter (calculated from indiameter
-	def circumdiameter
-	    indiameter/Math.cos(Math::PI/edge_count)
-	end
-	alias :diameter :circumdiameter
-
-	# @!attribute circumradius
-	#   @return [Number]  the circumradius (calculated from indiameter)
-	def circumradius
-	    circumdiameter/2
-	end
-	alias :radius :circumradius
-
-	# @!attribute inradius
-	#   @return [Number]  the inradius (calculated from indiameter)
-	def inradius
-	    indiameter/2
-	end
-    end
-
-    class DiameterRegularPolygon < RegularPolygon
-	# @return [Number]  The {RegularPolygon}'s diameter
-	attr_reader :diameter
-
-	# Construct a new {RegularPolygon} from a centerpoint and a diameter
-	# @param    [Number]	edge_count  The number of edges
-	# @param    [Point]	center  The center point of the {RegularPolygon}
-	# @param    [Number]	diameter  The radius of the {RegularPolygon}
-	# @return   [RegularPolygon]	A new {RegularPolygon} object
-	def initialize(edge_count, center, diameter)
-	    @center = center ? Point[center] : nil
-	    @edge_count = edge_count
-	    @diameter = diameter
-	end
-
-	def eql?(other)
-	    (self.center == other.center) && (self.edge_count == other.edge_count) && (self.diameter == other.diameter)
-	end
-	alias :== :eql?
-
-# @!group Accessors
-	# @return [Number] The {RegularPolygon}'s radius
-	def radius
-	    @diameter/2
-	end
 # @!endgroup
     end
 end

@@ -52,11 +52,6 @@ describe Geometry::RegularPolygon do
     describe "when constructed with a center and diameter" do
 	let(:polygon) { RegularPolygon.new sides:4, center:[1,2], diameter:4 }
 
-	it "must be a DiameterRegularPolygon" do
-	    polygon.must_be_instance_of(Geometry::DiameterRegularPolygon)
-	    polygon.must_be_kind_of(RegularPolygon)
-	end
-
 	it "must have the correct number of sides" do
 	    polygon.edge_count.must_equal 4
 	end
@@ -81,11 +76,6 @@ describe Geometry::RegularPolygon do
     describe "when constructed with a diameter and no center" do
 	let(:polygon) { RegularPolygon.new sides:4, diameter:4 }
 
-	it "must be a DiameterRegularPolygon" do
-	    polygon.must_be_instance_of(Geometry::DiameterRegularPolygon)
-	    polygon.must_be_kind_of(RegularPolygon)
-	end
-
 	it "must have the correct number of sides" do
 	    polygon.edge_count.must_equal 4
 	end
@@ -106,10 +96,6 @@ describe Geometry::RegularPolygon do
     describe 'when constructed with an indiameter and center' do
 	subject { RegularPolygon.new sides:6, indiameter:4 }
 
-	it 'must be an InradiusRegularPolygon' do
-	    subject.must_be_instance_of Geometry::IndiameterRegularPolygon
-	end
-
 	it 'must have a circumdiameter' do
 	    subject.diameter.must_be_close_to 4.618
 	end
@@ -129,10 +115,6 @@ describe Geometry::RegularPolygon do
 
     describe 'when constructed with an inradius and center' do
 	subject { RegularPolygon.new sides:6, inradius:4 }
-
-	it 'must be an InradiusRegularPolygon' do
-	    subject.must_be_instance_of Geometry::InradiusRegularPolygon
-	end
 
 	it 'must have a circumradius' do
 	    subject.circumradius.must_be_close_to 4.618
