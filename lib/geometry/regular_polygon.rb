@@ -118,6 +118,7 @@ A {RegularPolygon} is a lot like a {Polygon}, but more regular.
 	def inradius
 	    @inradius || (@indiameter && @indiameter/2) || (@radius && (@radius * cosine_half_angle))
 	end
+	alias :apothem :inradius
 
 	# @!attribute [r] radius
 	# @return [Number]  The {RegularPolygon}'s radius
