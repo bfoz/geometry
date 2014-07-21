@@ -1,3 +1,4 @@
+require_relative 'geometry/annulus'
 require_relative 'geometry/arc'
 require_relative 'geometry/circle'
 require_relative 'geometry/line'

@@ -24,6 +24,7 @@ Primitives
 - Size
 - Line
 - Edge
+- [Annulus](http://en.wikipedia.org/wiki/Annulus_(mathematics))
 - [Arc](http://en.wikipedia.org/wiki/Arc_(geometry)), Circle
 - Rectangle, Square
 - Path, [Polyline](http://en.wikipedia.org/wiki/Polyline), [Polygon](http://en.wikipedia.org/wiki/Polygon), [RegularPolygon](http://en.wikipedia.org/wiki/Regular_polygon)
