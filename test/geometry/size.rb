@@ -108,9 +108,15 @@ describe Geometry::Size do
 
     it 'must inset with horizontal and vertical insets' do
 	subject.inset(4).must_equal Geometry::Size[6, 6]
-	subject.inset(2,3).must_equal Geometry::Size[8, 7]
-	subject.inset(x:2, y:3).must_equal Geometry::Size[8, 7]
+	subject.inset(2,3).must_equal Geometry::Size[6, 4]
+	subject.inset(x:2, y:3).must_equal Geometry::Size[6, 4]
+    end
+
+    it 'must inset with left and top' do
 	subject.inset(left:2, top:3).must_equal Geometry::Size[8, 7]
+    end
+
+    it 'must inset with right and bottom' do
 	subject.inset(right:2, bottom:3).must_equal Geometry::Size[8, 7]
     end
 
@@ -120,13 +126,19 @@ describe Geometry::Size do
 
     it 'must outset' do
 	subject.outset(4).must_equal Geometry::Size[14, 14]
-	subject.outset(2,3).must_equal Geometry::Size[12, 13]
-	subject.outset(x:2, y:3).must_equal Geometry::Size[12, 13]
+	subject.outset(2,3).must_equal Geometry::Size[14, 16]
+	subject.outset(x:2, y:3).must_equal Geometry::Size[14, 16]
+    end
+
+    it 'must outset with left and top' do
 	subject.outset(left:2, top:3).must_equal Geometry::Size[12, 13]
+    end
+
+    it 'must outset with right and bottom' do
 	subject.outset(right:2, bottom:3).must_equal Geometry::Size[12, 13]
     end
 
-    it 'must inset with insets for top, left, bottom, right' do
+    it 'must outset with insets for top, left, bottom, right' do
 	subject.outset(top:1, left:2, bottom:3, right:4).must_equal Geometry::Size[16, 14]
     end
 end

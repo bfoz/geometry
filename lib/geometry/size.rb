@@ -123,13 +123,12 @@ methods (width, height and depth).
 		left = top = -args.shift
 		right = bottom = 0
 	    elsif 2 == args.size
-		left = -args.shift
-		top = -args.shift
-		right = bottom = 0
+		left = right = -args.shift
+		top = bottom = -args.shift
 	    end
 
-	    left = -options[:x] if options[:x]
-	    top = -options[:y] if options[:y]
+	    left = right = -options[:x] if options[:x]
+	    top = bottom = -options[:y] if options[:y]
 
 	    top = -options[:top] if options[:top]
 	    left = -options[:left] if options[:left]
@@ -157,13 +156,12 @@ methods (width, height and depth).
 		left = top = args.shift
 		right = bottom = 0
 	    elsif 2 == args.size
-		left = args.shift
-		top = args.shift
-		right = bottom = 0
+		left = right = args.shift
+		top = bottom = args.shift
 	    end
 
-	    left = options[:x] if options[:x]
-	    top = options[:y] if options[:y]
+	    left = right = options[:x] if options[:x]
+	    top = bottom = options[:y] if options[:y]
 
 	    top = options[:top] if options[:top]
 	    left = options[:left] if options[:left]
