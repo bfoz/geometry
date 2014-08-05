@@ -70,7 +70,8 @@ An edge. It's a line segment between 2 points. Generally part of a {Polygon}.
 
 	# @return [Bool] Returns true if the passed {Edge} is parallel to the receiver
 	def parallel?(edge)
-	    v1, v2 = self.direction, edge.direction
+	    v1 = self.direction
+	    v2 = edge.direction
 	    winding = v1[0]*v2[1] - v1[1]*v2[0]
 	    if 0 == winding	# collinear?
 		if v1 == v2
@@ -89,9 +90,10 @@ An edge. It's a line segment between 2 points. Generally part of a {Polygon}.
 	    (@first == other.last) || (@last == other.first) || (@first == other.first) || (@last == other.last)
 	end
 
+	# @!attribute [r] direction
 	# @return [Vector]  A unit {Vector} pointing from first to last
 	def direction
-	    self.vector.normalize
+	    @direction ||= self.vector.normalize
 	end
 
 	# Find the intersection of two {Edge}s (http://bloggingmath.wordpress.com/2009/05/29/line-segment-intersection/)
@@ -128,9 +130,10 @@ An edge. It's a line segment between 2 points. Generally part of a {Polygon}.
 	    end
 	end
 
+	# @!attribute [r] vector
 	# @return [Vector]  A {Vector} pointing from first to last
 	def vector
-	    last - first
+	    @vector ||= last - first
 	end
 
 	def to_a

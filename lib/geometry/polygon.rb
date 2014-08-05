@@ -18,11 +18,11 @@ but there's currently nothing that enforces simplicity.
     class Polygon < Polyline
 
 	# Construct a new Polygon from Points and/or Edges
-	#  The constructor will try to convert all of its arguments into Points and
-	#   Edges. Then successive Points will be collpased into Edges. Successive
-	#   Edges that share a common vertex will be added to the new Polygon. If
-	#   there's a gap between Edges it will be automatically filled with a new
-	#   Edge. The resulting Polygon will then be closed if it isn't already.
+	#  The constructor will try to convert all of its arguments into {Points} and
+	#   {Edges}. Then successive {Points} will be collpased into {Edges}. Successive
+	#   {Edges} that share a common vertex will be added to the new {Polygon}. If
+	#   there's a gap between {Edges} it will be automatically filled with a new
+	#   {Edge}. The resulting Polygon will then be closed, if it isn't already.
 	# @overload initialize(Edge, Edge, ...)
 	#   @return [Polygon]
 	# @overload initialize(Point, Point, ...)
@@ -116,7 +116,7 @@ but there's currently nothing that enforces simplicity.
 			if (a.first == b.first) and (a.last == b.last)	    # Equal edges
 			elsif (a.first == b.last) and (a.last == b.first)   # Ignore equal but opposite edges
 			else
-			    if a.vector.normalize == b.vector.normalize # Same direction?
+			    if a.direction == b.direction # Same direction?
 				offsetA += 1 if ringA.insert_boundary(indexA + 1 + offsetA, b.first)
 				offsetB += 1 if ringB.insert_boundary(indexB + 1 + offsetB, a.last)
 			    else    # Opposite direction
