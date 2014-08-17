@@ -105,3 +105,15 @@ Examples
     # Everyone loves a good hexagon
     hexagon = Geometry::RegularPolygon.new 6, :diameter => 3
 ```
+
+### Zeros and Ones
+```ruby
+    # For when you know you need a zero, but you don't know how big it should be
+    zero = Point.zero       # Returns a Point of indeterminate length that always compares equal to zero
+
+    # Oh, you wanted ones instead? No problem.
+    ones = Point.one        # => Point[1,1,1...1]
+
+    # Looking for something more exotic that a mere 1?
+    iso = Point.iso(5)      # => Point[5,5,5...5]
+```
