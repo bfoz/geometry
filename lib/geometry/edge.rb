@@ -44,7 +44,7 @@ An edge. It's a line segment between 2 points. Generally part of a {Polygon}.
 
 	# Return a new {Edge} with swapped endpoints
 	def reverse
-	    Edge.new(@last, @first)
+	    self.class.new(@last, @first)
 	end
 
 	# In-place swap the endpoints
