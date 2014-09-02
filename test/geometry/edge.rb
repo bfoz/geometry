@@ -24,6 +24,10 @@ describe Geometry::Edge do
 	edge1.wont_equal edge3
     end
 
+    it 'must have a length' do
+	Edge.new([0,0], [1,0]).length.must_equal 1
+    end
+
     it "must return the height of the edge" do
 	edge = Edge([0,0], [1,1])
 	assert_equal(1, edge.height)
