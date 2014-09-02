@@ -53,6 +53,11 @@ An edge. It's a line segment between 2 points. Generally part of a {Polygon}.
 	    self
 	end
 
+	# @return [Number]  the length of the {Edge}
+	def length
+	    @length ||= vector.magnitude
+	end
+
 	# Return the {Edge}'s length along the Y axis
 	def height
 	    (@first.y - @last.y).abs
