@@ -114,6 +114,58 @@ describe Geometry::Point do
 	Point[1,2].dup.must_equal Point[1,2]
     end
 
+    describe 'minmax' do
+	it 'must have a minimum' do
+	    Point[1,2].min.must_equal 1
+	end
+
+	it 'must minimum with another Point' do
+	    Point[1,3].min(Point[4,2]).must_equal Point[1,2]
+	    Point[1,3].min(Point[4,2]).must_be_kind_of Point
+	end
+
+	it 'must minimum with an Array' do
+	    Point[1,3].min([4,2]).must_equal Point[1,2]
+	end
+
+	it 'must minimum with a multiple arguments' do
+	    Point[1,3].min(4,2).must_equal Point[1,2]
+	end
+
+	it 'must have a maximum' do
+	    Point[1,2].max.must_equal 2
+	end
+
+	it 'must maximum with another Point' do
+	    Point[1,3].max(Point[4,2]).must_equal Point[4,3]
+	    Point[1,3].max(Point[4,2]).must_be_kind_of Point
+	end
+
+	it 'must maximum with an Array' do
+	    Point[1,3].max([4,2]).must_equal Point[4,3]
+	end
+
+	it 'must maximum with multiple arguments' do
+	    Point[1,3].max(4,2).must_equal Point[4,3]
+	end
+
+	it 'must have a minmax' do
+	    Point[1,2].minmax.must_equal [1,2]
+	end
+
+	it 'must minmax with another Point' do
+	    Point[1,3].minmax(Point[4,2]).must_equal [Point[1,2], Point[4,3]]
+	end
+
+	it 'must minmax with an Array' do
+	    Point[1,3].minmax([4,2]).must_equal [Point[1,2], Point[4,3]]
+	end
+
+	it 'must maximum with multiple arguments' do
+	    Point[1,3].minmax(4,2).must_equal [Point[1,2], Point[4,3]]
+	end
+    end
+
     describe "arithmetic" do
 	let(:left) { Point[1,2] }
 	let(:right) { Point[3,4] }

@@ -5,6 +5,56 @@ describe Geometry::PointZero do
     subject { Geometry::PointZero.new }
     let(:zero) { Geometry::PointZero.new }
 
+describe 'minmax' do
+    it 'must have a minimum' do
+	subject.min.must_equal 0
+    end
+
+    it 'must minimum with another Point' do
+	subject.min(Point[-1,7]).must_equal Point[-1,0]
+    end
+
+    it 'must minimum with an Array' do
+	subject.min([-1,7]).must_equal Point[-1,0]
+    end
+
+    it 'must minimum with a multiple arguments' do
+	subject.min(-1,7).must_equal Point[-1,0]
+    end
+
+    it 'must have a maximum' do
+	subject.max.must_equal 0
+    end
+
+    it 'must maximum with another Point' do
+	subject.max(Point[7,-1]).must_equal Point[7,0]
+    end
+
+    it 'must maximum with an Array' do
+	subject.max([7,-1]).must_equal Point[7,0]
+    end
+
+    it 'must maximum with multiple arguments' do
+	subject.max(7,-1).must_equal Point[7,0]
+    end
+
+    it 'must have a minmax' do
+	subject.minmax.must_equal [0, 0]
+    end
+
+    it 'must minmax with another Point' do
+	subject.minmax(Point[7,-1]).must_equal [Point[0,-1], Point[7,0]]
+    end
+
+    it 'must minmax with an Array' do
+	subject.minmax([7,-1]).must_equal [Point[0,-1], Point[7,0]]
+    end
+
+    it 'must maximum with multiple arguments' do
+	subject.minmax(7,-1).must_equal [Point[0,-1], Point[7,0]]
+    end
+end
+
     describe "arithmetic" do
 	let(:left) { Point[1,2] }
 	let(:right) { Point[3,4] }

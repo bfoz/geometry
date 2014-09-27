@@ -67,6 +67,44 @@ everything else, regardless of size. It's similar to the
 	end
 # @endgroup
 
+    # @override max()
+    # @return [Number]  The maximum value of the {Point}'s elements
+    # @override max(point)
+    # @return [Point]    The element-wise maximum values of the receiver and the given {Point}
+    def max(*args)
+	if args.empty?
+	    1
+	else
+	    args = args.first if 1 == args.size
+	    Point[Array.new(args.size, 1).zip(args).map(&:max)]
+	end
+    end
+
+    # @override min()
+    # @return [Number]  The minimum value of the {Point}'s elements
+    # @override min(point)
+    # @return [Point]    The element-wise minimum values of the receiver and the given {Point}
+    def min(*args)
+	if args.empty?
+	    1
+	else
+	    args = args.first if 1 == args.size
+	    Point[Array.new(args.size, 1).zip(args).map(&:min)]
+	end
+    end
+
+    # @override minmax()
+    # @return [Array<Number>]   The minimum value of the {Point}'s elements
+    # @override min(point)
+    # @return [Array<Point>]    The element-wise minimum values of the receiver and the given {Point}
+    def minmax(*args)
+	if args.empty?
+	    [1, 1]
+	else
+	    [min(*args), max(*args)]
+	end
+    end
+
 # @group Arithmetic
 
 # @group Unary operators
