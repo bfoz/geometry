@@ -20,6 +20,11 @@ The {Square} class cluster is like the {Rectangle} class cluster, but not longer
 	#   @return [Point]  The {Square}'s origin
 	attr_reader :origin
 
+	# @!attribute points
+	#   @return [Array<Point>]  the corner {Point}s of the {Square} in counter-clockwise order
+	attr_reader :points
+	alias :vertices :points
+
 	# @overload new(:origin, :size)
 	#  Creates a {Square} with the given origin and size
 	#  @option [Point]  :origin The lower-left corner
@@ -75,6 +80,12 @@ The {Square} class cluster is like the {Rectangle} class cluster, but not longer
 	    true
 	end
 
+	# @!attribute [r] edges
+	#   @return [Array<Edge>]  An array of {Edge}s corresponding to the sides of the {Square}
+	def edges
+	    (points + [points.first]).each_cons(2).map {|v1,v2| Edge.new v1, v2}
+	end
+
 	# @return [Point]   The upper right corner of the bounding {Rectangle}
 	def max
 	    @points.last
@@ -94,6 +105,11 @@ The {Square} class cluster is like the {Rectangle} class cluster, but not longer
 	# @return [Point] The lower left corner
 	def origin
 	    @points.first
+	end
+
+	def points
+	    p0, p1 = *@points
+	    [p0, Point[p1.x, p0.y], p1, Point[p0.x, p1.y]]
 	end
 
 	def height

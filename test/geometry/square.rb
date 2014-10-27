@@ -65,6 +65,10 @@ describe Geometry::Square do
 	    subject.closed?.must_equal true
 	end
 
+	it 'must have edges' do
+	    subject.edges.must_equal [Edge([2,3], [3,3]), Edge.new([3,3], [3,4]), Edge.new([3,4], [2,4]), Edge.new([2,4], [2,3])]
+	end
+
 	it "must have an origin accessor" do
 	    subject.origin.must_equal Point[2,3]
 	end
@@ -79,6 +83,10 @@ describe Geometry::Square do
 
 	it "must have a min property that returns the lower left corner of the bounding rectangle" do
 	    subject.min.must_equal Point[2, 3]
+	end
+
+	it 'must have points' do
+	    subject.points.must_equal [Point[2,3], Point[3,3], Point[3,4], Point[2,4]]
 	end
     end
 end
