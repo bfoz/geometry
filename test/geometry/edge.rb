@@ -16,6 +16,12 @@ describe Geometry::Edge do
 	assert_equal(Geometry::Point[1,0], edge.last)
     end
 
+    it 'must have a convenience initializer' do
+	edge = Edge([0,0], [1,0])
+	edge.must_be_kind_of Geometry::Edge
+	edge.must_equal Edge.new([0,0], [1,0])
+    end
+
     it "must handle equality" do
 	edge1 = Edge.new([1,0], [0,1])
 	edge2 = Edge.new([1,0], [0,1])

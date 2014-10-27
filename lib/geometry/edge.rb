@@ -8,8 +8,8 @@ module Geometry
 An edge. It's a line segment between 2 points. Generally part of a {Polygon}.
 
 == Usage
+    edge = Geometry::Edge.new([1,1], [2,2])
     edge = Geometry::Edge([1,1], [2,2])
-
 =end
 
     class Edge
@@ -144,5 +144,13 @@ An edge. It's a line segment between 2 points. Generally part of a {Polygon}.
 	def to_a
 	    [@first, @last]
 	end
+    end
+
+    # Convenience initializer for {Edge} that tries to coerce its arguments into
+    #  something useful
+    # @param first	[Point, Array]	the starting point of the {Edge}
+    # @param last	[Point, Array]	the endpoint of the {Edge}
+    def Edge(first, last)
+	Edge.new(first, last)
     end
 end
