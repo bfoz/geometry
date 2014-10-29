@@ -113,6 +113,13 @@ describe Geometry::PointSlopeLine do
     it "must have a slope attribute" do
 	subject.slope.must_equal 3
     end
+
+    it "must handle equality" do
+	line2 = Geometry::PointSlopeLine.new([1,2], 3)
+	line3 = Geometry::PointSlopeLine.new([1,1], 4)
+	subject.must_equal line2
+	subject.wont_equal line3
+    end
 end
 
 describe Geometry::SlopeInterceptLine do
@@ -121,6 +128,13 @@ describe Geometry::SlopeInterceptLine do
     it "must have a slope attribute" do
 	subject.slope.must_equal 3
     end
+
+    it "must handle equality" do
+	line2 = Geometry::SlopeInterceptLine.new(3, 2)
+	line3 = Geometry::SlopeInterceptLine.new(4, 3)
+	subject.must_equal line2
+	subject.wont_equal line3
+    end
 end
 
 describe Geometry::TwoPointLine do
@@ -128,5 +142,12 @@ describe Geometry::TwoPointLine do
 
     it "must have a slope attribute" do
 	subject.slope.must_equal 1
+    end
+
+    it "must handle equality" do
+	line2 = Geometry::TwoPointLine.new([1,2], [3,4])
+	line3 = Geometry::TwoPointLine.new([1,1], [5,5])
+	subject.must_equal line2
+	subject.wont_equal line3
     end
 end

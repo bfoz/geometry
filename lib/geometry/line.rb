@@ -87,6 +87,10 @@ Supports two-point, slope-intercept, and point-slope initializer forms
 
     # @private
     class PointSlopeLine < Line
+	# @!attribute point
+	#   @return [Point]  the stating point
+	attr_reader :point
+
 	# @return [Number]  the slope of the {Line}
 	attr_reader :slope
 
@@ -94,6 +98,13 @@ Supports two-point, slope-intercept, and point-slope initializer forms
 	    @point = Point[point]
 	    @slope = slope
 	end
+
+	# Two {PointSlopeLine}s are equal if both have equal slope and origin
+	def ==(other)
+	    (point == other.point) && (slope == other.slope)
+	end
+	alias :eql? :==
+
 	def to_s
 	    'Line(' + @slope.to_s + ',' + @point.to_s + ')'
 	end
@@ -108,6 +119,12 @@ Supports two-point, slope-intercept, and point-slope initializer forms
 	    @slope = slope
 	    @intercept = intercept
 	end
+
+	# Two {SlopeInterceptLine}s are equal if both have equal slope and intercept
+	def ==(other)
+	    (intercept == other.intercept) && (slope == other.slope)
+	end
+	alias :eql? :==
 
 	def horizontal?
 	    0 == @slope
@@ -141,6 +158,12 @@ Supports two-point, slope-intercept, and point-slope initializer forms
 	    'Line(' + @first.inspect + ', ' + @last.inspect + ')'
 	end
 	alias :to_s :inspect
+
+	# Two {TwoPointLine}s are equal if both have equal {Point}s in the same order
+	def ==(other)
+	    (first == other.first) && (last == other.last)
+	end
+	alias :eql? :==
 
 # @group Accessors
 	# !@attribute [r[ slope
