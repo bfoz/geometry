@@ -120,6 +120,20 @@ describe Geometry::PointSlopeLine do
 	subject.must_equal line2
 	subject.wont_equal line3
     end
+
+    it 'must handle equality with a SlopeInterceptLine' do
+	line2 = Geometry::SlopeInterceptLine.new(3, -1)
+	line3 = Geometry::SlopeInterceptLine.new(4, -1)
+	line2.must_equal subject
+	line3.wont_equal subject
+    end
+
+    it 'must handle equality with a TwoPointLine' do
+	line2 = Geometry::TwoPointLine.new([1,2], [2,5])
+	line3 = Geometry::TwoPointLine.new([1,2], [2,4])
+	line2.must_equal subject
+	line3.wont_equal subject
+    end
 end
 
 describe Geometry::SlopeInterceptLine do
@@ -135,6 +149,20 @@ describe Geometry::SlopeInterceptLine do
 	subject.must_equal line2
 	subject.wont_equal line3
     end
+
+    it 'must handle equality with a PointSlopeLine' do
+	line2 = Geometry::PointSlopeLine.new([0,2], 3)
+	line3 = Geometry::PointSlopeLine.new([0,2], 2)
+	line2.must_equal subject
+	line3.wont_equal subject
+    end
+
+    it 'must handle equality with a TwoPointLine' do
+	line2 = Geometry::TwoPointLine.new([0,2], [1,5])
+	line3 = Geometry::TwoPointLine.new([0,2], [1,4])
+	line2.must_equal subject
+	line3.wont_equal subject
+    end
 end
 
 describe Geometry::TwoPointLine do
@@ -149,5 +177,19 @@ describe Geometry::TwoPointLine do
 	line3 = Geometry::TwoPointLine.new([1,1], [5,5])
 	subject.must_equal line2
 	subject.wont_equal line3
+    end
+
+    it 'must handle equality with a PointSlopeLine' do
+	line2 = Geometry::PointSlopeLine.new([1,2], 1)
+	line3 = Geometry::PointSlopeLine.new([1,2], 2)
+	line2.must_equal subject
+	line3.wont_equal subject
+    end
+
+    it 'must handle equality with a SlopeInterceptLine' do
+	line2 = Geometry::SlopeInterceptLine.new(1, 1)
+	line3 = Geometry::SlopeInterceptLine.new(1, -1)
+	line2.must_equal subject
+	line3.wont_equal subject
     end
 end
