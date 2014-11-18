@@ -1,4 +1,12 @@
 language: ruby
 rvm:
-  - 2.0.0
-  - 2.1.1
+- 2.0.0
+- 2.1.1
+deploy:
+  provider: rubygems
+  api_key:
+    secure: aCCrqOZ4pR5ACbPHfsurZbY2KOT3Qs5DZ7cJEG6Haa3sJXoMQ2srCtE2hsH1VO8idmrkHvl3wCEO9zNLOdx2x40xlaLVQ+wixtFKW1u9nnxjw4zszyyaxDIc8qnFsRNh6j997wyT2Sqx1YuQ8I82DnTh2I28mnxS51O33KeB0is=
+  gem: geometry
+  on:
+    tags: true
+    repo: bfoz/geometry
