@@ -114,6 +114,23 @@ describe Geometry::Point do
 	Point[1,2].dup.must_equal Point[1,2]
     end
 
+    it 'must pop' do
+	Point[1,2,3,4].pop.must_equal Point[4]
+	Point[1,2,3,4].pop(2).must_equal Point[3,4]
+    end
+
+    it 'must push' do
+	Point[1,2].push(3,4).must_equal Point[1,2,3,4]
+    end
+
+    it 'must shift' do
+	Point[1,2,3,4].shift.must_equal Point[1]
+    end
+
+    it 'must unshift' do
+	Point[2,3,4].unshift(1).must_equal Point[1,2,3,4]
+    end
+
     describe 'minmax' do
 	it 'must have a minimum' do
 	    Point[1,2].min.must_equal 1

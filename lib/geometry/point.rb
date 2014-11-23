@@ -157,6 +157,30 @@ geometry class (x, y, z).
 	    end
 	end
 
+	# Returns a new {Point} with the given number of elements removed from the end
+	# @return [Point]   the popped elements
+	def pop(count=1)
+	    self.class[to_a.pop(count)]
+	end
+
+	# Returns a new {Point} with the given elements appended
+	# @return [Point]
+	def push(*args)
+	    self.class[to_a.push(*args)]
+	end
+
+	# Removes the first element and returns it
+	# @return [Point]   the shifted elements
+	def shift(count=1)
+	    self.class[to_a.shift(count)]
+	end
+
+	# Prepend the given objects and return a new {Point}
+	# @return [Point]
+	def unshift(*args)
+	    self.class[to_a.unshift(*args)]
+	end
+
 # @group Accessors
 	# @param [Integer]  i	Index into the {Point}'s elements
 	# @return [Numeric] Element i (starting at 0)
