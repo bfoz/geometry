@@ -84,6 +84,20 @@ describe Geometry::Transformation do
 	end
     end
 
+    describe 'convenience constructors' do
+	it 'must create a translation from coordinates' do
+	    Geometry.translation(1, 2, 3).translation.must_equal Point[1,2,3]
+	end
+
+	it 'must create a translation from an Array' do
+	    Geometry.translation([1, 2, 3]).translation.must_equal Point[1,2,3]
+	end
+
+	it 'must create a translation from a Point' do
+	    Geometry.translation(Point[1, 2, 3]).translation.must_equal Point[1,2,3]
+	end
+    end
+
     it 'must translate with a Point' do
 	Transformation.new(translate:[1,2]).translate(Point[3,4]).translation.must_equal Point[4,6]
     end

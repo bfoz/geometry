@@ -180,4 +180,19 @@ system's X-axis:
 	    @translation ? (@translation + point) : point
 	end
     end
+
+    # @override translation(x, y, z)
+    #   Construct a new translation from the given values
+    #   @param x    [Number]	The distance to translate along the X-axis
+    #   @param y    [Number]	The distance to translate along the Y-axis
+    #   @param z    [Number]	The distance to translate along the Z-axis
+    # @override translation([x, y, z])
+    #   Construct a new translation from an array of values
+    # @override translation(point)
+    #   Construct a new translation from a {Point}
+    #   @param point	[Point]	A {Point}
+    def self.translation(*args)
+	args = *args if args[0].is_a? Array
+	Transformation.new translate:args
+    end
 end
