@@ -105,6 +105,18 @@ everything else, regardless of size. You can think of it as an application of th
 	    end
 	end
 
+	# Returns a new {Point} with the given number of elements removed from the end
+	# @return [Point]   the popped elements
+	def pop(count=1)
+	    Point[Array.new(count, 0)]
+	end
+
+	# Removes the first element and returns it
+	# @return [Point]   the shifted elements
+	def shift(count=1)
+	    Point[Array.new(count, 0)]
+	end
+
 # @group Arithmetic
 
 # @group Unary operators

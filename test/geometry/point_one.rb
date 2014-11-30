@@ -5,6 +5,16 @@ describe Geometry::PointOne do
     subject { Geometry::PointOne.new }
     let(:one) { Geometry::PointOne.new }
 
+    it 'must pop' do
+	subject.pop.must_equal Point[1]
+	subject.pop(2).must_equal Point[1, 1]
+    end
+
+    it 'must shift' do
+	subject.shift.must_equal Point[1]
+	subject.shift(2).must_equal Point[1, 1]
+    end
+
     describe 'minmax' do
 	it 'must have a minimum' do
 	    subject.min.must_equal 1

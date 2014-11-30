@@ -91,6 +91,18 @@ An object repesenting a N-dimensional {Point} with identical elements.
 	    end
 	end
 
+	# Returns a new {Point} with the given number of elements removed from the end
+	# @return [Point]   the popped elements
+	def pop(count=1)
+	    Point[Array.new(count, @value)]
+	end
+
+	# Removes the first element and returns it
+	# @return [Point]   the shifted elements
+	def shift(count=1)
+	    Point[Array.new(count, @value)]
+	end
+
 # @group Accessors
 	# @param i [Integer]	Index into the {Point}'s elements
 	# @return [Numeric] Element i (starting at 0)
