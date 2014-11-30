@@ -128,7 +128,13 @@ geometry class (x, y, z).
 		@elements.max
 	    else
 		args = args.first if 1 == args.size
-		self.class[@elements.zip(args).map(&:max)]
+		case args
+		    when PointIso   then    self.class[@elements.map {|e| [e, args.value].max }]
+		    when PointOne   then    self.class[@elements.map {|e| [e, 1].max }]
+		    when PointZero  then    self.class[@elements.map {|e| [e, 0].max }]
+		    else
+			self.class[@elements.zip(args).map(&:max)]
+		end
 	    end
 	end
 
@@ -141,7 +147,13 @@ geometry class (x, y, z).
 		@elements.min
 	    else
 		args = args.first if 1 == args.size
-		self.class[@elements.zip(args).map(&:min)]
+		case args
+		    when PointIso   then    self.class[@elements.map {|e| [e, args.value].min }]
+		    when PointOne   then    self.class[@elements.map {|e| [e, 1].min }]
+		    when PointZero  then    self.class[@elements.map {|e| [e, 0].min }]
+		    else
+			self.class[@elements.zip(args).map(&:min)]
+		end
 	    end
 	end
 

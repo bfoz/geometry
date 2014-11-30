@@ -2,6 +2,7 @@ require 'minitest/autorun'
 require 'geometry/point'
 
 describe Geometry::Point do
+    PointIso = Geometry::PointIso
     PointOne = Geometry::PointOne
     PointZero = Geometry::PointZero
 
@@ -131,7 +132,7 @@ describe Geometry::Point do
 	Point[2,3,4].unshift(1).must_equal Point[1,2,3,4]
     end
 
-    describe 'minmax' do
+    describe 'minimum' do
 	it 'must have a minimum' do
 	    Point[1,2].min.must_equal 1
 	end
@@ -149,6 +150,20 @@ describe Geometry::Point do
 	    Point[1,3].min(4,2).must_equal Point[1,2]
 	end
 
+	it 'must minimum with a PointIso' do
+	    Point[-5,-5,5].min(PointIso.new(-5/2)).must_equal Point[-5,-5,-5/2]
+	end
+
+	it 'must minimum with a PointOne' do
+	    Point[-5,-5,5].min(Point.one).must_equal Point[-5,-5,1]
+	end
+
+	it 'must minimum with a PointZero' do
+	    Point[-5,-5,5].min(Point.zero).must_equal Point[-5,-5,0]
+	end
+    end
+
+    describe 'maximum' do
 	it 'must have a maximum' do
 	    Point[1,2].max.must_equal 2
 	end
@@ -166,6 +181,20 @@ describe Geometry::Point do
 	    Point[1,3].max(4,2).must_equal Point[4,3]
 	end
 
+	it 'must maximum with a PointIso' do
+	    Point[-5,-5,5].max(PointIso.new(-5/2)).must_equal Point[-5/2, -5/2, 5]
+	end
+
+	it 'must maximum with a PointOne' do
+	    Point[-5,-5,5].max(Point.one).must_equal Point[1, 1, 5]
+	end
+
+	it 'must maximum with a PointZero' do
+	    Point[-5,-5,5].max(Point.zero).must_equal Point[0, 0, 5]
+	end
+    end
+
+    describe 'minmax' do
 	it 'must have a minmax' do
 	    Point[1,2].minmax.must_equal [1,2]
 	end
@@ -178,8 +207,20 @@ describe Geometry::Point do
 	    Point[1,3].minmax([4,2]).must_equal [Point[1,2], Point[4,3]]
 	end
 
-	it 'must maximum with multiple arguments' do
+	it 'must minmax with multiple arguments' do
 	    Point[1,3].minmax(4,2).must_equal [Point[1,2], Point[4,3]]
+	end
+
+	it 'must minmax with a PointIso' do
+	    Point[-5,-5,5].minmax(PointIso.new(-5/2)).must_equal [Point[-5,-5,-5/2], Point[-5/2, -5/2, 5]]
+	end
+
+	it 'must minmax with a PointOne' do
+	    Point[-5,-5,5].minmax(Point.one).must_equal [Point[-5,-5,1], Point[1, 1, 5]]
+	end
+
+	it 'must minmax with a PointZero' do
+	    Point[-5,-5,5].minmax(Point.zero).must_equal [Point[-5,-5,0], Point[0, 0, 5]]
 	end
     end
 
