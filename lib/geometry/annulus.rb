@@ -66,6 +66,24 @@ known as a Ring, is a circle that ate another circle.
 	    @outer_diameter = options[:outer_diameter] || options[:diameter]
 	    @outer_radius = options[:outer_radius] || options[:radius]
 	end
+
+	# @!attribute	max
+	# @return [Point]   The upper right corner of the bounding {Rectangle}
+	def max
+	    @center+radius
+	end
+
+	# @!attribute	min
+	# @return [Point]   The lower left corner of the bounding {Rectangle}
+	def min
+	    @center-radius
+	end
+
+	# @!attribute	minmax
+	# @return [Array<Point>]    The lower left and upper right corners of the bounding {Rectangle}
+	def minmax
+	    [self.min, self.max]
+	end
     end
 
     # Ring is an alias of Annulus because that's the word that most people use,

@@ -16,6 +16,18 @@ describe Geometry::Annulus do
 	it 'must have a center' do
 	    subject.center.must_equal Point[1,2]
 	end
+
+	it 'must have a max' do
+	    subject.max.must_equal Point[11, 12]
+	end
+
+	it 'must have a min' do
+	    subject.min.must_equal Point[-9, -8]
+	end
+
+	it 'must have a min and a max' do
+	    subject.minmax.must_equal [subject.min, subject.max]
+	end
     end
     
     describe 'when constructed with a center, inner_radius and radius' do
