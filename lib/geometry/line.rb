@@ -34,6 +34,9 @@ Supports two-point, slope-intercept, and point-slope initializer forms
 	# @!attribute [r] horizontal?
 	#   @return [Boolean]	true if the slope is zero
 
+	# @!attribute [r] slope
+	#   @return [Number]	the slope of the {Line}
+
 	# @!attribute [r] vertical?
 	#   @return [Boolean]	true if the slope is infinite
 
@@ -91,14 +94,33 @@ Supports two-point, slope-intercept, and point-slope initializer forms
 	end
     end
 
+    module SlopedLine
+	# @!attribute slope
+	#   @return [Number]  the slope of the {Line}
+	attr_reader :slope
+
+	# @!attribute horizontal?
+	#   @return [Boolean]  true if the slope is zero
+	def horizontal?
+	    slope.zero?
+	end
+
+	# @!attribute vertical?
+	#   @return [Boolean]  true if the slope is infinite
+	def vertical?
+	    slope.infinite? != nil
+	rescue	# Non-Float's don't have an infinite? method
+	    false
+	end
+    end
+
     # @private
     class PointSlopeLine < Line
+	include SlopedLine
+
 	# @!attribute point
 	#   @return [Point]  the stating point
 	attr_reader :point
-
-	# @return [Number]  the slope of the {Line}
-	attr_reader :slope
 
 	# @param point	[Point]	    a {Point} that lies on the {Line}
 	# @param slope	[Number]    the slope of the {Line}
@@ -133,20 +155,6 @@ Supports two-point, slope-intercept, and point-slope initializer forms
 	    'Line(' + @slope.to_s + ',' + @point.to_s + ')'
 	end
 
-	# @!attribute horizontal?
-	#   @return [Boolean]  true if the slope is zero
-	def horizontal?
-	    slope.zero?
-	end
-
-	# @!attribute vertical?
-	#   @return [Boolean]  true is the slope is infinite
-	def vertical?
-	    slope.infinite? != nil
-	rescue	# Non-Float's don't have an infinite? method
-	    false
-	end
-
 	# Find the requested axis intercept
 	# @param axis	[Symbol]    the axis to intercept (either :x or :y)
 	# @return [Number]  the location of the intercept
@@ -162,8 +170,7 @@ Supports two-point, slope-intercept, and point-slope initializer forms
 
     # @private
     class SlopeInterceptLine < Line
-	# @return [Number]  the slope of the {Line}
-	attr_reader :slope
+	include SlopedLine
 
 	# @param slope	    [Number]    the slope
 	# @param intercept  [Number]	the location of the y-axis intercept
@@ -190,18 +197,6 @@ Supports two-point, slope-intercept, and point-slope initializer forms
 	#   @note eql? does not check for equivalence between cluster subclases
 	def eql?(other)
 	    (intercept == other.intercept) && (slope == other.slope)
-	end
-
-	def horizontal?
-	    0 == @slope
-	end
-
-	# @!attribute vertical?
-	#   @return [Boolean]  true is the slope is infinite
-	def vertical?
-	    slope.infinite? != nil
-	rescue	# Non-Float's don't have an infinite? method
-	    false
 	end
 
 	# Find the requested axis intercept
