@@ -31,6 +31,12 @@ Supports two-point, slope-intercept, and point-slope initializer forms
     class Line
 	include ClusterFactory
 
+	# @!attribute [r] horizontal?
+	#   @return [Boolean]	true if the slope is zero
+
+	# @!attribute [r] vertical?
+	#   @return [Boolean]	true if the slope is infinite
+
 	# @overload [](Array, Array)
 	#   @return [TwoPointLine]
 	# @overload [](Point, Point)
@@ -126,6 +132,32 @@ Supports two-point, slope-intercept, and point-slope initializer forms
 	def to_s
 	    'Line(' + @slope.to_s + ',' + @point.to_s + ')'
 	end
+
+	# @!attribute horizontal?
+	#   @return [Boolean]  true if the slope is zero
+	def horizontal?
+	    slope.zero?
+	end
+
+	# @!attribute vertical?
+	#   @return [Boolean]  true is the slope is infinite
+	def vertical?
+	    slope.infinite? != nil
+	rescue	# Non-Float's don't have an infinite? method
+	    false
+	end
+
+	# Find the requested axis intercept
+	# @param axis	[Symbol]    the axis to intercept (either :x or :y)
+	# @return [Number]  the location of the intercept
+	def intercept(axis=:y)
+	    case axis
+		when :x
+		    vertical? ? point.x : (horizontal? ? nil : (slope * point.x - point.y))
+		when :y
+		    vertical? ? nil : (horizontal? ? point.y : (point.y - slope * point.x))
+	    end
+	end
     end
 
     # @private
@@ -163,10 +195,18 @@ Supports two-point, slope-intercept, and point-slope initializer forms
 	def horizontal?
 	    0 == @slope
 	end
+
+	# @!attribute vertical?
+	#   @return [Boolean]  true is the slope is infinite
 	def vertical?
-	    (1/0.0) == @slope
+	    slope.infinite? != nil
+	rescue	# Non-Float's don't have an infinite? method
+	    false
 	end
 
+	# Find the requested axis intercept
+	# @param axis	[Symbol]    the axis to intercept (either :x or :y)
+	# @return [Number]  the location of the intercept
 	def intercept(axis=:y)
 	    case axis
 		when :x
@@ -221,6 +261,27 @@ Supports two-point, slope-intercept, and point-slope initializer forms
 	def slope
 	    (last.y - first.y)/(last.x - first.x)
 	end
+
+	def horizontal?
+	    first.y == last.y
+	end
+
+	def vertical?
+	    first.x == last.x
+	end
+
+	# Find the requested axis intercept
+	# @param axis	[Symbol]    the axis to intercept (either :x or :y)
+	# @return [Number]  the location of the intercept
+	def intercept(axis=:y)
+	    case axis
+		when :x
+		    vertical? ? @intercept : (horizontal? ? nil : (first.x - first.y/slope))
+		when :y
+		    vertical? ? nil : (horizontal? ? first.y : (first.y - slope * first.x))
+	    end
+	end
+
 # @endgroup
     end
 end

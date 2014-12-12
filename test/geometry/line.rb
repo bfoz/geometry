@@ -134,6 +134,29 @@ describe Geometry::PointSlopeLine do
 	line2.must_equal subject
 	line3.wont_equal subject
     end
+
+    it 'must know how to be horizontal' do
+	Geometry::PointSlopeLine.new([1,2],0).horizontal?.must_equal true
+	Geometry::PointSlopeLine.new([1,2],1).horizontal?.must_equal false
+    end
+
+    it 'must know how to be vertical' do
+	Geometry::PointSlopeLine.new([1,2], Float::INFINITY).vertical?.must_equal true
+	Geometry::PointSlopeLine.new([1,2], -Float::INFINITY).vertical?.must_equal true
+	Geometry::PointSlopeLine.new([1,2],1).vertical?.must_equal false
+    end
+
+    it 'must have an x-intercept' do
+	subject.intercept(:x).must_equal 1
+    end
+
+    it 'must not have an x-intercept for horizontal lines' do
+	Geometry::PointSlopeLine.new([1,2], 0).intercept(:x).must_equal nil
+    end
+
+    it 'must have a y-intercept' do
+	subject.intercept.must_equal -1
+    end
 end
 
 describe Geometry::SlopeInterceptLine do
@@ -163,6 +186,29 @@ describe Geometry::SlopeInterceptLine do
 	line2.must_equal subject
 	line3.wont_equal subject
     end
+
+    it 'must know how to be horizontal' do
+	Geometry::SlopeInterceptLine.new(0, 2).horizontal?.must_equal true
+	Geometry::SlopeInterceptLine.new(1, 2).horizontal?.must_equal false
+    end
+
+    it 'must know how to be vertical' do
+	Geometry::SlopeInterceptLine.new(Float::INFINITY, 2).vertical?.must_equal true
+	Geometry::SlopeInterceptLine.new(-Float::INFINITY, 2).vertical?.must_equal true
+	Geometry::SlopeInterceptLine.new(1, 2).vertical?.must_equal false
+    end
+
+    it 'must have an x-intercept' do
+	subject.intercept(:x).must_equal -2/3
+    end
+
+    it 'must not have an x-intercept for horizontal lines' do
+	Geometry::SlopeInterceptLine.new(0, 2).intercept(:x).must_equal nil
+    end
+
+    it 'must have a y-intercept' do
+	subject.intercept.must_equal 2
+    end
 end
 
 describe Geometry::TwoPointLine do
@@ -191,5 +237,28 @@ describe Geometry::TwoPointLine do
 	line3 = Geometry::SlopeInterceptLine.new(1, -1)
 	line2.must_equal subject
 	line3.wont_equal subject
+    end
+
+    it 'must know how to be horizontal' do
+	Geometry::TwoPointLine.new([1,2],[2,2]).horizontal?.must_equal true
+	Geometry::TwoPointLine.new([1,2],[3,4]).horizontal?.must_equal false
+    end
+
+    it 'must know how to be vertical' do
+	Geometry::TwoPointLine.new([1,2], [1,3]).vertical?.must_equal true
+	Geometry::TwoPointLine.new([1,2], [1,-3]).vertical?.must_equal true
+	Geometry::TwoPointLine.new([1,2],[3,4]).vertical?.must_equal false
+    end
+
+    it 'must have an x-intercept' do
+	subject.intercept(:x).must_equal -1
+    end
+
+    it 'must not have an x-intercept for horizontal lines' do
+	Geometry::TwoPointLine.new([1,2],[2,2]).intercept(:x).must_equal nil
+    end
+
+    it 'must have a y-intercept' do
+	subject.intercept.must_equal 1
     end
 end
