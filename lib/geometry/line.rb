@@ -67,6 +67,42 @@ Supports two-point, slope-intercept, and point-slope initializer forms
 	    end
 	end
 
+
+    def intersection(object)
+        case(object)
+        when Line
+            if object.vertical? && self.vertical? then
+                return []
+            end
+
+            if object.vertical? || self.vertical? then
+                if object.vertical? then
+                    vline = object ; line = self
+                else
+                    vline = self ; line = object
+                end
+                m = line.slope
+                c = line.intercept
+                x = vline.intercept(:x)
+                y = m * x + c
+                return [Point[x,y]]
+            else
+                m1 = self.slope
+                m2 = object.slope
+                c1 = self.intercept
+                c2 = object.intercept
+                return [] if m1 == m2
+                x = (c2 - c1) / (m1 - m2)
+                y = m1 * x + c1
+                return [Point[x,y]]
+            end
+        when Polyline
+            raise NotImplementedError
+        end
+        return nil
+    end
+
+
 	# @overload new(from, to)
 	# @option options [Point] :from	A starting {Point}
 	# @option options [Point] :to	An end {Point}
@@ -271,7 +307,7 @@ Supports two-point, slope-intercept, and point-slope initializer forms
 	def intercept(axis=:y)
 	    case axis
 		when :x
-		    vertical? ? @intercept : (horizontal? ? nil : (first.x - first.y/slope))
+		    vertical? ? first.x : (horizontal? ? nil : (first.x - first.y/slope))
 		when :y
 		    vertical? ? nil : (horizontal? ? first.y : (first.y - slope * first.x))
 	    end
@@ -280,4 +316,3 @@ Supports two-point, slope-intercept, and point-slope initializer forms
 # @endgroup
     end
 end
-

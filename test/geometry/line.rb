@@ -105,6 +105,31 @@ describe Geometry::Line do
 	line = Geometry::Line[[0,0], [10,10]]
 	assert_equal('Line(Point[0, 0], Point[10, 10])', line.to_s)
     end
+    it "line intersection" do
+        line1 = Geometry::Line[[1,1],[3,3]]
+        line2 = Geometry::Line[[1,3],[3,1]]
+        assert_equal [Geometry::Point[2,2]], line1.intersection(line2)
+        assert_equal [Geometry::Point[2,2]], line2.intersection(line1)
+    end
+    it "verctical line intersection" do
+        line1 = Geometry::Line[[1,1],[1,2]]
+        line2 = Geometry::Line[[0,0],[2,2]]
+        assert_equal [Geometry::Point[1,1]], line2.intersection(line1)
+        assert_equal [Geometry::Point[1,1]], line1.intersection(line2)
+    end
+    it "paralells lines shouldn't intercept" do
+        line1 = Geometry::Line[[2,0],[2,0]]
+        line2 = Geometry::Line[[1,0],[1,0]]
+        assert_equal [], line2.intersection(line1)
+
+        line1 = Geometry::Line[[0,2],[0,2]]
+        line2 = Geometry::Line[[0,1],[0,1]]
+        assert_equal [], line2.intersection(line1)
+
+        line1 = Geometry::Line[[0,0],[1,1]]
+        line2 = Geometry::Line[[2,3],[3,4]]
+        assert_equal [], line2.intersection(line1)
+    end
 end
 
 describe Geometry::PointSlopeLine do
