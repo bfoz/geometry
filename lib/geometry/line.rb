@@ -67,7 +67,7 @@ Supports two-point, slope-intercept, and point-slope initializer forms
 	    end
 	end
 
-
+    # @return [Array<Point>] intersection points
     def intersection(object)
         case(object)
         when Line
@@ -97,7 +97,18 @@ Supports two-point, slope-intercept, and point-slope initializer forms
                 return [Point[x,y]]
             end
         when Polyline
-            raise NotImplementedError
+            points = object.edges.map do |edge|
+                point = self.intersection(Line[edge.first,edge.last]).first
+                next nil if point.nil?
+                x1 , x2 = [edge.first.x , edge.last.x ].sort
+                y1 , y2 = [edge.first.y , edge.last.y ].sort
+                if (x1 .. x2).include?(point.x) && (y1 .. y2).include?(point.y) then
+                    next point
+                else
+                    next nil
+                end
+            end
+            return points.compact.uniq
         end
         return nil
     end

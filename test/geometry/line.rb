@@ -130,6 +130,18 @@ describe Geometry::Line do
         line2 = Geometry::Line[[2,3],[3,4]]
         assert_equal [], line2.intersection(line1)
     end
+    it "polygon intersection" do
+        b = proc{ |p1,p2| p1.to_a <=> p2.to_a }
+        polygon = Geometry::Polygon.new([1,1] ,[1,3], [3,3], [3,1])
+        line = Geometry::Line[[0,2],[4,2]]
+        assert_equal [Geometry::Point[1, 2],Geometry::Point[3, 2]].sort(&b) , line.intersection(polygon).sort(&b)
+        line = Geometry::Line[[2,0],[2,4]]
+        assert_equal [Geometry::Point[2, 3],Geometry::Point[2, 1]].sort(&b), line.intersection(polygon).sort(&b)
+        line = Geometry::Line[[3,3],[4,4]]
+        assert_equal [Geometry::Point[1, 1],Geometry::Point[3, 3]].sort(&b), line.intersection(polygon).sort(&b)
+        line = Geometry::Line[[0,6],[10,15]]
+        assert_equal [], line.intersection(polygon)
+    end
 end
 
 describe Geometry::PointSlopeLine do
