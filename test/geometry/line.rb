@@ -258,6 +258,10 @@ describe Geometry::TwoPointLine do
 	Geometry::TwoPointLine.new([1,2],[2,2]).intercept(:x).must_equal nil
     end
 
+    it 'must have an x-intercept for vertical lines' do
+	Geometry::TwoPointLine.new([1,2], [1,3]).intercept(:x).must_equal 1
+    end
+
     it 'must have a y-intercept' do
 	subject.intercept.must_equal 1
     end

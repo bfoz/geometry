@@ -271,7 +271,7 @@ Supports two-point, slope-intercept, and point-slope initializer forms
 	def intercept(axis=:y)
 	    case axis
 		when :x
-		    vertical? ? @intercept : (horizontal? ? nil : (first.x - first.y/slope))
+		    vertical? ? first.x : (horizontal? ? nil : (first.x - first.y/slope))
 		when :y
 		    vertical? ? nil : (horizontal? ? first.y : (first.y - slope * first.x))
 	    end
