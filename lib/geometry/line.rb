@@ -98,7 +98,7 @@ Supports two-point, slope-intercept, and point-slope initializer forms
             end
         elsif object.kind_of?(Polyline) then
             points = object.edges.map do |edge|
-                point = self.intersection(Line[edge.first,edge.last]).first
+                point = intersection(Line[edge.first,edge.last]).first
                 if point != nil then
                     x1 , x2 = [edge.first.x , edge.last.x ].sort
                     y1 , y2 = [edge.first.y , edge.last.y ].sort
