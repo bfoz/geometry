@@ -69,48 +69,49 @@ Supports two-point, slope-intercept, and point-slope initializer forms
 
     # @return [Array<Point>] intersection points
     def intersection(object)
-        case(object)
-        when Line
-            if object.vertical? && self.vertical? then
-                return []
-            end
-
-            if object.vertical? || self.vertical? then
-                if object.vertical? then
-                    vline = object ; line = self
+        result = []
+        if object.kind_of?(Line) then
+            unless object.vertical? && self.vertical? then
+                if object.vertical? || self.vertical? then
+                    if object.vertical? then
+                        vline = object ; line = self
+                    else
+                        vline = self ; line = object
+                    end
+                    m = line.slope
+                    c = line.intercept
+                    x = vline.intercept(:x)
+                    y = m * x + c
+                    result = [Point[x,y]]
                 else
-                    vline = self ; line = object
+                    m1 = self.slope
+                    m2 = object.slope
+                    c1 = self.intercept
+                    c2 = object.intercept
+                    if m1 != m2 then
+                        x = (c2 - c1) / (m1 - m2)
+                        y = m1 * x + c1
+                        result = [Point[x,y]]
+                    end
                 end
-                m = line.slope
-                c = line.intercept
-                x = vline.intercept(:x)
-                y = m * x + c
-                return [Point[x,y]]
-            else
-                m1 = self.slope
-                m2 = object.slope
-                c1 = self.intercept
-                c2 = object.intercept
-                return [] if m1 == m2
-                x = (c2 - c1) / (m1 - m2)
-                y = m1 * x + c1
-                return [Point[x,y]]
             end
-        when Polyline
+        elsif object.kind_of?(Polyline) then
             points = object.edges.map do |edge|
                 point = self.intersection(Line[edge.first,edge.last]).first
-                next nil if point.nil?
-                x1 , x2 = [edge.first.x , edge.last.x ].sort
-                y1 , y2 = [edge.first.y , edge.last.y ].sort
-                if (x1 .. x2).include?(point.x) && (y1 .. y2).include?(point.y) then
-                    next point
-                else
-                    next nil
+                if point != nil then
+                    x1 , x2 = [edge.first.x , edge.last.x ].sort
+                    y1 , y2 = [edge.first.y , edge.last.y ].sort
+                    unless (x1 .. x2).include?(point.x) && (y1 .. y2).include?(point.y) then
+                         point = nil
+                    end
                 end
+                next point
             end
-            return points.compact.uniq
+            result = points.compact.uniq
+        else
+            raise ArgumentError
         end
-        return nil
+        return result
     end
 
 
