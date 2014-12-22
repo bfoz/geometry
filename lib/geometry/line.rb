@@ -74,19 +74,20 @@ Supports two-point, slope-intercept, and point-slope initializer forms
             unless object.vertical? && self.vertical? then
                 if object.vertical? || self.vertical? then
                     if object.vertical? then
-                        vline = object ; line = self
+                        m = slope
+                        c = intercept
+                        x = object.intercept(:x)
                     else
-                        vline = self ; line = object
+                        m = object.slope
+                        c = object.intercept
+                        x = intercept(:x)
                     end
-                    m = line.slope
-                    c = line.intercept
-                    x = vline.intercept(:x)
                     y = m * x + c
                     result = [Point[x,y]]
                 else
-                    m1 = self.slope
+                    m1 = slope
                     m2 = object.slope
-                    c1 = self.intercept
+                    c1 = intercept
                     c2 = object.intercept
                     if m1 != m2 then
                         x = (c2 - c1) / (m1 - m2)
