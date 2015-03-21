@@ -218,11 +218,21 @@ Supports two-point, slope-intercept, and point-slope initializer forms
 
     # @private
     class TwoPointLine < Line
-	attr_reader :first, :last
+	# @!attribute first
+	#   @return [Point]  the {Line}'s starting point
+	attr_reader :first
 
-	def initialize(point0, point1)
-	    @first, @last = [Point[point0], Point[point1]]
+	# @!attribute last
+	#   @return [Point]  the {Line}'s end point
+	attr_reader :last
+
+	# @param first	[Point]	the starting point
+	# @param last	[Point]	the end point
+	def initialize(first, last)
+	    @first = Point[first]
+	    @last = Point[last]
 	end
+
 	def inspect
 	    'Line(' + @first.inspect + ', ' + @last.inspect + ')'
 	end
