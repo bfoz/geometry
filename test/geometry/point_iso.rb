@@ -2,7 +2,7 @@ require 'minitest/autorun'
 require 'geometry/point_iso'
 
 describe Geometry::PointIso do
-    let(:value) { 5 }
+    let(:iso_value) { 5 }
     subject { Geometry::PointIso.new(5) }
 
     it 'must pop' do
@@ -83,30 +83,30 @@ describe Geometry::PointIso do
 	end
 
 	it 'must have +@' do
-	    (+subject).must_be :eql?, value
+	    (+subject).must_be :eql?, iso_value
 	    (+subject).must_be_instance_of(Geometry::PointIso)
 	end
 
 	it 'must have unary negation' do
-	    (-subject).must_be :eql?, -value
+	    (-subject).must_be :eql?, -iso_value
 	    (-subject).must_be_instance_of(Geometry::PointIso)
 	end
 
 	describe 'Accessors' do
 	    it 'must return 1 for array access' do
-		subject[3].must_equal value
+		subject[3].must_equal iso_value
 	    end
 
 	    it 'must return 1 for named element access' do
-		subject.x.must_equal value
-		subject.y.must_equal value
-		subject.z.must_equal value
+		subject.x.must_equal iso_value
+		subject.y.must_equal iso_value
+		subject.z.must_equal iso_value
 	    end
 	end
 
 	it 'must add a number' do
-	    (subject + 3).must_equal (value + 3)
-	    (3 + subject).must_equal (3 + value)
+	    (subject + 3).must_equal (iso_value + 3)
+	    (3 + subject).must_equal (3 + iso_value)
 	end
 
 	it 'return a Point when adding two Points' do
@@ -115,24 +115,24 @@ describe Geometry::PointIso do
 	end
 
 	it 'must return an Array when adding an array' do
-	    (subject + [5,6]).must_equal [value+5, value+6]
+	    (subject + [5,6]).must_equal [iso_value+5, iso_value+6]
 #	    ([5,6] + subject).must_equal [10, 11]
 	end
 
 	it 'must return a Point when adding a Size' do
 	    (subject + Size[5,6]).must_be_instance_of(Point)
-	    (subject + Size[5,6]).must_equal Point[value+5, value+6]
+	    (subject + Size[5,6]).must_equal Point[iso_value+5, iso_value+6]
 	end
 
 	describe 'when subtracting' do
 	    it 'must subtract a number' do
-		(subject - 3).must_equal (value - 3)
+		(subject - 3).must_equal (iso_value - 3)
 		(3 - subject).must_equal -2
 	    end
 
 	    it 'return a Point when subtracting two Points' do
-		(subject - right).must_equal Point[value - right.x, value - right.y]
-		(left - subject).must_equal Point[left.x - value, left.y - value]
+		(subject - right).must_equal Point[iso_value - right.x, iso_value - right.y]
+		(left - subject).must_equal Point[left.x - iso_value, left.y - iso_value]
 	    end
 
 	    it 'must return a Point when subtracting an array' do
@@ -231,15 +231,15 @@ describe Geometry::PointIso do
 	end
 
 	it 'must be equal to a Point of subjects' do
-	    subject.must_be :==, Point[value, value]
-	    subject.must_be :eql?, Point[value, value]
-	    subject.must_be :===, Point[value, value]
-	    Point[value, value].must_equal subject
-	    subject.must_equal Point[value, value]
+	    subject.must_be :==, Point[iso_value, iso_value]
+	    subject.must_be :eql?, Point[iso_value, iso_value]
+	    subject.must_be :===, Point[iso_value, iso_value]
+	    Point[iso_value, iso_value].must_equal subject
+	    subject.must_equal Point[iso_value, iso_value]
 	end
 
 	it 'must be equal to an Vector of the same value' do
-	    subject.must_be :eql?, Vector[value, value]
+	    subject.must_be :eql?, Vector[iso_value, iso_value]
 	    Vector[5, 5].must_equal subject
 	end
 
