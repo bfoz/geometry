@@ -17,8 +17,15 @@ An {Arc} with its center at [1,1] and a radius of 2 that starts at the X-axis an
 	include ClusterFactory
 
 	attr_reader :center
+
+	# @return [Number]  the radius of the {Arc}
 	attr_reader :radius
-	attr_reader :start_angle, :end_angle
+
+	# @return [Number]  the starting angle of the {Arc} as radians from the x-axis
+	attr_reader :start_angle
+
+	# @return [Number]  the ending angle of the {Arc} as radians from the x-axis
+	attr_reader :end_angle
 
 	# @overload new(center, start, end)
 	#  Create a new {Arc} given center, start and end {Point}s
@@ -90,5 +97,19 @@ An {Arc} with its center at [1,1] and a radius of 2 that starts at the X-axis an
 	# The end point of the {Arc}
 	# @return [Point]
 	alias :last :end
+
+	def end_angle
+	    a = (self.end - self.center)
+	    Math.atan2(a.y, a.x)
+	end
+
+	def radius
+	    (self.start - self.center).magnitude
+	end
+
+	def start_angle
+	    a = (self.start - self.center)
+	    Math.atan2(a.y, a.x)
+	end
     end
 end

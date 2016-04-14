@@ -23,3 +23,20 @@ describe Geometry::Arc do
 	end
     end
 end
+
+describe Geometry::ThreePointArc do
+    it 'must have an ending angle' do
+	arc = Geometry::ThreePointArc.new([0,0], [1,0], [0,1])
+	arc.end_angle.must_equal Math::PI/2
+    end
+
+    it 'must have a radius' do
+	arc = Geometry::ThreePointArc.new([0,0], [1,0], [0,1])
+	arc.radius.must_equal 1
+    end
+
+    it 'must have an starting angle' do
+	arc = Geometry::ThreePointArc.new([0,0], [1,0], [0,1])
+	arc.start_angle.must_equal 0
+    end
+end
