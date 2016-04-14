@@ -15,6 +15,15 @@ describe Geometry::Point do
 	    Point.one(3).must_equal Point[1,1,1]
 	end
 
+	it 'must generate a PointIso' do
+	    Point.iso(3).must_be_kind_of(PointIso)
+	    Point.iso(3).value.must_equal 3
+	end
+
+	it 'must generate a Point filled with a given value' do
+	    Point.iso(3, 2).must_equal Point[3,3]
+	end
+
 	it "must generate a PointZero" do
 	    Point.zero.must_be_instance_of(PointZero)
 	end

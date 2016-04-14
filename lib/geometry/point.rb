@@ -35,12 +35,12 @@ geometry class (x, y, z).
 	    super(*array)
 	end
 
-	# Creates and returns a new {PointIso} instance. Or, a {Point} full of ones if the size argument is given.
+	# Creates and returns a new {PointIso} instance. Or, a {Point} full of the given value if the size argument is given.
 	# @param value [Number]	the value of the elements
 	# @param size [Number] the size of the new {Point} full of ones
 	# @return [PointIso] A new {PointIso} instance
 	def self.iso(value, size=nil)
-	    size ? Point[Array.new(size, 1)] : PointIso.new(value)
+	    size ? Point[Array.new(size, value)] : PointIso.new(value)
 	end
 
 	# Creates and returns a new {PointOne} instance. Or, a {Point} full of ones if the size argument is given.
