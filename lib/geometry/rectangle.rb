@@ -147,11 +147,11 @@ The {Rectangle} class cluster represents your typical arrangement of 4 corners a
 	    [self.min, self.max]
 	end
 
-	# @return [Array<Point>]    The {Rectangle}'s four points (counterclockwise)
+	# @return [Array<Point>]    The {Rectangle}'s four points (clockwise)
 	def points
 	    point0, point2 = *@points
-	    point1 = Point[point2.x, point0.y]
-	    point3 = Point[point0.x, point2.y]
+	    point1 = Point[point0.x, point2.y]
+	    point3 = Point[point2.x, point0.y]
 	    [point0, point1, point2, point3]
 	end
 
@@ -206,6 +206,11 @@ The {Rectangle} class cluster represents your typical arrangement of 4 corners a
 	    elsif options[:top] && options[:left] && options[:bottom] && options[:right]
 		Rectangle.new from:(min + Point[options[:left], options[:bottom]]), to:(max - Point[options[:right], options[:top]])
 	    end
+	end
+
+	# @return [Path]    A closed {Path} that traces the boundary of the {Rectangle} clockwise, starting from the lower-left
+	def path
+	    Path.new(*self.points, self.points.first)
 	end
     end
 

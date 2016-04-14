@@ -52,6 +52,14 @@ An object representing a set of connected elements, each of which could be an
 	    end
 	end
 
+	def ==(other)
+	    if other.is_a?(Path)
+		@elements == other.elements
+	    else
+		super other
+	    end
+	end
+
 	# @return [Geometry]	The last element in the {Path}
 	def last
 	    @elements.last

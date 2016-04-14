@@ -133,10 +133,11 @@ describe Geometry::Rectangle do
 	    edges.each {|edge| assert_kind_of(Geometry::Edge, edge)}
 	end
 
-	it "have a points property that returns 4 points" do
+	it "have a points property that returns 4 points in clockwise order starting from the lower-left" do
 	    points = rectangle.points
 	    assert_equal(4, points.size)
 	    points.each {|point| assert_kind_of(Geometry::Point, point)}
+	    points.must_equal [Point[1,2], Point[1,4], Point[3,4], Point[3,2]]
 	end
 
 	it "must have a bounds property that returns a Rectangle" do
@@ -153,6 +154,10 @@ describe Geometry::Rectangle do
 
 	it "must have a min property that returns the lower left corner of the bounding rectangle" do
 	    subject.min.must_equal Point[1,2]
+	end
+
+	it 'must have a path property that returns a closed Path' do
+	    rectangle.path.must_equal Geometry::Path.new([1,2], [1,4], [3,4], [3,2], [1,2])
 	end
     end
 end

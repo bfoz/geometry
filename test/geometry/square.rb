@@ -66,7 +66,7 @@ describe Geometry::Square do
 	end
 
 	it 'must have edges' do
-	    subject.edges.must_equal [Edge([2,3], [3,3]), Edge.new([3,3], [3,4]), Edge.new([3,4], [2,4]), Edge.new([2,4], [2,3])]
+	    subject.edges.must_equal [Edge([2,3], [2,4]), Edge.new([2,4], [3,4]), Edge.new([3,4], [3,3]), Edge.new([3,3], [2,3])]
 	end
 
 	it "must have an origin accessor" do
@@ -85,8 +85,13 @@ describe Geometry::Square do
 	    subject.min.must_equal Point[2, 3]
 	end
 
-	it 'must have points' do
-	    subject.points.must_equal [Point[2,3], Point[3,3], Point[3,4], Point[2,4]]
+	it 'have a points property that returns 4 points in clockwise order starting from the lower-left' do
+	    subject.points.must_equal [Point[2,3], Point[2,4], Point[3,4], Point[3,3]]
+	end
+
+	it 'must have a path property that returns a closed Path' do
+	    square = Geometry::Square.new origin:[0,0], size:5
+	    square.path.must_equal Geometry::Path.new([0,0], [0,5], [5,5], [5,0], [0,0])
 	end
     end
 end
@@ -107,8 +112,8 @@ describe Geometry::CenteredSquare do
 	    square.center.must_equal Point[2,3]
 	end
 
-	it "must have a points property" do
-	    square.points.must_equal [Point[0,1], Point[4,1], Point[4,5], Point[0,5]]
+	it 'have a points property that returns 4 points in clockwise order starting from the lower-left' do
+	    square.points.must_equal [Point[0,1], Point[0,5], Point[4,5], Point[4,1]]
 	end
 
 	it "must have a height property" do
@@ -149,8 +154,8 @@ describe Geometry::SizedSquare do
 	    square.center.must_equal Point[4,5]
 	end
 
-	it "must have a points property" do
-	    square.points.must_equal [Point[2,3], Point[6,3], Point[6,7], Point[2,7]]
+	it 'have a points property that returns 4 points in clockwise order starting from the lower-left' do
+	    square.points.must_equal [Point[2,3], Point[2,7], Point[6,7], Point[6,3]]
 	end
 
 	it "must have a height property" do

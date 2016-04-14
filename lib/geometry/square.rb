@@ -103,9 +103,10 @@ The {Square} class cluster is like the {Rectangle} class cluster, but not longer
 	    @points.first
 	end
 
+	# @return [Array<Point>]    The {Square}'s four points (clockwise)
 	def points
 	    p0, p1 = *@points
-	    [p0, Point[p1.x, p0.y], p1, Point[p0.x, p1.y]]
+	    [p0, Point[p0.x, p1.y], p1, Point[p1.x, p0.y]]
 	end
 
 	def height
@@ -118,6 +119,11 @@ The {Square} class cluster is like the {Rectangle} class cluster, but not longer
 	    max.x - min.x
 	end
 # @endgroup
+
+	# @return [Path]    A closed {Path} that traces the boundary of the {Square} clockwise, starting from the lower-left
+	def path
+	    Path.new(*self.points, self.points.first)
+	end
     end
 
     # A {Square} created with a center point and a size
@@ -162,7 +168,7 @@ The {Square} class cluster is like the {Rectangle} class cluster, but not longer
 	end
 
 	# @attribute [r] points
-	# @return [Array<Point>]    The {Square}'s four points (counterclockwise)
+	# @return [Array<Point>]    The {Square}'s four points (clockwise)
 	def points
 	    half_size = @size/2
 	    minx = @center.x - half_size
@@ -170,7 +176,7 @@ The {Square} class cluster is like the {Rectangle} class cluster, but not longer
 	    miny = @center.y - half_size
 	    maxy = @center.y + half_size
 
-	    [Point[minx,miny], Point[maxx, miny], Point[maxx, maxy], Point[minx,maxy]]
+	    [Point[minx,miny], Point[minx, maxy], Point[maxx, maxy], Point[maxx,miny]]
 	end
 
 	def height
@@ -220,14 +226,14 @@ The {Square} class cluster is like the {Rectangle} class cluster, but not longer
 	end
 
 	# @attribute [r] points
-	# @return [Array<Point>]    The {Square}'s four points (counterclockwise)
+	# @return [Array<Point>]    The {Square}'s four points (clockwise)
 	def points
 	    minx = origin.x
 	    maxx = origin.x + size
 	    miny = origin.y
 	    maxy = origin.y + size
 
-	    [origin, Point[maxx, miny], Point[maxx, maxy], Point[minx,maxy]]
+	    [origin, Point[minx, maxy], Point[maxx, maxy], Point[maxx,miny]]
 	end
 
 	# @return [Number]  The size of the {Square} along the y-axis
