@@ -25,16 +25,8 @@ The {Rectangle} class cluster represents your typical arrangement of 4 corners a
     class Rectangle
 	include ClusterFactory
 
-	# @return [Point]   The {Rectangle}'s center
-	attr_reader :center
-	# @return [Number]  Height of the {Rectangle}
-	attr_reader :height
-	# @return [Point]   The {Rectangle}'s origin
-	attr_reader :origin
 	# @return [Size]    The {Size} of the {Rectangle}
 	attr_reader :size
-	# @return [Number]  Width of the {Rectangle}
-	attr_reader :width
 
 	# @overload new(width, height)
 	#   Creates a {Rectangle} of the given width and height, centered on the origin
@@ -163,17 +155,20 @@ The {Rectangle} class cluster represents your typical arrangement of 4 corners a
 	    [point0, point1, point2, point3]
 	end
 
+	# @return [Point]   The {Rectangle}'s origin
 	def origin
 	    minx = @points.min {|a,b| a.x <=> b.x}
 	    miny = @points.min {|a,b| a.y <=> b.y}
 	    Point[minx.x, miny.y]
 	end
 
+	# @return [Number]  Height of the {Rectangle}
 	def height
 	    min, max = @points.minmax {|a,b| a.y <=> b.y}
 	    max.y - min.y
 	end
 
+	# @return [Number]  Width of the {Rectangle}
 	def width
 	    min, max = @points.minmax {|a,b| a.x <=> b.x}
 	    max.x - min.x

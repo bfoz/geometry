@@ -37,7 +37,7 @@ describe Geometry::SizeOne do
 
 	describe 'when subtracting' do
 	    it 'must subtract a number' do
-		(one - 3).must_equal -2
+		(one - 3).must_equal(-2)
 		(3 - one).must_equal 2
 	    end
 

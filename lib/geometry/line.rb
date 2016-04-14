@@ -190,7 +190,7 @@ Supports two-point, slope-intercept, and point-slope initializer forms
 		    ((other.first.y == slope * other.first.x + intercept)) && (other.last.y == (slope * other.last.x + intercept))
 		else
 		    self.eql? other
-		end
+	    end
 	end
 
 	# Two {SlopeInterceptLine}s are equal if both have equal slopes and intercepts
@@ -251,7 +251,7 @@ Supports two-point, slope-intercept, and point-slope initializer forms
 		    ((first.y == other.slope * first.x + other.intercept)) && (last.y == (other.slope * last.x + other.intercept))
 		else
 		    self.eql?(other) || ((first == other.last) && (last == other.first))
-		end
+	    end
 	end
 
 	# Two {TwoPointLine}s are equal if both have equal endpoints

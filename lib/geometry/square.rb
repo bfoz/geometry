@@ -16,10 +16,6 @@ The {Square} class cluster is like the {Rectangle} class cluster, but not longer
     class Square
 	include ClusterFactory
 
-	# @!attribute origin
-	#   @return [Point]  The {Square}'s origin
-	attr_reader :origin
-
 	# @!attribute points
 	#   @return [Array<Point>]  the corner {Point}s of the {Square} in counter-clockwise order
 	attr_reader :points
@@ -101,8 +97,8 @@ The {Square} class cluster is like the {Rectangle} class cluster, but not longer
 	    [self.min, self.max]
 	end
 
-	# @attribute [r] origin
-	# @return [Point] The lower left corner
+	# @!attribute origin
+	#   @return [Point]  The {Square}'s origin (lower-left corner)
 	def origin
 	    @points.first
 	end

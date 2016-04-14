@@ -30,7 +30,7 @@ An isoscoles right {Triangle} created with an origin and leg length
 	#   @param [Number] height  The length of the {Triangle}'s vertical leg
 	def self.new(*args)
 	     if args.size == 3
-		ScaleneTriangle.new *args
+		ScaleneTriangle.new(*args)
 	     elsif args.size == 2
 		RightTriangle.new args[0], args[1], args[1]
 	     end

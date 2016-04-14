@@ -15,7 +15,7 @@ describe Vector do
 	end
 	
 	it "must cross product" do
-	    left.cross(right).must_equal -2
+	    left.cross(right).must_equal(-2)
 	    Vector[1,2,3].cross(Vector[3,4,5]).must_equal Vector[-2, 4, -2]
 	    (Vector[1,2,3] ** Vector[3,4,5]).must_equal Vector[-2, 4, -2]
 	end

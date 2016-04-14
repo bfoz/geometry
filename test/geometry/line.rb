@@ -155,7 +155,7 @@ describe Geometry::PointSlopeLine do
     end
 
     it 'must have a y-intercept' do
-	subject.intercept.must_equal -1
+	subject.intercept.must_equal(-1)
     end
 end
 
@@ -199,7 +199,7 @@ describe Geometry::SlopeInterceptLine do
     end
 
     it 'must have an x-intercept' do
-	subject.intercept(:x).must_equal -2/3
+	subject.intercept(:x).must_equal(-2/3)
     end
 
     it 'must not have an x-intercept for horizontal lines' do
@@ -251,7 +251,7 @@ describe Geometry::TwoPointLine do
     end
 
     it 'must have an x-intercept' do
-	subject.intercept(:x).must_equal -1
+	subject.intercept(:x).must_equal(-1)
     end
 
     it 'must not have an x-intercept for horizontal lines' do

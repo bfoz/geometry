@@ -118,7 +118,7 @@ describe Geometry::Polygon do
 
     describe "spaceship" do
 	it "with a Point" do
-	    (unit_square <=> Point[2,0]).must_equal -1
+	    (unit_square <=> Point[2,0]).must_equal(-1)
 	    (unit_square <=> Point[1,0]).must_equal 0
 	    (unit_square <=> Point[0.5,0.5]).must_equal 1
 	end

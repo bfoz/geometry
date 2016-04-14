@@ -41,7 +41,7 @@ also like a {Path} in that it isn't necessarily closed.
 		@vertices.push first
 	    elsif first.is_a?(Edge)
 		@edges.push first
-		@vertices.push *(first.to_a)
+		@vertices.push(*(first.to_a))
 	    end
 
 	    args.reduce(@vertices.last) do |previous,n|
@@ -82,7 +82,7 @@ also like a {Path} in that it isn't necessarily closed.
 		    else
 			e = Edge.new(previous, n.first)
 			push_edge e, n
-			push_vertex *(e.to_a), *(n.to_a)
+			push_vertex(*(e.to_a), *(n.to_a))
 		    end
 		    n.last
 		end
@@ -167,7 +167,7 @@ also like a {Path} in that it isn't necessarily closed.
 	# Clone the receiver, reverse it, then return it
 	# @return [Polyline]	the reversed clone
 	def reverse
-	    self.class.new *(edges.reverse.map! {|edge| edge.reverse! })
+	    self.class.new(*(edges.reverse.map! {|edge| edge.reverse! }))
 	end
 
 	# Reverse the receiver and return it
@@ -261,7 +261,7 @@ also like a {Path} in that it isn't necessarily closed.
 		    redo    # Recheck the modified edges
 		end
 	    end
-	    Polyline.new *(active_edges.map {|e| e[:edge]}.compact.map {|e| [e.first, e.last]}.flatten)
+	    Polyline.new(*(active_edges.map {|e| e[:edge]}.compact.map {|e| [e.first, e.last]}.flatten))
 	end
 	alias :leftset :offset
 
@@ -369,12 +369,12 @@ also like a {Path} in that it isn't necessarily closed.
 	end
 
 	def push_edge(*e)
-	    @edges.push *e
+	    @edges.push(*e)
 	    @edges.uniq!
 	end
 
 	def push_vertex(*v)
-	    @vertices.push *v
+	    @vertices.push(*v)
 	    @vertices.uniq!
 	end
 

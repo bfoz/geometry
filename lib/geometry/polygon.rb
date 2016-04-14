@@ -46,7 +46,7 @@ but there's currently nothing that enforces simplicity.
 
 	# @return [Polygon] A new {Polygon} with orientation that's the opposite of the receiver
 	def reverse
-	    self.class.new *(self.vertices.reverse)
+	    self.class.new(*(self.vertices.reverse))
 	end
 
 	# Reverse the receiver and return it
@@ -68,7 +68,7 @@ but there's currently nothing that enforces simplicity.
 	# @param [Point] point	The {Point} to test
 	# @return [Number]	1 if the {Point} is inside the {Polygon}, -1 if it's outside, and 0 if it's on an {Edge}
 	def <=>(point)
-	    sum = edges.reduce(0) do |sum, e|
+	    winding = edges.reduce(0) do |sum, e|
 		direction = e.last.y <=> e.first.y
 		# Ignore edges that don't cross the point's x coordinate
 		next sum unless ((point.y <=> e.last.y) + (point.y <=> e.first.y)).abs <= 1
@@ -83,7 +83,7 @@ but there's currently nothing that enforces simplicity.
 		    sum += 0 <=> (direction + is_left)
 		end
 	    end
-	    (0 == sum) ? -1 : 1
+	    (0 == winding) ? -1 : 1
 	end
 
 	# Create a new {Polygon} that's the union of the receiver and a passed {Polygon}
@@ -152,11 +152,11 @@ but there's currently nothing that enforces simplicity.
 	    edgeFragments = edgeFragments.reject {|f| edgeFragments.find {|f2| (f[:first] == f2[:last]) and (f[:last] == f2[:first])} }
 
 	    # Construct the output polygons
-	    output = edgeFragments.reduce([Array.new]) do |output, fragment|
+	    output_polygons = edgeFragments.reduce([Array.new]) do |output, fragment|
 		next output if fragment.empty?
 		polygon = output.last
 		polygon.push fragment[:first], fragment[:last] if polygon.empty?
-		while 1 do
+		loop do
 		    adjacent_fragment = edgeFragments.find {|f| fragment[:last] == f[:first]}
 		    break unless adjacent_fragment
 
@@ -170,13 +170,13 @@ but there's currently nothing that enforces simplicity.
 	    end
 
 	    # If everything worked properly there should be only one output Polygon
-	    output.reject! {|a| a.empty?}
-	    output = Polygon.new *(output[0])
+	    output_polygons.reject! {|a| a.empty?}
+	    output_polygons = Polygon.new(*(output_polygons[0]))
 
 	    # Table 4: Both input polygons are "island" type and the operation
 	    #  is union, so the output polygon's orientation should be the same
 	    #  as the input polygon's orientation
-	    (self.clockwise? != output.clockwise?) ? output.reverse : output
+	    (self.clockwise? != output_polygons.clockwise?) ? output_polygons.reverse : output_polygons
 	end
 	alias :+ :union
 
@@ -213,7 +213,7 @@ but there's currently nothing that enforces simplicity.
 		break if current_point == hull_points.first
 		hull_points << min_point
 	    end
-	    Polygon.new *hull_points
+	    Polygon.new(*hull_points)
 	end
 
 	# @endgroup
@@ -278,7 +278,7 @@ but there's currently nothing that enforces simplicity.
 		    redo    # Recheck the modified edges
 		end
 	    end
-	    Polygon.new *(active_edges.map {|e| e[:edge]}.compact.map {|e| [e.first, e.last]}.flatten)
+	    Polygon.new(*(active_edges.map {|e| e[:edge]}.compact.map {|e| [e.first, e.last]}.flatten))
 	end
 
 	# Vertex bisectors suitable for outsetting
@@ -332,9 +332,10 @@ but there's currently nothing that enforces simplicity.
 	# @param [Integer] index	The index to insert the new {Point} before
 	# @param [Point] point		The {Point} to insert
 	# @param [Integer] type		The vertex type: 1 is inside, 0 is boundary, -1 is outside
+	# @return [Bool]    true if the {Point} was inserted, false otherwise
 	def insert(index, point, type)
-	    if v = @vertices.find {|v| v[:vertex] == point }
-		v[:type] = type
+	    if vertex = @vertices.find {|v| v[:vertex] == point }
+		vertex[:type] = type
 		false
 	    else
 		@vertices.insert(index, {:vertex => point, :type => type})

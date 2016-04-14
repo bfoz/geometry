@@ -180,8 +180,6 @@ The {Obround} class cluster represents a rectangle with semicircular end caps
     end
 
     class SizedObround < Obround
-	# @return [Point]   The {Obround}'s center
-	attr_reader :center
 	# @return [Point]	The {Obround}'s origin
 	attr_accessor :origin
 	# @return [Size]	The {Size} of the {Obround}
@@ -219,6 +217,7 @@ The {Obround} class cluster represents a rectangle with semicircular end caps
 	alias :== :eql?
 
 # @group Accessors
+	# @return [Point]   The {Obround}'s center
 	def center
 	    @origin + @size/2
 	end

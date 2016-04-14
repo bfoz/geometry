@@ -127,7 +127,7 @@ describe Geometry::PointIso do
 	describe 'when subtracting' do
 	    it 'must subtract a number' do
 		(subject - 3).must_equal (iso_value - 3)
-		(3 - subject).must_equal -2
+		(3 - subject).must_equal(-2)
 	    end
 
 	    it 'return a Point when subtracting two Points' do

@@ -72,16 +72,18 @@ A generalized representation of a rotation transformation.
 	alias :== :eql?
 
 	def identity?
-	    (!@x && !@y && !@z) || ([@x, @y, @z].select {|a| a}.all? {|a| a.respond_to?(:magnitude) ? (1 == a.magnitude) : (1 == a.size)})
+	    x, y, z = self.x, self.y, self.z
+	    (!x && !y && !z) || ([x, y, z].select {|a| a}.all? {|a| a.respond_to?(:magnitude) ? (1 == a.magnitude) : (1 == a.size)})
 	end
 
 	# @attribute [r] matrix
 	# @return [Matrix] the transformation {Matrix} representing the {Rotation}
 	def matrix
-	    return nil unless [@x, @y, @z].compact.size >= 2
+	    x, y, z = self.x, self.y, self.z
+	    return nil unless [x, y, z].compact.size >= 2
 
 	    # Force all axes to be Vectors
-	    x,y,z = [@x, @y, @z].map {|a| a.is_a?(Array) ? Vector[*a] : a}
+	    x,y,z = [x, y, z].map {|a| a.is_a?(Array) ? Vector[*a] : a}
 
 	    # Force all axes to exist
 	    if x and y

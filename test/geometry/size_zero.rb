@@ -39,7 +39,7 @@ describe Geometry::SizeZero do
 	
 	describe "when subtracting" do
 	    it "must return a number" do
-		(zero - 3).must_equal -3
+		(zero - 3).must_equal(-3)
 		(3 - zero).must_equal 3
 	    end
 

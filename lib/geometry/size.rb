@@ -17,8 +17,6 @@ methods (width, height and depth).
 =end
 
     class Size < Vector
-	attr_reader :x, :y, :z
-	
 	# Allow vector-style initialization, but override to support copy-init
 	# from Vector, Point or another Size
 	#
@@ -30,7 +28,7 @@ methods (width, height and depth).
 	def self.[](*array)
 	    array.map! {|a| a.respond_to?(:to_a) ? a.to_a : a }
 	    array.flatten!
-	    super *array
+	    super(*array)
 	end
 
 	# Creates and returns a new {SizeOne} instance. Or, a {Size} full of ones if the size argument is given.

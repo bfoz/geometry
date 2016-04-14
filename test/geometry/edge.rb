@@ -79,7 +79,7 @@ describe Geometry::Edge do
 	it "ascending with a Point" do
 	    edge = Edge.new [0,0], [1,1]
 	    (edge <=> Point[0,0]).must_equal 0
-	    (edge <=> Point[1,0]).must_equal -1
+	    (edge <=> Point[1,0]).must_equal(-1)
 	    (edge <=> Point[0,1]).must_equal 1
 	    (edge <=> Point[2,2]).must_equal nil
 	end
@@ -88,7 +88,7 @@ describe Geometry::Edge do
 	    edge = Edge.new [1,1], [0,0]
 	    (edge <=> Point[0,0]).must_equal 0
 	    (edge <=> Point[1,0]).must_equal 1
-	    (edge <=> Point[0,1]).must_equal -1
+	    (edge <=> Point[0,1]).must_equal(-1)
 	    (edge <=> Point[2,2]).must_equal nil
 	end
     end

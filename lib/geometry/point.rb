@@ -21,8 +21,6 @@ geometry class (x, y, z).
     point = Geometry::Point[x,y]
 =end
     class Point < Vector
-	attr_reader :x, :y, :z
-
 	# Allow vector-style initialization, but override to support copy-init
 	# from Vector or another Point
 	#
@@ -34,7 +32,7 @@ geometry class (x, y, z).
 	    return array[0] if array[0].is_a?(Point)
 	    array = array[0] if array[0].is_a?(Array)
 	    array = array[0].to_a if array[0].is_a?(Vector)
-	    super *array
+	    super(*array)
 	end
 
 	# Creates and returns a new {PointIso} instance. Or, a {Point} full of ones if the size argument is given.

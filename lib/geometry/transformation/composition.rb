@@ -32,7 +32,7 @@ module Geometry
 # @endgroup
 
 	    def transform(point)
-		transformations.reverse.reduce(point) {|point, transformation| transformation.transform(point) }
+		transformations.reverse.reduce(point) {|_point, transformation| transformation.transform(_point) }
 	    end
 	end
     end

@@ -13,7 +13,7 @@ describe Geometry::Rotation do
 	    rotation.angle.must_equal Math::PI/2
 	    rotation.x.x.must_be_close_to 0
 	    rotation.x.y.must_be_close_to 1
-	    rotation.y.x.must_be_close_to -1
+	    rotation.y.x.must_be_close_to(-1)
 	    rotation.y.y.must_be_close_to 0
 	end
 
