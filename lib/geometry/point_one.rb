@@ -1,5 +1,3 @@
-require_relative 'point'
-
 module Geometry
 =begin rdoc
 An object repesenting a {Point} that is one unit away from the origin, along each

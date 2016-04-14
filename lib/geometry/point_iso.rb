@@ -1,5 +1,3 @@
-require_relative 'point'
-
 module Geometry
 =begin rdoc
 An object repesenting a N-dimensional {Point} with identical elements.
