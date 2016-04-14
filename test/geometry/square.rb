@@ -9,7 +9,7 @@ describe Geometry::Square do
 	    square = Square.new from:[1,2], to:[3,4]
 	    square.must_be_kind_of Geometry::Square
 	end
-	
+
 	it "must reorder swapped points when constructed from two Points" do
 	    square = Geometry::Square.new from:[3,4], to:[1,2]
 	    square.must_be_kind_of Geometry::Square
@@ -57,7 +57,7 @@ describe Geometry::Square do
 	    -> { Square.new size:[1,2] }.must_raise Geometry::NotSquareError
 	end
     end
-    
+
     describe "properties" do
 	subject { Square.new from:[2,3], to:[3,4] }
 
@@ -102,7 +102,7 @@ describe Geometry::CenteredSquare do
 
     describe "properties" do
 	let(:square) { Geometry::CenteredSquare.new [2,3], 4 }
-	
+
 	it "must have a center property" do
 	    square.center.must_equal Point[2,3]
 	end

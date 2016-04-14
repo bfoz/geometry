@@ -296,4 +296,3 @@ geometry class (x, y, z).
 
     end
 end
-
