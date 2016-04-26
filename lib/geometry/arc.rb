@@ -98,6 +98,14 @@ An {Arc} with its center at [1,1] and a radius of 2 that starts at the X-axis an
 	# @return [Point]
 	alias :last :end
 
+	def ==(other)
+	    if other.is_a?(ThreePointArc)
+		(self.center == other.center) && (self.end == other.end) && (self.start == other.start)
+	    else
+		super other
+	    end
+	end
+
 	def end_angle
 	    a = (self.end - self.center)
 	    Math.atan2(a.y, a.x)
