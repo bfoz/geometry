@@ -63,4 +63,20 @@ describe Geometry::Path do
 	    path.elements[0].last.must_equal path.elements[1].first
 	end
     end
+
+    describe 'attributes' do
+	let(:unit_square) { Geometry::Path.new [0,0], [1,0], [1,1], [0,1] }
+
+	it 'must know the max' do
+	    unit_square.max.must_equal Point[1,1]
+	end
+
+	it 'must know the min' do
+	    unit_square.min.must_equal Point[0,0]
+	end
+
+	it 'must know the min and the max' do
+	    unit_square.minmax.must_equal [Point[0,0], Point[1,1]]
+	end
+    end
 end

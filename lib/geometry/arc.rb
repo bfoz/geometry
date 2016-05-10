@@ -106,6 +106,46 @@ An {Arc} with its center at [1,1] and a radius of 2 that starts at the X-axis an
 	    end
 	end
 
+    # @group Attributes
+
+	# @return [Point]   The upper-right corner of the bounding rectangle that encloses the {Path}
+	def max
+	    minmax.last
+	end
+
+	# @return [Point]   The lower-left corner of the bounding rectangle that encloses the {Path}
+	def min
+	    minmax.first
+	end
+
+	# @return [Array<Point>]    The lower-left and upper-right corners of the enclosing bounding rectangle
+	def minmax
+	    a = [self.start, self.end]
+	    quadrants = a.map(&:quadrant)
+
+	    # If the Arc spans more than one quadrant, then it must cross at
+	    #  least one axis. Each axis-crossing is a potential extrema.
+	    if quadrants.first != quadrants.last
+		range = (quadrants.first...quadrants.last)
+		# If the Arc crosses the X axis...
+		if quadrants.first > quadrants.last
+		    range = (quadrants.first..4).to_a + (1...quadrants.last).to_a
+		end
+
+		a = range.map do |q|
+		    case q
+			when 1 then self.center + Point[0,radius]
+			when 2 then self.center + Point[-radius, 0]
+			when 3 then self.center + Point[0,-radius]
+			when 4 then self.center + Point[radius,0]
+		    end
+		end.push(*a)
+		a.reduce([a.first, a.first]) {|memo, e| [memo.first.min(e), memo.last.max(e)] }
+	    else
+		[a.first.min(a.last), a.first.max(a.last)]
+	    end
+	end
+
 	def end_angle
 	    a = (self.end - self.center)
 	    Math.atan2(a.y, a.x)
@@ -119,5 +159,7 @@ An {Arc} with its center at [1,1] and a radius of 2 that starts at the X-axis an
 	    a = (self.start - self.center)
 	    Math.atan2(a.y, a.x)
 	end
+
+    # @endgroup
     end
 end

@@ -60,10 +60,29 @@ An object representing a set of connected elements, each of which could be an
 	    end
 	end
 
+    # @group Attributes
+
+	# @return [Point]   The upper-right corner of the bounding rectangle that encloses the {Path}
+	def max
+	    elements.reduce(elements.first.max) {|memo, e| memo.max(e.max) }
+	end
+
+	# @return [Point]   The lower-left corner of the bounding rectangle that encloses the {Path}
+	def min
+	    elements.reduce(elements.first.min) {|memo, e| memo.min(e.max) }
+	end
+
+	# @return [Array<Point>]    The lower-left and upper-right corners of the enclosing bounding rectangle
+	def minmax
+	    elements.reduce(elements.first.minmax) {|memo, e| [memo.first.min(e.min), memo.last.max(e.max)] }
+	end
+
 	# @return [Geometry]	The last element in the {Path}
 	def last
 	    @elements.last
 	end
+
+    # @endgroup
 
 	# Append a new geometry element to the {Path}
 	# @return [Path]

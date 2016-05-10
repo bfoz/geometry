@@ -39,4 +39,85 @@ describe Geometry::ThreePointArc do
 	arc = Geometry::ThreePointArc.new([0,0], [1,0], [0,1])
 	arc.start_angle.must_equal 0
     end
+
+    describe 'max' do
+	# Cosine and sine of a 22.5 degree angle
+	let(:cos) { 0.9239556995 }
+	let(:sin) { 0.3824994973 }
+	let(:radius) { 1.0000000000366434 }
+
+	it 'must handle an Arc entirely in quadrant 1' do
+	    arc = Geometry::ThreePointArc.new([0,0], [cos,sin], [sin,cos])
+	    arc.max.must_equal Point[cos,cos]
+	end
+
+	it 'must handle a counterclockwise Arc from quadrant 1 to quadrant 2' do
+	    arc = Geometry::ThreePointArc.new([0,0], [cos,sin], [-cos,sin])
+	    arc.max.must_equal Point[cos,radius]
+	end
+
+	it 'must handle a counterclockwise Arc from quadrant 4 to quadrant 1' do
+	    arc = Geometry::ThreePointArc.new([0,0], [sin,-cos], [sin,cos])
+	    arc.max.must_equal Point[radius,cos]
+	end
+
+	it 'must handle a counterclockwise Arc from quadrant 3 to quadrant 2' do
+	    arc = Geometry::ThreePointArc.new([0,0], [-cos,-sin], [-cos,sin])
+	    arc.max.must_equal Point[radius,radius]
+	end
+    end
+
+    describe 'min' do
+	# Cosine and sine of a 22.5 degree angle
+	let(:cos) { 0.9239556995 }
+	let(:sin) { 0.3824994973 }
+	let(:radius) { 1.0000000000366434 }
+
+	it 'must handle an Arc entirely in quadrant 1' do
+	    arc = Geometry::ThreePointArc.new([0,0], [cos,sin], [sin,cos])
+	    arc.min.must_equal Point[sin,sin]
+	end
+
+	it 'must handle a counterclockwise Arc from quadrant 1 to quadrant 2' do
+	    arc = Geometry::ThreePointArc.new([0,0], [cos,sin], [-cos,sin])
+	    arc.min.must_equal Point[-cos,sin]
+	end
+
+	it 'must handle a counterclockwise Arc from quadrant 4 to quadrant 1' do
+	    arc = Geometry::ThreePointArc.new([0,0], [sin,-cos], [sin,cos])
+	    arc.min.must_equal Point[sin,-cos]
+	end
+
+	it 'must handle a counterclockwise Arc from quadrant 3 to quadrant 2' do
+	    arc = Geometry::ThreePointArc.new([0,0], [-cos,-sin], [-cos,sin])
+	    arc.min.must_equal Point[-cos,-radius]
+	end
+    end
+
+    describe 'minmax' do
+	# Cosine and sine of a 22.5 degree angle
+	let(:cos) { 0.9239556995 }
+	let(:sin) { 0.3824994973 }
+	let(:radius) { 1.0000000000366434 }
+
+	it 'must handle an Arc entirely in quadrant 1' do
+	    arc = Geometry::ThreePointArc.new([0,0], [cos,sin], [sin,cos])
+	    arc.minmax.must_equal [Point[sin,sin], Point[cos,cos]]
+	end
+
+	it 'must handle a counterclockwise Arc from quadrant 1 to quadrant 2' do
+	    arc = Geometry::ThreePointArc.new([0,0], [cos,sin], [-cos,sin])
+	    arc.minmax.must_equal [Point[-cos,sin], Point[cos,radius]]
+	end
+
+	it 'must handle a counterclockwise Arc from quadrant 4 to quadrant 1' do
+	    arc = Geometry::ThreePointArc.new([0,0], [sin,-cos], [sin,cos])
+	    arc.minmax.must_equal [Point[sin,-cos], Point[radius,cos]]
+	end
+
+	it 'must handle a counterclockwise Arc from quadrant 3 to quadrant 2' do
+	    arc = Geometry::ThreePointArc.new([0,0], [-cos,-sin], [-cos,sin])
+	    arc.minmax.must_equal [Point[-cos,-radius], Point[radius,radius]]
+	end
+    end
 end

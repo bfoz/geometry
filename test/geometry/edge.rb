@@ -75,6 +75,20 @@ describe Geometry::Edge do
 	subject.to_a.must_equal original.reverse
     end
 
+    describe 'attributes' do
+	it 'must have a maximum' do
+	    Edge([0,0], [1,1]).max.must_equal Point[1,1]
+	end
+
+	it 'must have a minimum' do
+	    Edge([0,0], [1,1]).min.must_equal Point[0,0]
+	end
+
+	it 'must have a minmax' do
+	    Edge([0,0], [1,1]).minmax.must_equal [Point[0,0], Point[1,1]]
+	end
+    end
+
     describe "spaceship" do
 	it "ascending with a Point" do
 	    edge = Edge.new [0,0], [1,1]

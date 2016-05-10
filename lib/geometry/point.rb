@@ -117,6 +117,8 @@ geometry class (x, y, z).
 	    'Point' + @elements.to_s
 	end
 
+    # @group Attributes
+
 	# @override max()
 	# @return [Number]  The maximum value of the {Point}'s elements
 	# @override max(point)
@@ -166,6 +168,22 @@ geometry class (x, y, z).
 		[min(*args), max(*args)]
 	    end
 	end
+
+	# Return the {Point}'s quadrant in the 2D Cartesian Euclidean Plane
+	# https://en.wikipedia.org/wiki/Quadrant_(plane_geometry)
+	# @note Undefined for all points on the axes, and for dimensionalities other than 2
+	# @todo Define the results for points on the axes
+	# @return [Bool]    The {Point}'s quadrant in the 2D Cartesian Euclidean Plane
+	def quadrant
+	    return nil unless elements[1]
+	    if elements.first > 0
+		(elements[1] > 0) ? 1 : 4
+	    else
+		(elements[1] > 0) ? 2 : 3
+	    end
+	end
+
+    # @endgroup
 
 	# Returns a new {Point} with the given number of elements removed from the end
 	# @return [Point]   the popped elements

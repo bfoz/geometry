@@ -42,6 +42,25 @@ An edge. It's a line segment between 2 points. Generally part of a {Polygon}.
 	    end
 	end
 
+    # @group Attributes
+
+	# @return [Point]   The upper-right corner of the bounding rectangle that encloses the {Edge}
+	def max
+	    first.max(last)
+	end
+
+	# @return [Point]   The lower-left corner of the bounding rectangle that encloses the {Edge}
+	def min
+	    first.min(last)
+	end
+
+	# @return [Array<Point>]    The lower-left and upper-right corners of the enclosing bounding rectangle
+	def minmax
+	    first.minmax(last)
+	end
+
+    # @endgroup
+
 	# Return a new {Edge} with swapped endpoints
 	def reverse
 	    self.class.new(@last, @first)

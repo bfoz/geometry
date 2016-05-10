@@ -321,6 +321,15 @@ describe Geometry::Point do
 	end
     end
 
+    describe 'attributes' do
+	it 'must have a quadrant' do
+	    Point[1,1].quadrant.must_equal 1
+	    Point[-1,1].quadrant.must_equal 2
+	    Point[-1,-1].quadrant.must_equal 3
+	    Point[1,-1].quadrant.must_equal 4
+	end
+    end
+
     describe "coercion" do
 	subject { Point[1,2] }
 
