@@ -4,11 +4,12 @@ Geometry for Ruby
 [![Build Status](https://travis-ci.org/bfoz/geometry.png)](https://travis-ci.org/bfoz/geometry)
 [![Gem Version](https://badge.fury.io/rb/geometry.svg)](http://badge.fury.io/rb/geometry)
 
+
 Classes and methods for the handling of all of the basic geometry that you 
 learned in high school (and then forgot).
 
-The classes in this libary are based on the Vector class provided by the Ruby 
-standard library. Geometric primitives are generally assumed to lie in 2D space,
+The classes in this library are based on the [Vector](http://ruby-doc.org/stdlib-2.4.0/libdoc/matrix/rdoc/Vector.html) 
+class provided by the Ruby standard library. Geometric primitives are generally assumed to lie in 2D space,
 but aren't necessarily restricted to it. Please let me know if you find cases 
 that don't work in higher dimensions and I'll do my best to fix them.
 
@@ -17,19 +18,27 @@ License
 
 Copyright 2012-2016 Brandon Fosdick <bfoz@bfoz.net> and released under the BSD license.
 
+Dependencies
+------------
+The only dependency is the (currently deprecated) [mathn](https://rubygems.org/gems/mathn) ruby gem, that requires MRI ruby, as it builds C-based extensions.
+
 Primitives
 ----------
 
-- Point
-- Size
-- Line
-- Edge
+- [Point](https://en.wikipedia.org/wiki/Point_(geometry))
+- [Line](https://en.wikipedia.org/wiki/Line_coordinates)
+- [Edge](https://en.wikipedia.org/wiki/Edge_(geometry))
 - [Annulus](http://en.wikipedia.org/wiki/Annulus_(mathematics))
-- [Arc](http://en.wikipedia.org/wiki/Arc_(geometry)), Circle
+- [Arc](http://en.wikipedia.org/wiki/Arc_(geometry))
+  - Circle
 - [Bézier Curves](http://en.wikipedia.org/wiki/Bézier_curve)
-- Rectangle, Square
-- Path, [Polyline](http://en.wikipedia.org/wiki/Polyline), [Polygon](http://en.wikipedia.org/wiki/Polygon), [RegularPolygon](http://en.wikipedia.org/wiki/Regular_polygon)
-- Transformation
+- [Rectangle](https://en.wikipedia.org/wiki/Rectangle)
+  - Square
+- Path:
+  - [Polyline](http://en.wikipedia.org/wiki/Polyline)
+  - [Polygon](http://en.wikipedia.org/wiki/Polygon)
+  - [RegularPolygon](http://en.wikipedia.org/wiki/Regular_polygon)
+- [Transformation](https://en.wikipedia.org/wiki/Geometric_transformation)
 - [Triangle](http://en.wikipedia.org/wiki/Triangle)
 - [Obround](http://en.wiktionary.org/wiki/obround)
 
@@ -37,6 +46,7 @@ Examples
 --------
 
 ### Point
+
 ```ruby
 point = Geometry::Point[3,4]    # 2D Point at coordinate 3, 4
 
@@ -56,6 +66,7 @@ Point.zero(3)   # => Point[0,0,0]
 ```
 
 ### Line
+
 ```ruby
 # Two-point constructors
 line = Geometry::Line[[0,0], [10,10]]
@@ -76,6 +87,7 @@ Geometry::Line.vertical(x=0)
 ```
 
 ### Rectangle
+
 ```ruby
 # A Rectangle made from two corner points
 Geometry::Rectangle.new [1,2], [2,3]
@@ -91,23 +103,28 @@ Geometry::Rectangle.new width: 10, height: 20
 ```
 
 ### Circle
+
 ```ruby
 # A circle at Point[1,2] with a radius of 3
 circle = Geometry::Circle.new center:[1,2], radius:3
 ```
 
 ### Polygon
+
 ```ruby
 # A polygon that looks a lot like a square
 polygon = Geometry::Polygon.new [0,0], [1,0], [1,1], [0,1]
 ```
+
 ### Regular Polygon
+
 ```ruby
 # Everyone loves a good hexagon
 hexagon = Geometry::RegularPolygon.new 6, :diameter => 3
 ```
 
 ### Zeros and Ones
+
 ```ruby
 # For when you know you need a zero, but you don't know how big it should be
 zero = Point.zero       # Returns a Point of indeterminate length that always compares equal to zero
@@ -118,3 +135,4 @@ ones = Point.one        # => Point[1,1,1...1]
 # Looking for something more exotic that a mere 1?
 iso = Point.iso(5)      # => Point[5,5,5...5]
 ```
+
