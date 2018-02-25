@@ -1,22 +1,25 @@
-require "bundler/gem_tasks"
+#/usr/bin/env ruby
+ENV['RUBYOPT'] = 'W0'
+
+require 'bundler/gem_tasks'
 require 'rake/testtask'
 
 task :default => :test
 
 Rake::TestTask.new do |t|
-    t.libs.push "lib"
-    t.test_files = FileList['test/**/*.rb']
-    t.verbose = true
+  t.libs.push 'lib'
+  t.test_files = FileList['test/**/*_test.rb']
+  t.verbose    = false
 end
 
 task :fixdates do
-    branch = `git branch --no-color -r --merged`.strip
-    `git fix-dates #{branch}..HEAD`
+  branch = `git branch --no-color -r --merged`.strip
+  `git fix-dates #{branch}..HEAD`
 end
 
 task :fixdates_f do
-    branch = `git branch --no-color -r --merged`.strip
-    `git fix-dates -f #{branch}..HEAD`
+  branch = `git branch --no-color -r --merged`.strip
+  `git fix-dates -f #{branch}..HEAD`
 end
 
 task :trim_whitespace do
