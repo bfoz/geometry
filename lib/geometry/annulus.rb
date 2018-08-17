@@ -1,7 +1,7 @@
 module Geometry
 
 =begin rdoc
-An {http://en.wikipedia.org/wiki/Annulus_(mathematics) Annulus}, more commonly 
+An {http://en.wikipedia.org/wiki/Annulus_(mathematics) Annulus}, more commonly
 known as a Ring, is a circle that ate another circle.
 
 == Usage
@@ -22,7 +22,7 @@ known as a Ring, is a circle that ate another circle.
 	# @!attribute inner_radius
 	#   @return [Number]  the radius of the inside of the {Annulus}
 	def inner_radius
-	    @inner_radius || (@inner_diameter && @inner_diameter/2)
+	    @inner_radius || (@inner_diameter && @inner_diameter.to_r/2)
 	end
 
 	# @!attribute outer_diameter
@@ -34,7 +34,7 @@ known as a Ring, is a circle that ate another circle.
 	# @!attribute outer_radius
 	#   @return [Number]  the outer radius
 	def outer_radius
-	    @outer_radius || (@outer_diameter && @outer_diameter/2)
+	    @outer_radius || ((@outer_diameter && @outer_diameter).to_r/2)
 	end
 
 	# @!attribute diameter

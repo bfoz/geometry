@@ -10,11 +10,11 @@ describe Geometry::Circle do
 	it "must create a Circle" do
 	    circle.must_be_instance_of(Circle)
 	end
-	
+
 	it "must have a center point accessor" do
 	    circle.center.must_equal Point[1,2]
 	end
-	
+
 	it "must have a radius accessor" do
 	    circle.radius.must_equal 3
 	end
@@ -26,15 +26,15 @@ describe Geometry::Circle do
 
     describe "when constructed with named center and radius arguments" do
 	let(:circle) { Circle.new :center => [1,2], :radius => 3 }
-	
+
 	it "must create a Circle" do
 	    circle.must_be_instance_of(Circle)
 	end
-	
+
 	it "must have a center point accessor" do
 	    circle.center.must_equal Point[1,2]
 	end
-	
+
 	it "must have a radius accessor" do
 	    circle.radius.must_equal 3
 	end
@@ -108,17 +108,17 @@ describe Geometry::Circle do
 	let(:circle) { Circle.new :diameter => Rational(5,3) }
 
 	it 'must have the correct min values' do
-	    circle.min.must_equal Point[-5/6, -5/6]
+	    circle.min.must_equal Point[-5.to_r/6, -5.to_r/6]
 	    circle.min.must_be_instance_of Geometry::PointIso
 	end
 
 	it 'must have the correct max values' do
-	    circle.max.must_equal Point[5/6, 5/6]
+	    circle.max.must_equal Point[5.to_r/6, 5.to_r/6]
 	    circle.max.must_be_instance_of Geometry::PointIso
 	end
 
 	it 'must have the correct minmax values' do
-	    circle.minmax.must_equal [Point[-5/6, -5/6], Point[5/6,5/6]]
+	    circle.minmax.must_equal [Point[-5.to_r/6, -5.to_r/6], Point[5.to_r/6,5.to_r/6]]
 	end
     end
 
