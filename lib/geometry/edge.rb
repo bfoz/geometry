@@ -1,5 +1,3 @@
-require 'mathn'
-
 require_relative 'point'
 
 module Geometry
@@ -147,8 +145,8 @@ An edge. It's a line segment between 2 points. Generally part of a {Polygon}.
 		    nil
 		end
 	    else
-		s = (-v1[1] * p.x + v1[0] * p.y) / denominator	# v1 x (p0 - p2) / denominator
-		t = ( v2[0] * p.y - v2[1] * p.x) / denominator	# v2 x (p0 - p2) / denominator
+		s = (-v1[1] * p.x + v1[0] * p.y).to_r / denominator	# v1 x (p0 - p2) / denominator
+		t = ( v2[0] * p.y - v2[1] * p.x).to_r / denominator	# v2 x (p0 - p2) / denominator
 
 		p0 + v1 * t if ((0..1) === s) && ((0..1) === t)
 	    end

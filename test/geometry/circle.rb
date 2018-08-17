@@ -108,17 +108,17 @@ describe Geometry::Circle do
 	let(:circle) { Circle.new :diameter => Rational(5,3) }
 
 	it 'must have the correct min values' do
-	    circle.min.must_equal Point[-5/6, -5/6]
+	    circle.min.must_equal Point[-5.to_r/6, -5.to_r/6]
 	    circle.min.must_be_instance_of Geometry::PointIso
 	end
 
 	it 'must have the correct max values' do
-	    circle.max.must_equal Point[5/6, 5/6]
+	    circle.max.must_equal Point[5.to_r/6, 5.to_r/6]
 	    circle.max.must_be_instance_of Geometry::PointIso
 	end
 
 	it 'must have the correct minmax values' do
-	    circle.minmax.must_equal [Point[-5/6, -5/6], Point[5/6,5/6]]
+	    circle.minmax.must_equal [Point[-5.to_r/6, -5.to_r/6], Point[5.to_r/6,5.to_r/6]]
 	end
     end
 
