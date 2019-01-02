@@ -1,7 +1,7 @@
 module Geometry
 
 =begin rdoc
-An {http://en.wikipedia.org/wiki/Annulus_(mathematics) Annulus}, more commonly
+An {http://en.wikipedia.org/wiki/Annulus_(mathematics) Annulus}, more commonly 
 known as a Ring, is a circle that ate another circle.
 
 == Usage

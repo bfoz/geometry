@@ -10,11 +10,11 @@ describe Geometry::Circle do
 	it "must create a Circle" do
 	    circle.must_be_instance_of(Circle)
 	end
-
+	
 	it "must have a center point accessor" do
 	    circle.center.must_equal Point[1,2]
 	end
-
+	
 	it "must have a radius accessor" do
 	    circle.radius.must_equal 3
 	end
@@ -26,15 +26,15 @@ describe Geometry::Circle do
 
     describe "when constructed with named center and radius arguments" do
 	let(:circle) { Circle.new :center => [1,2], :radius => 3 }
-
+	
 	it "must create a Circle" do
 	    circle.must_be_instance_of(Circle)
 	end
-
+	
 	it "must have a center point accessor" do
 	    circle.center.must_equal Point[1,2]
 	end
-
+	
 	it "must have a radius accessor" do
 	    circle.radius.must_equal 3
 	end
