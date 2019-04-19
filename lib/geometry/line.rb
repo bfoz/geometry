@@ -67,6 +67,55 @@ Supports two-point, slope-intercept, and point-slope initializer forms
 	    end
 	end
 
+    # @return [Array<Point>] intersection points
+    def intersection(object)
+        result = []
+        if object.kind_of?(Line) then
+            unless object.vertical? && self.vertical? then
+                if object.vertical? || self.vertical? then
+                    if object.vertical? then
+                        m = slope
+                        c = intercept
+                        x = object.intercept(:x)
+                    else
+                        m = object.slope
+                        c = object.intercept
+                        x = intercept(:x)
+                    end
+                    y = m * x + c
+                    result = [Point[x,y]]
+                else
+                    m1 = slope
+                    m2 = object.slope
+                    c1 = intercept
+                    c2 = object.intercept
+                    if m1 != m2 then
+                        x = (c2 - c1) / (m1 - m2)
+                        y = m1 * x + c1
+                        result = [Point[x,y]]
+                    end
+                end
+            end
+        elsif object.kind_of?(Polyline) then
+            points = object.edges.map do |edge|
+                point = intersection(Line[edge.first,edge.last]).first
+                if point != nil then
+                    x1 , x2 = [edge.first.x , edge.last.x ].sort
+                    y1 , y2 = [edge.first.y , edge.last.y ].sort
+                    unless (x1 .. x2).include?(point.x) && (y1 .. y2).include?(point.y) then
+                         point = nil
+                    end
+                end
+                next point
+            end
+            result = points.compact.uniq
+        else
+            raise ArgumentError
+        end
+        return result
+    end
+
+
 	# @overload new(from, to)
 	# @option options [Point] :from	A starting {Point}
 	# @option options [Point] :to	An end {Point}
@@ -290,4 +339,3 @@ Supports two-point, slope-intercept, and point-slope initializer forms
 # @endgroup
     end
 end
-

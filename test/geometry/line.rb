@@ -105,6 +105,43 @@ describe Geometry::Line do
 	line = Geometry::Line[[0,0], [10,10]]
 	assert_equal('Line(Point[0, 0], Point[10, 10])', line.to_s)
     end
+    it "line intersection" do
+        line1 = Geometry::Line[[1,1],[3,3]]
+        line2 = Geometry::Line[[1,3],[3,1]]
+        assert_equal [Geometry::Point[2,2]], line1.intersection(line2)
+        assert_equal [Geometry::Point[2,2]], line2.intersection(line1)
+    end
+    it "verctical line intersection" do
+        line1 = Geometry::Line[[1,1],[1,2]]
+        line2 = Geometry::Line[[0,0],[2,2]]
+        assert_equal [Geometry::Point[1,1]], line2.intersection(line1)
+        assert_equal [Geometry::Point[1,1]], line1.intersection(line2)
+    end
+    it "paralells lines shouldn't intercept" do
+        line1 = Geometry::Line[[2,0],[2,0]]
+        line2 = Geometry::Line[[1,0],[1,0]]
+        assert_equal [], line2.intersection(line1)
+
+        line1 = Geometry::Line[[0,2],[0,2]]
+        line2 = Geometry::Line[[0,1],[0,1]]
+        assert_equal [], line2.intersection(line1)
+
+        line1 = Geometry::Line[[0,0],[1,1]]
+        line2 = Geometry::Line[[2,3],[3,4]]
+        assert_equal [], line2.intersection(line1)
+    end
+    it "polygon intersection" do
+        b = proc{ |p1,p2| p1.to_a <=> p2.to_a }
+        polygon = Geometry::Polygon.new([1,1] ,[1,3], [3,3], [3,1])
+        line = Geometry::Line[[0,2],[4,2]]
+        assert_equal [Geometry::Point[1, 2],Geometry::Point[3, 2]].sort(&b) , line.intersection(polygon).sort(&b)
+        line = Geometry::Line[[2,0],[2,4]]
+        assert_equal [Geometry::Point[2, 3],Geometry::Point[2, 1]].sort(&b), line.intersection(polygon).sort(&b)
+        line = Geometry::Line[[3,3],[4,4]]
+        assert_equal [Geometry::Point[1, 1],Geometry::Point[3, 3]].sort(&b), line.intersection(polygon).sort(&b)
+        line = Geometry::Line[[0,6],[10,15]]
+        assert_equal [], line.intersection(polygon)
+    end
 end
 
 describe Geometry::PointSlopeLine do
