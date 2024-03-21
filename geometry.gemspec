@@ -2,8 +2,9 @@
 $:.push File.expand_path("../lib", __FILE__)
 
 Gem::Specification.new do |s|
+    spec = s
   s.name        = "geometry"
-  s.version     = '6.5'
+    spec.version	= '6.6'
   s.authors     = ["Brandon Fosdick"]
   s.email       = ["bfoz@bfoz.net"]
   s.homepage    = "http://github.com/bfoz/geometry"
@@ -19,7 +20,6 @@ Gem::Specification.new do |s|
 
   s.required_ruby_version = '>= 2.0'
 
-    spec = s
     spec.add_development_dependency "bundler", "~> 2"
     spec.add_development_dependency "rake", "~> 13"
 end
