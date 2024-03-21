@@ -18,4 +18,8 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   s.required_ruby_version = '>= 2.0'
+
+    spec = s
+    spec.add_development_dependency "bundler", "~> 2"
+    spec.add_development_dependency "rake", "~> 13"
 end
