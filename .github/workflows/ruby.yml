@@ -1,0 +1,21 @@
+name: Ruby
+
+on: [push]
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby-version: ['2.7']
+        os: [ubuntu-latest]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - uses: actions/checkout@v4
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby-version }}
+        bundler-cache: true
+    - run: bundle exec rake
